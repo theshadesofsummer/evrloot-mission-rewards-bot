@@ -2,16 +2,10 @@ const { getIpfsLinkForItem } = require("./abi-interaction");
 const linkWithoutIpfs = require("./ipfs-link-tools")
 
 module.exports = {
-  getItemMetadata,
-  getSoulMetadata,
-  getFishMetadata
+  getFromIpfs
 }
 
-async function getItemMetadata(tokenId) {
-  let ipfsLink = await getIpfsLinkForItem(tokenId);
-  if (ipfsLink === undefined) {
-    throw Error(`No IPFS Link for Item ${tokenId} found`);
-  }
+async function getFromIpfs(ipfsLink) {
   return await fetchAsync(`https://evrloot.mypinata.cloud/ipfs/${linkWithoutIpfs(ipfsLink)}`);
 }
 

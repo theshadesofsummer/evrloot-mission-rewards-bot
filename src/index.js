@@ -1,23 +1,17 @@
 require('dotenv').config();
 const { setupDiscordBot } = require("./discord-bot.js");
-const web3 = require("./web3.js");
-const {decodeInput} = require("./publish-listing");
+const { MISSION_CONTRACT } = require("./abi-interaction.js")
+const { fetchMissionReward } = require('./mission-interaction.js');
 
-setupDiscordBot();
+setupDiscordBot().then(() => setupAuctionListener());
 
-web3.eth.subscribe('logs', {
-  address: '0xdF5499A17D487345e0201aCE513b26E5F427A717',
-  fromBlock: 'latest'
-}, function(error, result){
-  if (error)
-    console.log(error);
-  if (!error)
-  web3.eth.getTransaction(result.transactionHash).then(async tx => {
-    const input = tx.input;
-    if (input.startsWith('0xfecb1242')) {
-      await decodeInput(input)
-    }
-  })
-})
-
-
+function setupAuctionListener() {
+    MISSION_CONTRACT.events.MissionReward(() => {
+    }).on("connected", function (_subscriptionId) {
+        console.log('connected to mission reward event')
+    }).on('data', function (event) {
+        fetchMissionReward(event)
+    }).on('error', function (error, receipt) {
+        console.log('Error:', error, receipt);
+    });
+}

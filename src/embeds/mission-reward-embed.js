@@ -1,30 +1,31 @@
 const removeIpfsStuff = require("../ipfs-link-tools");
 
-
-module.exports = function createMissionRewardEmbed(id) {
+module.exports = function createMissionRewardEmbed(metadata) {
   return {
-    color: 0x1f8724,
-    title: `Mission ${id} ended`,
-    //url: `https://singular.app/collectibles/moonbeam/${ITEM_COLLECTION}/${id}`,
+    color: colorForRarity(metadata.attributes.find(m => m.label === 'Rarity')),
+    title: `${metadata.name} found!`,
     author: {
       name: 'New Mission Reward!',
-      //icon_url: 'https://game.evrloot.com/assets/icons/moonbeamIcon.png',
+      icon_url: 'https://game.evrloot.com/assets/icons/moonbeamIcon.png',
     },
-    //description: `Item listed for **${price} ${paymentOption}** (${usdPrice}$)`,
-    //thumbnail: {
-    //  url: `https://evrloot.mypinata.cloud/ipfs/${removeIpfsStuff(itemMetadata["image"])}`,
-    //},
-    //fields: [
-    //  {
-    //    name: 'Attributes',
-    //    value: itemAttrFormatter(itemMetadata["attributes"]),
-    //    inline: true
-    //  },
-    //  {
-    //    name: 'Stats',
-    //    value: itemStatsFormatter(itemMetadata["attributes"]),
-    //    inline: true
-    //  }
-    //],
+    thumbnail: {
+      url: `https://evrloot.mypinata.cloud/ipfs/${removeIpfsStuff(metadata.image)}`,
+    },
   };
+}
+
+function colorForRarity(rarityMetadata) {
+  const rarity = rarityMetadata.value;
+
+  if (rarity === 'Legendary') {
+    return 0xF4B01E
+  } else if (rarity === 'Epic') {
+    return 0xC12FE2
+  } else if (rarity === 'Rare') {
+    return 0x34E0F5
+  } else if (rarity === 'Common') {
+    return 0xD2D2D2
+  } else {
+    return 0xFF0000
+  }
 }

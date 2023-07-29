@@ -1,0 +1,754 @@
+[
+  {
+    "inputs": [],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "inputs": [],
+    "name": "ContractIsPaused",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "FeeNotSent",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "IncorrectMissionFee",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InsufficientSuppliedNfts",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidTokenID",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "MaxRollsExceedsLimit",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "MissionDoesNotExist",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "MissionIdMismatch",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "MissionNotEnabled",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "MissionNotFinished",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "MissionNotStarted",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NoFeestoCollect",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NoRngAvailable",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NotAirNode",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_user",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_contractOwner",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_backendAddress",
+        "type": "address"
+      }
+    ],
+    "name": "NotPermitted",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "SenderIsNotOwnerOfStakedToken",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "SoulHasActiveOrUnclaimedMission",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "UnsupportedMission",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "WithdrawalAddressNotSet",
+    "type": "error"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "missionId",
+        "type": "uint256"
+      }
+    ],
+    "name": "MissionAdded",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint16",
+        "name": "missionId",
+        "type": "uint16"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "activityId",
+        "type": "uint16"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "experienceGained",
+        "type": "uint256"
+      },
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "contractAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "uint16",
+            "name": "itemId",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "amount",
+            "type": "uint16"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct NftByItemId[]",
+        "name": "nftRewards",
+        "type": "tuple[]"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint16",
+            "name": "resourceId",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "amount",
+            "type": "uint16"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct ResourceData[]",
+        "name": "resourceRewards",
+        "type": "tuple[]"
+      }
+    ],
+    "name": "MissionReward",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "rngIndex",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "rolledValue",
+        "type": "uint256"
+      }
+    ],
+    "name": "MissionRoll",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint16",
+        "name": "missionId",
+        "type": "uint16"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "rngIndex",
+        "type": "uint256"
+      }
+    ],
+    "name": "MissionStarted",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "contractAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "uint16",
+            "name": "itemId",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "amount",
+            "type": "uint16"
+          }
+        ],
+        "internalType": "struct NftByItemId[]",
+        "name": "nftRequirements",
+        "type": "tuple[]"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint16",
+            "name": "resourceId",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "amount",
+            "type": "uint16"
+          }
+        ],
+        "internalType": "struct ResourceData[]",
+        "name": "resourceRequirements",
+        "type": "tuple[]"
+      },
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "contractAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "uint16",
+            "name": "itemId",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "amount",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint32",
+            "name": "rollChance",
+            "type": "uint32"
+          },
+          {
+            "internalType": "uint16",
+            "name": "maxRolls",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint8",
+            "name": "experienceBenefit",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint256",
+            "name": "attributeMultipliers",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct NFTRewardChance[]",
+        "name": "nftRewards",
+        "type": "tuple[]"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint16",
+            "name": "resourceId",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "amount",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint32",
+            "name": "rollChance",
+            "type": "uint32"
+          },
+          {
+            "internalType": "uint8",
+            "name": "maxRolls",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "experienceBenefit",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint256",
+            "name": "attributeMultipliers",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct ResourceRewardChance[]",
+        "name": "resourceRewards",
+        "type": "tuple[]"
+      },
+      {
+        "components": [
+          {
+            "internalType": "bool",
+            "name": "enabled",
+            "type": "bool"
+          },
+          {
+            "internalType": "uint32",
+            "name": "blockDuration",
+            "type": "uint32"
+          },
+          {
+            "internalType": "uint16",
+            "name": "activityId",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint32",
+            "name": "baseExperience",
+            "type": "uint32"
+          },
+          {
+            "internalType": "uint32",
+            "name": "collectionId",
+            "type": "uint32"
+          },
+          {
+            "internalType": "uint256",
+            "name": "attributeMultipliers",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct ActivityData",
+        "name": "activityData",
+        "type": "tuple"
+      },
+      {
+        "internalType": "uint256",
+        "name": "replacesMissionId",
+        "type": "uint256"
+      }
+    ],
+    "name": "addMission",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "missionId",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "availableMissions",
+    "outputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "",
+        "type": "uint256[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "clearPendingTokenId",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "estraTokenId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "missionId",
+        "type": "uint256"
+      }
+    ],
+    "name": "endLastMission",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "requestId",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
+      }
+    ],
+    "name": "fulfillUint256RngRequest",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "estraTokenId",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "getLastMissionsByTokenIds",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint16",
+            "name": "missionId",
+            "type": "uint16"
+          },
+          {
+            "internalType": "address",
+            "name": "playerAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "uint32",
+            "name": "endBlock",
+            "type": "uint32"
+          },
+          {
+            "internalType": "uint32",
+            "name": "rngIndex",
+            "type": "uint32"
+          }
+        ],
+        "internalType": "struct PlayerMission[]",
+        "name": "missions",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "missionId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getMissionData",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint16",
+            "name": "resourceId",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "amount",
+            "type": "uint16"
+          }
+        ],
+        "internalType": "struct ResourceData[]",
+        "name": "",
+        "type": "tuple[]"
+      },
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "contractAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "uint16",
+            "name": "itemId",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "amount",
+            "type": "uint16"
+          }
+        ],
+        "internalType": "struct NftByItemId[]",
+        "name": "",
+        "type": "tuple[]"
+      },
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "contractAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "uint16",
+            "name": "itemId",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "amount",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint32",
+            "name": "rollChance",
+            "type": "uint32"
+          },
+          {
+            "internalType": "uint16",
+            "name": "maxRolls",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint8",
+            "name": "experienceBenefit",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint256",
+            "name": "attributeMultipliers",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct NFTRewardChance[]",
+        "name": "",
+        "type": "tuple[]"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint16",
+            "name": "resourceId",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "amount",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint32",
+            "name": "rollChance",
+            "type": "uint32"
+          },
+          {
+            "internalType": "uint8",
+            "name": "maxRolls",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "experienceBenefit",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint256",
+            "name": "attributeMultipliers",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct ResourceRewardChance[]",
+        "name": "",
+        "type": "tuple[]"
+      },
+      {
+        "components": [
+          {
+            "internalType": "bool",
+            "name": "enabled",
+            "type": "bool"
+          },
+          {
+            "internalType": "uint32",
+            "name": "blockDuration",
+            "type": "uint32"
+          },
+          {
+            "internalType": "uint16",
+            "name": "activityId",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint32",
+            "name": "baseExperience",
+            "type": "uint32"
+          },
+          {
+            "internalType": "uint32",
+            "name": "collectionId",
+            "type": "uint32"
+          },
+          {
+            "internalType": "uint256",
+            "name": "attributeMultipliers",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct ActivityData",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "requestUint256Rng",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "missionId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "enabled",
+        "type": "bool"
+      }
+    ],
+    "name": "setMissionEnabled",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "estraTokenId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint16",
+        "name": "missionId",
+        "type": "uint16"
+      },
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "contractAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "tokenId",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct InputNftData[]",
+        "name": "suppliedNfts",
+        "type": "tuple[]"
+      }
+    ],
+    "name": "startMission",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "withdrawFees",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]
