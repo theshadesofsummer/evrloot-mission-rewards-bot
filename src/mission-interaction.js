@@ -4,6 +4,7 @@ const { itemIds } = require('./mappings/fish-types.js')
 const { MISSION_CONTRACT } = require("./abi-interaction.js");
 const { getFromIpfs } = require('./evrloot-ipfs.js')
 const config = require('./config.js')
+const { addToStats } = require('./summary/daily-stats.js')
 
 module.exports = {
   fetchMissionReward
@@ -18,6 +19,9 @@ async function fetchMissionReward(eventInput) {
   const nftRewardsForEmbed = [];
   for (const nftReward of nftRewards) {
     let nftRewardWithMetadata = await getNftRewardInfos(nftReward);
+
+    addToStats(nftRewardWithMetadata.retrievedMetadata)
+
     nftRewardsForEmbed.push(nftRewardWithMetadata);
   }
 

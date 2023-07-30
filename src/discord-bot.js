@@ -1,7 +1,9 @@
 const { Client } = require('discord.js');
+const generateSummary = require('./summary/generate-summary.js')
 
 module.exports = {
   setupDiscordBot,
+  publishSummary,
   postEmbed,
 };
 
@@ -17,12 +19,21 @@ async function setupDiscordBot() {
   await client.login(process.env.DISCORDJS_TOKEN);
 }
 
+async function publishSummary() {
+  const channel = await getChannel(client, process.env.STATS_CHANNEL_ID)
+  const summary = generateSummary()
+  await channel.send(summary);
+}
+
 async function postEmbed(embed) {
+  const channel = await getChannel(client, process.env.PUBLISH_CHANNEL_ID)
+  await channel.send({embeds: [embed]});
+}
+
+async function getChannel(client, channelId) {
   await client.guilds.fetch();
-  const guild = client.guilds.cache.get("1039143267285073990");
+  const guild = client.guilds.cache.get(process.env.GUILD_ID);
 
   await guild.channels.fetch();
-  const channel = guild.channels.cache.get("1121489416209322075");
-
-  await channel.send({embeds: [embed]});
+  return guild.channels.cache.get(channelId);
 }

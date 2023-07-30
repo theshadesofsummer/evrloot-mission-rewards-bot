@@ -1,9 +1,16 @@
 require('dotenv').config();
-const { setupDiscordBot } = require("./discord-bot.js");
+const { setupDiscordBot, publishSummary } = require("./discord-bot.js");
 const { MISSION_CONTRACT } = require("./abi-interaction.js")
 const { fetchMissionReward } = require('./mission-interaction.js');
+const cron = require('node-cron');
 
-setupDiscordBot().then(() => setupAuctionListener());
+setupDiscordBot().then(() => {
+    setupAuctionListener()
+    cron.schedule('0 0 * * *', () => {
+        publishSummary();
+    });
+
+});
 
 function setupAuctionListener() {
     MISSION_CONTRACT.events.MissionReward(() => {
