@@ -21,7 +21,7 @@ async function fetchMissionReward(eventInput) {
   const resourceRewards = eventInput.returnValues.resourceRewards;
   const nftRewards = eventInput.returnValues.nftRewards;
 
-  console.log('size of fish triumphs:', nftRewards.size)
+  console.log('size of fish triumphs:', nftRewards.length)
   for (const resourceReward of resourceRewards) {
     const resourceRewardWithMetadata = await getResourceRewardInfos(resourceReward);
 
