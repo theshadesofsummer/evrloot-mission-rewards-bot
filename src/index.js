@@ -6,7 +6,7 @@ const cron = require('node-cron');
 
 setupDiscordBot().then(() => {
     setupAuctionListener()
-    cron.schedule('* * * * *', () => {
+    cron.schedule('0 * * * *', () => {
         publishSummary();
     });
 
