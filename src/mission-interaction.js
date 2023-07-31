@@ -2,25 +2,40 @@ const { postEmbed } = require('./discord-bot.js')
 const createMissionRewardEmbed = require('./embeds/mission-reward-embed.js')
 const { itemIds } = require('./mappings/fish-types.js')
 const { MISSION_CONTRACT } = require("./abi-interaction.js");
+const resourceRewards = require('./mappings/resource-types.js');
 const { getFromIpfs } = require('./evrloot-ipfs.js')
 const config = require('./config.js')
-const { addToStats } = require('./summary/daily-stats.js')
+const { addItemToStats, addResourceToStats, increaseMissionCounter } = require('./summary/daily-stats.js')
 
 module.exports = {
   fetchMissionReward
 }
 
 async function fetchMissionReward(eventInput) {
-  const missionInformation = await MISSION_CONTRACT.methods.getMissionData(eventInput.returnValues.missionId).call();
+  increaseMissionCounter();
+
+  // currently not in use
+  // const missionInformation = await MISSION_CONTRACT.methods.getMissionData(eventInput.returnValues.missionId).call();
 
   const resourceRewards = eventInput.returnValues.resourceRewards;
   const nftRewards = eventInput.returnValues.nftRewards;
 
+  console.log('size of fish triumphs:', nftRewards.size)
+  for (const resourceReward of resourceRewards) {
+    const resourceRewardWithMetadata = await getResourceRewardInfos(resourceReward);
+
+    if (resourceRewardWithMetadata === undefined) {
+      return;
+    }
+
+    addResourceToStats(resourceRewardWithMetadata.retrievedMetadata, resourceRewardWithMetadata.amount)
+  }
+
   const nftRewardsForEmbed = [];
   for (const nftReward of nftRewards) {
-    let nftRewardWithMetadata = await getNftRewardInfos(nftReward);
+    const nftRewardWithMetadata = await getNftRewardInfos(nftReward);
 
-    addToStats(nftRewardWithMetadata.retrievedMetadata)
+    addItemToStats(nftRewardWithMetadata.retrievedMetadata)
 
     nftRewardsForEmbed.push(nftRewardWithMetadata);
   }
@@ -29,6 +44,29 @@ async function fetchMissionReward(eventInput) {
   for (const filteredNftReward of filteredNftRewards) {
     await postEmbed(createMissionRewardEmbed(filteredNftReward.retrievedMetadata));
   }
+}
+
+async function getResourceRewardInfos(resourceReward) {
+  const amount = Number.parseInt(resourceReward.amount)
+  const resourceId = Number.parseInt(resourceReward.resourceId)
+
+  if (amount <= 0) {
+    return;
+  }
+
+  const metadataUri = Object.values(resourceRewards).find(rr => rr.id === resourceId).tokenUri;
+
+  const retrievedMetadata = metadataUri
+    ? await getFromIpfs(metadataUri)
+    : undefined;
+
+  return {
+    resourceId,
+    amount,
+    metadata: metadataUri,
+    retrievedMetadata: retrievedMetadata,
+  };
+
 }
 
 async function getNftRewardInfos(nftReward) {
@@ -58,6 +96,8 @@ async function getNftRewardInfos(nftReward) {
 function containsShowableRarity(nftRewardWithMetadata) {
   const rarityMetadata = nftRewardWithMetadata.retrievedMetadata.attributes.find(o => o.label === 'Rarity');
   const rarity = rarityMetadata.value;
+
+  console.log('rarity', rarity);
 
   return config.showItems.includes(rarity)
 }

@@ -1,13 +1,15 @@
 const { getStats, resetStats } = require('./daily-stats')
 
 module.exports = function generateSummary() {
-    const stats = getStats();
+    const {stats, missionCounter} = getStats();
     
     if (stats.size <= 0) {
         return '`No items gathered in the last 24 hours`'
     }
 
-    let summary = '```ansi\nGathered in the last 24 hours:\n\n';
+    let summary = '```ansi\n' +
+        `Missions claimed: \u001b[4;34m${missionCounter}\n\n`
+        'Gathered in the last 24 hours:\n';
     for (const [itemName, value] of stats) {
         const rarityColor = getColorRarity(value.rarity)
         summary += `${rarityColor}${itemName}\u001b[0m: ${value.amount}\n`
