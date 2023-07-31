@@ -8,7 +8,7 @@ module.exports = function generateSummary() {
     }
 
     let summary = '```ansi\n' +
-        `Missions claimed: \u001b[4;36m${missionCounter}\u001b[0m\n\n`
+        `Missions claimed: \u001b[4;36m${missionCounter}\u001b[0m\n\n` +
         'Gathered in the last 24 hours:\n';
     for (const [itemName, value] of stats) {
         const rarityColor = getColorRarity(value.rarity)

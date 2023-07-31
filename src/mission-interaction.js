@@ -5,7 +5,7 @@ const { MISSION_CONTRACT } = require("./abi-interaction.js");
 const resourceRewards = require('./mappings/resource-types.js');
 const { getFromIpfs } = require('./evrloot-ipfs.js')
 const config = require('./config.js')
-const { addItemToStats, addResourceToStats, increaseMissionCounter } = require('./summary/daily-stats.js')
+const { addItemToStats, addResourceToStats, increaseMissionCounter, getStats } = require('./summary/daily-stats.js')
 
 module.exports = {
   fetchMissionReward
@@ -13,6 +13,7 @@ module.exports = {
 
 async function fetchMissionReward(eventInput) {
   increaseMissionCounter();
+  console.log('mission counter with this', getStats().missionCounter)
 
   // currently not in use
   // const missionInformation = await MISSION_CONTRACT.methods.getMissionData(eventInput.returnValues.missionId).call();
