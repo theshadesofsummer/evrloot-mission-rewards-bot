@@ -1,8 +1,8 @@
 module.exports = {
     showItems: [
-        //'Common',
-        //'Rare',
-        //'Epic',
+        'Common',
+        'Rare',
+        'Epic',
         'Legendary'
     ]
 }

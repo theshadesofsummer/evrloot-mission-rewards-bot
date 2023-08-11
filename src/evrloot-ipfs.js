@@ -6,7 +6,7 @@ module.exports = {
 }
 
 async function getFromIpfs(ipfsLink) {
-  return await fetchAsync(`https://evrloot.mypinata.cloud/ipfs/${linkWithoutIpfs(ipfsLink)}`);
+  return await fetchAsync(`https://evrloot.myfilebase.com/ipfs/${linkWithoutIpfs(ipfsLink)}`);
 }
 
 async function fetchAsync(url) {

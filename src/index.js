@@ -13,12 +13,14 @@ setupDiscordBot().then(() => {
 });
 
 function setupAuctionListener() {
-    MISSION_CONTRACT.events.MissionReward(() => {
-    }).on("connected", function (_subscriptionId) {
+    MISSION_CONTRACT.events.MissionReward({fromBlock: 'latest'})
+      .on("connected", function (_subscriptionId) {
         console.log('connected to mission reward event')
-    }).on('data', function (event) {
+      })
+      .on('data', function (event) {
         fetchMissionReward(event)
-    }).on('error', function (error, receipt) {
+      })
+      .on('error', function (error, receipt) {
         console.log('Error:', error, receipt);
-    });
+      });
 }
