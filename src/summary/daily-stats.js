@@ -29,7 +29,7 @@ function resetStats() {
     missionCounter = 0;
 }
 
-function addItemToStats(metadata) {
+function addItemToStats(metadata, uuid) {
     const itemName = metadata.name;
     if (stats.has(itemName)) {
         const statEntry = stats.get(metadata.name);
@@ -44,7 +44,7 @@ function addItemToStats(metadata) {
             }
         )
     }
-    console.log('stats after added item:', stats)
+    console.log(uuid, 'stats after added item:', stats)
 }
 
 function addResourceToStats(metadata, amount) {

@@ -6,14 +6,18 @@ const resourceRewards = require('./mappings/resource-types.js');
 const { getFromIpfs } = require('./evrloot-ipfs.js')
 const config = require('./config.js')
 const { addItemToStats, addResourceToStats, increaseMissionCounter, getStats } = require('./summary/daily-stats.js')
+const { v4: uuidv4 } = require('uuid');
 
 module.exports = {
   fetchMissionReward
 }
 
 async function fetchMissionReward(eventInput) {
+
+  const uuid = uuidv4();
+
   increaseMissionCounter();
-  console.log('mission counter with this', getStats().missionCounter)
+  console.log(uuid, 'mission counter with this', getStats().missionCounter)
 
   // currently not in use
   // const missionInformation = await MISSION_CONTRACT.methods.getMissionData(eventInput.returnValues.missionId).call();
@@ -21,10 +25,8 @@ async function fetchMissionReward(eventInput) {
   const resourceRewards = eventInput.returnValues.resourceRewards;
   const nftRewards = eventInput.returnValues.nftRewards;
 
-  console.log('size of fish triumphs:', nftRewards.length)
   for (const resourceReward of resourceRewards) {
     const resourceRewardWithMetadata = await getResourceRewardInfos(resourceReward);
-
     if (resourceRewardWithMetadata === undefined) {
       return;
     }
@@ -32,11 +34,13 @@ async function fetchMissionReward(eventInput) {
     addResourceToStats(resourceRewardWithMetadata.retrievedMetadata, resourceRewardWithMetadata.amount)
   }
 
+  console.log(uuid, 'size of nft rewards:', nftRewards.length)
   const nftRewardsForEmbed = [];
   for (const nftReward of nftRewards) {
     const nftRewardWithMetadata = await getNftRewardInfos(nftReward);
 
-    addItemToStats(nftRewardWithMetadata.retrievedMetadata)
+    console.log(uuid, nftRewardWithMetadata.retrievedMetadata.name, 'found')
+    addItemToStats(nftRewardWithMetadata.retrievedMetadata, uuid)
 
     nftRewardsForEmbed.push(nftRewardWithMetadata);
   }
