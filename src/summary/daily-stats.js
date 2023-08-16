@@ -23,14 +23,12 @@ function getStats() {
 }
 
 function resetStats() {
-    console.log('cleared stats')
     stats.clear();
     missionCounter = 0;
 }
 
 function addToStats(reward) {
     const name = reward.retrievedMetadata.name;
-    console.log('added', name)
     if (stats.has(name)) {
         const statEntry = stats.get(name);
         statEntry.amount += reward.amount;

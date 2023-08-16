@@ -14,14 +14,11 @@ module.exports = {
 async function fetchMissionReward(eventInput) {
   increaseMissionCounter();
 
-  console.log('mission counter with this:', getStats().missionCounter)
-
   // currently not in use
   // const missionInformation = await MISSION_CONTRACT.methods.getMissionData(eventInput.returnValues.missionId).call();
 
   const resourceRewards = eventInput.returnValues.resourceRewards;
   const nftRewards = eventInput.returnValues.nftRewards;
-  console.log('total size of nft rewards:', nftRewards.length);
 
   for (const resourceReward of resourceRewards) {
     const resourceRewardWithMetadata = await getResourceRewardInfos(resourceReward);
@@ -36,11 +33,9 @@ async function fetchMissionReward(eventInput) {
   const nftRewardsForEmbed = [];
   for (const nftReward of nftRewards) {
     const amount = Number.parseInt(nftReward.amount)
-    console.log('amount of nftReward', amount, typeof amount);
+
     if (amount > 0) {
       const nftRewardWithMetadata = await getNftRewardInfos(nftReward);
-
-      console.log('found', amount, nftRewardWithMetadata.retrievedMetadata.name);
 
       addToStats(nftRewardWithMetadata)
 
@@ -105,8 +100,6 @@ async function getNftRewardInfos(nftReward) {
 function containsShowableRarity(nftRewardWithMetadata) {
   const rarityMetadata = nftRewardWithMetadata.retrievedMetadata.attributes.find(o => o.label === 'Rarity');
   const rarity = rarityMetadata.value;
-
-  console.log('rarity', rarity)
 
   return config.showItems.includes(rarity)
 }

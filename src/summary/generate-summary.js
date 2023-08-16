@@ -7,10 +7,13 @@ module.exports = function generateSummary() {
         return '`No items gathered in the last 24 hours`'
     }
 
+    const sortedStats = Array.from(stats).sort(raritySorter)
+
     let summary = '```ansi\n' +
         `Missions claimed: \u001b[4;36m${missionCounter}\u001b[0m\n\n` +
-        'Gathered in the last hour:\n';
-    for (const [itemName, value] of stats) {
+        'Gathered in the last 24 hours:\n';
+
+    for (const [itemName, value] of sortedStats) {
         const rarityColor = getColorRarity(value.rarity)
         summary += `${rarityColor}${itemName}\u001b[0m: ${value.amount}\n`
     }
@@ -32,4 +35,17 @@ function getColorRarity(rarity) {
         return '\u001b[1;33m'
     }
     return 'error'
+}
+
+const raritySortValue = new Map([
+    ['Common', 0],
+    ['Rare', 1],
+    ['Epic', 2],
+    ['Legendary', 3],
+])
+function raritySorter(entryA, entryB) {
+    const rarityA = entryA[1].rarity;
+    const rarityB = entryB[1].rarity;
+
+    return raritySortValue.get(rarityB) - raritySortValue.get(rarityA)
 }
