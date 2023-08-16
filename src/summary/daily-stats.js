@@ -44,7 +44,6 @@ function addItemToStats(metadata, uuid) {
             }
         )
     }
-    console.log(uuid, 'stats after added item:', stats)
 }
 
 function addResourceToStats(metadata, amount) {
