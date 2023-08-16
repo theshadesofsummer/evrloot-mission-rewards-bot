@@ -32,7 +32,7 @@ function addToStats(reward) {
     const name = reward.metadata.name;
     if (stats.has(name)) {
         const statEntry = stats.get(name);
-        statEntry.amount += 1;
+        statEntry.amount += reward.amount;
         stats.set(name, statEntry)
     } else {
         stats.set(

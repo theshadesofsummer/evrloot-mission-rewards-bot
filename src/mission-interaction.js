@@ -26,7 +26,7 @@ async function fetchMissionReward(eventInput) {
       return;
     }
 
-    addToStats(resourceRewardWithMetadata.retrievedMetadata)
+    addToStats(resourceRewardWithMetadata)
   }
 
 
@@ -39,7 +39,7 @@ async function fetchMissionReward(eventInput) {
 
     const nftRewardWithMetadata = await getNftRewardInfos(nftReward);
 
-    addToStats(nftRewardWithMetadata.retrievedMetadata)
+    addToStats(nftRewardWithMetadata)
 
     nftRewardsForEmbed.push(nftRewardWithMetadata);
   }
@@ -74,6 +74,8 @@ async function getResourceRewardInfos(resourceReward) {
 }
 
 async function getNftRewardInfos(nftReward) {
+  const amount = Number.parseInt(nftReward.amount)
+
   const itemId = nftReward.itemId;
   const poolId = itemId >> 8;
   const memberId = itemId & 0xff;
@@ -91,7 +93,7 @@ async function getNftRewardInfos(nftReward) {
 
   return {
     itemId,
-    amount: nftReward.amount,
+    amount,
     metadata: metadataUri,
     retrievedMetadata: retrievedMetadata,
   };
