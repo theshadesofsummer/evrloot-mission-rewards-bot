@@ -36,12 +36,13 @@ async function fetchMissionReward(eventInput) {
   const nftRewardsForEmbed = [];
   for (const nftReward of nftRewards) {
     const amount = Number.parseInt(nftReward.amount)
-    console.log('nftReward amount', amount)
     if (amount <= 0) {
       return;
     }
 
     const nftRewardWithMetadata = await getNftRewardInfos(nftReward);
+
+    console.log('found', amount, nftRewardWithMetadata.retrievedMetadata.name);
 
     addToStats(nftRewardWithMetadata)
 
