@@ -29,7 +29,7 @@ function resetStats() {
 }
 
 function addToStats(reward) {
-    const name = reward.metadata.name;
+    const name = reward.retrievedMetadata.name;
     if (stats.has(name)) {
         const statEntry = stats.get(name);
         statEntry.amount += reward.amount;
@@ -38,7 +38,7 @@ function addToStats(reward) {
         stats.set(
           name,
             {
-                rarity: reward.metadata.attributes.find(attr => attr.label === 'Rarity').value,
+                rarity: reward.retrievedMetadata.attributes.find(attr => attr.label === 'Rarity').value,
                 amount: reward.amount
             }
         )
