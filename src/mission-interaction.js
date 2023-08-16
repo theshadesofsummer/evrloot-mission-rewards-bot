@@ -36,6 +36,7 @@ async function fetchMissionReward(eventInput) {
   const nftRewardsForEmbed = [];
   for (const nftReward of nftRewards) {
     const amount = Number.parseInt(nftReward.amount)
+    console.log('amount of nftReward', amount, typeof amount);
     if (amount <= 0) {
       return;
     }
