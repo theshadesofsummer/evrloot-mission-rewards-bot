@@ -28,7 +28,7 @@ function resetStats() {
     missionCounter = 0;
 }
 
-function addToStats(metadata, amount) {
+function addToStats(metadata) {
     const name = metadata.name;
     if (stats.has(name)) {
         const statEntry = stats.get(metadata.name);
@@ -39,7 +39,7 @@ function addToStats(metadata, amount) {
             metadata.name, 
             {
                 rarity: metadata.attributes.find(attr => attr.label === 'Rarity').value,
-                amount: amount
+                amount: metadata.amount
             }
         )
     }
