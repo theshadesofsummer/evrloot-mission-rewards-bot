@@ -14,11 +14,14 @@ module.exports = {
 async function fetchMissionReward(eventInput) {
   increaseMissionCounter();
 
+  console.log('mission counter with this:', getStats().missionCounter)
+
   // currently not in use
   // const missionInformation = await MISSION_CONTRACT.methods.getMissionData(eventInput.returnValues.missionId).call();
 
   const resourceRewards = eventInput.returnValues.resourceRewards;
   const nftRewards = eventInput.returnValues.nftRewards;
+  console.log('total size of nft rewards:', nftRewards.length);
 
   for (const resourceReward of resourceRewards) {
     const resourceRewardWithMetadata = await getResourceRewardInfos(resourceReward);
