@@ -1,8 +1,7 @@
 module.exports = {
     getStats,
     resetStats,
-    addItemToStats,
-    addResourceToStats,
+    addToStats,
     increaseMissionCounter
 }
 
@@ -29,32 +28,15 @@ function resetStats() {
     missionCounter = 0;
 }
 
-function addItemToStats(metadata, uuid) {
-    const itemName = metadata.name;
-    if (stats.has(itemName)) {
+function addToStats(metadata, amount) {
+    const name = metadata.name;
+    if (stats.has(name)) {
         const statEntry = stats.get(metadata.name);
         statEntry.amount += 1;
-        stats.set(itemName, statEntry)
+        stats.set(name, statEntry)
     } else {
         stats.set(
             metadata.name, 
-            {
-                rarity: metadata.attributes.find(attr => attr.label === 'Rarity').value,
-                amount: 1
-            }
-        )
-    }
-}
-
-function addResourceToStats(metadata, amount) {
-    const itemName = metadata.name;
-    if (stats.has(itemName)) {
-        const statEntry = stats.get(metadata.name);
-        statEntry.amount += amount;
-        stats.set(itemName, statEntry)
-    } else {
-        stats.set(
-            metadata.name,
             {
                 rarity: metadata.attributes.find(attr => attr.label === 'Rarity').value,
                 amount: amount
@@ -62,6 +44,7 @@ function addResourceToStats(metadata, amount) {
         )
     }
 }
+
 
 function increaseMissionCounter() {
     missionCounter++;
