@@ -30,6 +30,7 @@ function resetStats() {
 
 function addToStats(reward) {
     const name = reward.retrievedMetadata.name;
+    console.log('added', name)
     if (stats.has(name)) {
         const statEntry = stats.get(name);
         statEntry.amount += reward.amount;

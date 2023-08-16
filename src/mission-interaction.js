@@ -33,6 +33,7 @@ async function fetchMissionReward(eventInput) {
   const nftRewardsForEmbed = [];
   for (const nftReward of nftRewards) {
     const amount = Number.parseInt(nftReward.amount)
+    console.log('nftReward amount', amount)
     if (amount <= 0) {
       return;
     }
@@ -102,6 +103,8 @@ async function getNftRewardInfos(nftReward) {
 function containsShowableRarity(nftRewardWithMetadata) {
   const rarityMetadata = nftRewardWithMetadata.retrievedMetadata.attributes.find(o => o.label === 'Rarity');
   const rarity = rarityMetadata.value;
+
+  console.log('rarity', rarity)
 
   return config.showItems.includes(rarity)
 }
