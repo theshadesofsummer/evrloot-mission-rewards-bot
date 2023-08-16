@@ -28,21 +28,22 @@ function resetStats() {
     missionCounter = 0;
 }
 
-function addToStats(metadata) {
-    const name = metadata.name;
+function addToStats(reward) {
+    const name = reward.metadata.name;
     if (stats.has(name)) {
-        const statEntry = stats.get(metadata.name);
+        const statEntry = stats.get(name);
         statEntry.amount += 1;
         stats.set(name, statEntry)
     } else {
         stats.set(
-            metadata.name, 
+          name,
             {
-                rarity: metadata.attributes.find(attr => attr.label === 'Rarity').value,
-                amount: metadata.amount
+                rarity: reward.metadata.attributes.find(attr => attr.label === 'Rarity').value,
+                amount: reward.amount
             }
         )
     }
+    console.log(stats)
 }
 
 
