@@ -37,17 +37,15 @@ async function fetchMissionReward(eventInput) {
   for (const nftReward of nftRewards) {
     const amount = Number.parseInt(nftReward.amount)
     console.log('amount of nftReward', amount, typeof amount);
-    if (amount <= 0) {
-      return;
+    if (amount > 0) {
+      const nftRewardWithMetadata = await getNftRewardInfos(nftReward);
+
+      console.log('found', amount, nftRewardWithMetadata.retrievedMetadata.name);
+
+      addToStats(nftRewardWithMetadata)
+
+      nftRewardsForEmbed.push(nftRewardWithMetadata);
     }
-
-    const nftRewardWithMetadata = await getNftRewardInfos(nftReward);
-
-    console.log('found', amount, nftRewardWithMetadata.retrievedMetadata.name);
-
-    addToStats(nftRewardWithMetadata)
-
-    nftRewardsForEmbed.push(nftRewardWithMetadata);
   }
 
   const filteredNftRewards = nftRewardsForEmbed.filter(containsShowableRarity);
@@ -60,23 +58,22 @@ async function getResourceRewardInfos(resourceReward) {
   const amount = Number.parseInt(resourceReward.amount)
   const resourceId = Number.parseInt(resourceReward.resourceId)
 
-  if (amount <= 0) {
-    return;
+  if (amount > 0) {
+    const metadataUri = Object.values(resourceRewards).find(rr => rr.id === resourceId).tokenUri;
+
+    const retrievedMetadata = metadataUri
+      ? await getFromIpfs(metadataUri)
+      : undefined;
+
+    return {
+      resourceId,
+      amount,
+      metadata: metadataUri,
+      retrievedMetadata: retrievedMetadata,
+    };
   }
 
-  const metadataUri = Object.values(resourceRewards).find(rr => rr.id === resourceId).tokenUri;
-
-  const retrievedMetadata = metadataUri
-    ? await getFromIpfs(metadataUri)
-    : undefined;
-
-  return {
-    resourceId,
-    amount,
-    metadata: metadataUri,
-    retrievedMetadata: retrievedMetadata,
-  };
-
+  return undefined;
 }
 
 async function getNftRewardInfos(nftReward) {
