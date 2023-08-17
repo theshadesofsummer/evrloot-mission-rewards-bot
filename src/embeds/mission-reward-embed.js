@@ -9,7 +9,7 @@ module.exports = function createMissionRewardEmbed(name, reward) {
       icon_url: 'https://game.evrloot.com/assets/icons/moonbeamIcon.png',
     },
     thumbnail: {
-      url: `https://evrloot.myfilebase.com/ipfs/${removeIpfsStuff(metadata.image)}`,
+      url: `https://evrloot.myfilebase.com/ipfs/${removeIpfsStuff(reward.retrievedMetadata.image)}`,
     },
   };
 }
