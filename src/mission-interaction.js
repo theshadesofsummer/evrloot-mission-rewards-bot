@@ -56,7 +56,7 @@ async function fetchMissionReward(eventInput) {
     return;
   }
 
-  let accountName = getAccountName({wallet: eventInput.address})
+  let accountName = await getAccountName({wallet: eventInput.address})
 
   if (!accountName) {
     accountName = 'An anonymous traveller '
