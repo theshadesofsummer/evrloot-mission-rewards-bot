@@ -1,9 +1,9 @@
 const removeIpfsStuff = require("../ipfs-link-tools");
 
-module.exports = function createMissionRewardEmbed(metadata) {
+module.exports = function createMissionRewardEmbed(name, reward) {
   return {
-    color: colorForRarity(metadata.attributes.find(m => m.label === 'Rarity')),
-    title: `${metadata.name} found!`,
+    color: colorForRarity(reward.retrievedMetadata.attributes.find(m => m.label === 'Rarity')),
+    title: `${name} found ${reward.amount} ${reward.retrievedMetadata.name}!`,
     author: {
       name: 'New Mission Reward!',
       icon_url: 'https://game.evrloot.com/assets/icons/moonbeamIcon.png',

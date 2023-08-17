@@ -6,6 +6,7 @@ const resourceRewards = require('./mappings/resource-types.js');
 const { getFromIpfs } = require('./evrloot-ipfs.js')
 const config = require('./config.js')
 const { addToStats, increaseMissionCounter, getStats } = require('./summary/daily-stats.js')
+const {getAccountName} = require("./evrloot-db");
 
 module.exports = {
   fetchMissionReward
@@ -50,8 +51,19 @@ async function fetchMissionReward(eventInput) {
   }
 
   const filteredNftRewards = rewardsForEmbed.filter(containsShowableRarity);
+
+  if (filteredNftRewards.length <= 0) {
+    return;
+  }
+
+  let accountName = getAccountName({wallet: eventInput.address})
+
+  if (!accountName) {
+    accountName = 'An anonymous traveller '
+  }
+
   for (const filteredNftReward of filteredNftRewards) {
-    await postEmbed(createMissionRewardEmbed(filteredNftReward.retrievedMetadata));
+    await postEmbed(createMissionRewardEmbed(accountName, filteredNftReward));
   }
 }
 

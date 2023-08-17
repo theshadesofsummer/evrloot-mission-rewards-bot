@@ -4,6 +4,7 @@ const { MISSION_CONTRACT } = require("./abi-interaction.js")
 const { fetchMissionReward } = require('./mission-interaction.js');
 const cron = require('node-cron');
 const {MongoClient} = require("mongodb");
+const {getAccountName} = require("./evrloot-db");
 
 setupDiscordBot().then(() => {
     setupMissionRewardListener()
