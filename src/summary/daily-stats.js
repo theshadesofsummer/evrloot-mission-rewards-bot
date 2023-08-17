@@ -42,7 +42,6 @@ function addToStats(reward) {
             }
         )
     }
-    console.log(stats)
 }
 
 

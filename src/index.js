@@ -27,7 +27,6 @@ function setupMongoDbConnection() {
 
     const collection = client.db("evrloot").collection("discordverifications");
 
-    collection.deleteOne({wallet: '0xD887474fE347562450a9a892204aBb3D13039550'})
     // Initialize change stream
     const changeStream = collection.watch([{ $match: { operationType: "insert" } }]);
 
