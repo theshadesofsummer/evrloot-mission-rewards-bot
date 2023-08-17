@@ -1,18 +1,57 @@
 require('dotenv').config();
-const { setupDiscordBot, publishSummary } = require("./discord-bot.js");
+const { setupDiscordBot, publishSummary, sendVerificationDm } = require("./discord-bot.js");
 const { MISSION_CONTRACT } = require("./abi-interaction.js")
 const { fetchMissionReward } = require('./mission-interaction.js');
 const cron = require('node-cron');
+const {MongoClient} = require("mongodb");
 
 setupDiscordBot().then(() => {
-    setupAuctionListener()
+    setupMissionRewardListener()
+    setupMongoDbConnection()
+
     cron.schedule('0 * * * *', () => {
         publishSummary();
     });
-
 });
 
-function setupAuctionListener() {
+function setupMongoDbConnection() {
+  const uri = `mongodb+srv://${process.env.MONGODB_ACCESS}@cluster0.cbrbn.mongodb.net/evrloot?retryWrites=true&w=majority`;
+
+  MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true }).then((client, err) => {
+    if (err) {
+      console.error('Failed to connect', err);
+      return;
+    } else {
+      console.log('connected to mongodb client')
+    }
+
+    const collection = client.db("evrloot").collection("discordverifications");
+
+    collection.deleteOne({wallet: '0xD887474fE347562450a9a892204aBb3D13039550'})
+    // Initialize change stream
+    const changeStream = collection.watch([{ $match: { operationType: "insert" } }]);
+
+    // Start listening to changes
+    changeStream.on('change', (next) => {
+      sendVerificationDm(next.fullDocument.discordId, next.fullDocument.wallet).then(() =>
+        console.log('sent discord dm to', next.fullDocument.discordId, 'with', next.fullDocument.wallet)
+      )
+    });
+
+    // Handle errors (optional but recommended)
+    changeStream.on('error', (error) => {
+      console.error('Error in change stream', error);
+    });
+
+    // Close change stream after some time or based on some condition (optional)
+    // setTimeout(() => {
+    //     changeStream.close();
+    //     client.close();
+    // }, 60000); // Close after 1 minute
+  });
+}
+
+function setupMissionRewardListener() {
     MISSION_CONTRACT.events.MissionReward({fromBlock: 'latest'})
       .on("connected", function (_subscriptionId) {
         console.log('connected to mission reward event')
