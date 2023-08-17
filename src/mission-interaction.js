@@ -24,14 +24,29 @@ async function fetchMissionReward(eventInput) {
 
   for (const resourceReward of resourceRewards) {
     const resourceRewardWithMetadata = await getResourceRewardInfos(resourceReward);
-    processReward(resourceRewardWithMetadata)
-    rewardsForEmbed.push(resourceRewardWithMetadata)
+
+    if (resourceRewardWithMetadata !== undefined) {
+      if (resourceRewardWithMetadata.retrievedMetadata === undefined) {
+        console.warn('found no metadata for', resourceRewardWithMetadata)
+        return;
+      }
+      addToStats(resourceRewardWithMetadata)
+      rewardsForEmbed.push(resourceRewardWithMetadata)
+    }
   }
 
   for (const nftReward of nftRewards) {
     const nftRewardWithMetadata = await getNftRewardInfos(nftReward);
-    processReward(nftRewardWithMetadata)
-    rewardsForEmbed.push(nftRewardWithMetadata)
+
+    if (nftRewardWithMetadata !== undefined) {
+      if (nftRewardWithMetadata.retrievedMetadata === undefined) {
+        console.warn('found no metadata for', nftRewardWithMetadata)
+        return;
+      }
+      addToStats(nftRewardWithMetadata)
+      rewardsForEmbed.push(nftRewardWithMetadata)
+    }
+
   }
 
   const filteredNftRewards = rewardsForEmbed.filter(containsShowableRarity);
@@ -63,18 +78,18 @@ async function getResourceRewardInfos(resourceReward) {
 }
 
 async function getNftRewardInfos(nftReward) {
+  const itemId = Number.parseInt(nftReward.itemId)
   const amount = Number.parseInt(nftReward.amount)
 
   if (amount > 0) {
-    const itemId = nftReward.itemId;
     const poolId = itemId >> 8;
     const memberId = itemId & 0xff;
     const contractAddress = nftReward.contractAddress
 
     const metadataUri = Object.values(itemIds).find((t) =>
-      t.poolId === poolId
-      && t.memberId === memberId
-      && t.contractAddress === contractAddress
+      t.poolId == poolId
+      && t.memberId == memberId
+      && t.contractAddress == contractAddress
     ).tokenUri;
 
     const retrievedMetadata = metadataUri
@@ -90,16 +105,6 @@ async function getNftRewardInfos(nftReward) {
   }
 
   return undefined;
-}
-
-function processReward(rewardWithMetadata) {
-  if (rewardWithMetadata !== undefined) {
-    if (rewardWithMetadata.retrievedMetadata === undefined) {
-      console.warn('found no metadata for', rewardWithMetadata)
-      return;
-    }
-    addToStats(rewardWithMetadata)
-  }
 }
 
 function containsShowableRarity(nftRewardWithMetadata) {
