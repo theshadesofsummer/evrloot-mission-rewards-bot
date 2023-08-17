@@ -47,5 +47,5 @@ function raritySorter(entryA, entryB) {
     const rarityA = entryA[1].rarity;
     const rarityB = entryB[1].rarity;
 
-    return raritySortValue.get(rarityB) - raritySortValue.get(rarityA)
+    return raritySortValue.get(rarityA) - raritySortValue.get(rarityB)
 }
