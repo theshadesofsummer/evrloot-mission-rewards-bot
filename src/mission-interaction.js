@@ -56,10 +56,12 @@ async function fetchMissionReward(eventInput) {
     return;
   }
 
+  console.log(eventInput.address)
   let accountName = await getAccountName({wallet: eventInput.address})
+  console.log(accountName)
 
   if (!accountName) {
-    accountName = 'An anonymous traveller '
+    accountName = 'An anonymous traveller'
   }
 
   for (const filteredNftReward of filteredNftRewards) {
