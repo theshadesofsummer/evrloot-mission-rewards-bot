@@ -20,30 +20,21 @@ async function fetchMissionReward(eventInput) {
   const resourceRewards = eventInput.returnValues.resourceRewards;
   const nftRewards = eventInput.returnValues.nftRewards;
 
+  const rewardsForEmbed = [];
+
   for (const resourceReward of resourceRewards) {
     const resourceRewardWithMetadata = await getResourceRewardInfos(resourceReward);
-    if (resourceRewardWithMetadata === undefined) {
-      return;
-    }
-
-    addToStats(resourceRewardWithMetadata)
+    processReward(resourceRewardWithMetadata)
+    rewardsForEmbed.push(resourceRewardWithMetadata)
   }
 
-
-  const nftRewardsForEmbed = [];
   for (const nftReward of nftRewards) {
-    const amount = Number.parseInt(nftReward.amount)
-
-    if (amount > 0) {
-      const nftRewardWithMetadata = await getNftRewardInfos(nftReward);
-
-      addToStats(nftRewardWithMetadata)
-
-      nftRewardsForEmbed.push(nftRewardWithMetadata);
-    }
+    const nftRewardWithMetadata = await getNftRewardInfos(nftReward);
+    processReward(nftRewardWithMetadata)
+    rewardsForEmbed.push(nftRewardWithMetadata)
   }
 
-  const filteredNftRewards = nftRewardsForEmbed.filter(containsShowableRarity);
+  const filteredNftRewards = rewardsForEmbed.filter(containsShowableRarity);
   for (const filteredNftReward of filteredNftRewards) {
     await postEmbed(createMissionRewardEmbed(filteredNftReward.retrievedMetadata));
   }
@@ -61,7 +52,7 @@ async function getResourceRewardInfos(resourceReward) {
       : undefined;
 
     return {
-      resourceId,
+      id: resourceId,
       amount,
       metadata: metadataUri,
       retrievedMetadata: retrievedMetadata,
@@ -74,27 +65,41 @@ async function getResourceRewardInfos(resourceReward) {
 async function getNftRewardInfos(nftReward) {
   const amount = Number.parseInt(nftReward.amount)
 
-  const itemId = nftReward.itemId;
-  const poolId = itemId >> 8;
-  const memberId = itemId & 0xff;
-  const contractAddress = nftReward.contractAddress
+  if (amount > 0) {
+    const itemId = nftReward.itemId;
+    const poolId = itemId >> 8;
+    const memberId = itemId & 0xff;
+    const contractAddress = nftReward.contractAddress
 
-  const metadataUri = Object.values(itemIds).find((t) =>
-    t.poolId == poolId
-    && t.memberId == memberId
-    && t.contractAddress == contractAddress
-  ).tokenUri;
+    const metadataUri = Object.values(itemIds).find((t) =>
+      t.poolId === poolId
+      && t.memberId === memberId
+      && t.contractAddress === contractAddress
+    ).tokenUri;
 
-  const retrievedMetadata = metadataUri
-    ? await getFromIpfs(metadataUri)
-    : undefined;
+    const retrievedMetadata = metadataUri
+      ? await getFromIpfs(metadataUri)
+      : undefined;
 
-  return {
-    itemId,
-    amount,
-    metadata: metadataUri,
-    retrievedMetadata: retrievedMetadata,
-  };
+    return {
+      id: itemId,
+      amount,
+      metadata: metadataUri,
+      retrievedMetadata: retrievedMetadata,
+    };
+  }
+
+  return undefined;
+}
+
+function processReward(rewardWithMetadata) {
+  if (rewardWithMetadata !== undefined) {
+    if (rewardWithMetadata.retrievedMetadata === undefined) {
+      console.warn('found no metadata for', rewardWithMetadata)
+      return;
+    }
+    addToStats(rewardWithMetadata)
+  }
 }
 
 function containsShowableRarity(nftRewardWithMetadata) {
