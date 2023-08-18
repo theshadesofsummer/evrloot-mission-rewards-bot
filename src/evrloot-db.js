@@ -18,9 +18,7 @@ async function getAccountName(filter) {
 
     console.log(doc);
 
-    console.log('(1)', !doc)
-    console.log('(2)', !doc.verified)
-    if (!doc || !doc.verified) {
+    if (doc === null || !doc.verified) {
       return 'An unknown traveller'
     }
 
