@@ -23,7 +23,7 @@ async function getAccountName(filter) {
       return undefined;
     }
 
-    return doc;
+    return doc.discordId;
   } catch (error) {
     console.error('db error while trying to find:', error);
     return undefined
