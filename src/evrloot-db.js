@@ -20,7 +20,7 @@ async function getAccountName(filter) {
       return 'An unknown traveller'
     }
 
-    if (doc.isAnonymous === undefined || doc.isAnonymous) {
+    if (doc.isAnonymous) {
       return 'An anonymous traveller'
     }
 
