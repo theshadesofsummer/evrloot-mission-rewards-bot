@@ -2,6 +2,8 @@ const {MongoClient} = require('mongodb');
 
 module.exports = {
   getAccountName,
+  getConnectedWallets,
+  userWithWallet,
   updateDocument,
   deleteDocument
 }
@@ -34,7 +36,41 @@ async function getAccountName(filter) {
   } finally {
     await client.close();
   }
+}
 
+async function getConnectedWallets(filter) {
+  const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+  try {
+    const collection = client.db("evrloot").collection("discordverifications");
+
+    console.log('fetching wallets for', filter)
+    // Fetch the documents
+    const docs = await collection.find(filter);
+    console.log('found wallets', docs)
+    return docs.map(doc => doc.wallet)
+  } catch (error) {
+    console.error('db error while trying to find wallets for:', filter, error);
+    return undefined
+  } finally {
+    await client.close();
+  }
+}
+
+async function userWithWallet(filter) {
+  const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+  try {
+    const collection = client.db("evrloot").collection("discordverifications");
+
+    console.log('checks if user with wallet exists for', filter)
+    // Fetch the documents
+    return await collection.findOne(filter)
+  } catch (error) {
+    console.error('db error while trying to check if user has wallet for:', filter, error);
+    return undefined
+  } finally {
+    await client.close();
+  }
+  return undefined
 }
 
 async function updateDocument(filter, updateData) {

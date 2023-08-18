@@ -1,7 +1,9 @@
-const { Client, ButtonStyle, ActionRowBuilder, ButtonBuilder} = require('discord.js');
-const generateSummary = require('./summary/generate-summary.js')
-const {updateDocument, deleteDocument} = require("./evrloot-db");
+const { Client, REST, Collection } = require('discord.js');
+const { Routes } = require('discord-api-types/v9');
+const generateSummary = require('./summary/generate-summary.js');
 const {verificationMessage} = require("./messaging/verification-message");
+const connectedWalletsCommand = require("./commands/connected-wallets");
+const walletSettingsCommand = require("./commands/wallet-settings");
 
 module.exports = {
   setupDiscordBot,
@@ -11,15 +13,70 @@ module.exports = {
 };
 
 const client = new Client({intents: 0});
+const commands = [
+  connectedWalletsCommand,
+  walletSettingsCommand
+]
 
 async function setupDiscordBot() {
   require('dotenv').config({path: '../.env'})
+
+  await deployCommandsToServer();
+
+  client.commands = getCollectionForCommands();
 
   client.once('ready', () => {
     console.log('Ready!');
   });
 
+  client.on('interactionCreate', async interaction => {
+    if (interaction.isCommand()) {
+      const command = client.commands.get(interaction.commandName);
+      if (!command) return;
+
+      try {
+        await command.execute(interaction);
+      } catch (error) {
+        console.error(error);
+        await interaction.reply({content: 'There was an error while executing this command!', ephemeral: true});
+      }
+    }
+  });
+
   await client.login(process.env.DISCORDJS_TOKEN);
+}
+
+async function deployCommandsToServer() {
+  const commandData = []
+  for (const command of commands) {
+    commandData.push(command.data.toJSON());
+  }
+
+  const rest = new REST({ version: '10' }).setToken(process.env.DISCORDJS_TOKEN);
+
+  try {
+    console.log('Started refreshing application (/) commands.');
+
+    await rest.put(
+      Routes.applicationCommands(process.env.DISCORDJS_CLIENTID),
+      { body: commandData },
+    );
+
+    console.log('Successfully reloaded application (/) commands.');
+  }
+  catch (error) {
+    console.error(error);
+  }
+}
+
+function getCollectionForCommands() {
+  const collection = new Collection();
+
+  for (const command of commands) {
+    collection.set(command.data.name, command);
+  }
+
+  return collection;
 }
 
 async function publishSummary() {
