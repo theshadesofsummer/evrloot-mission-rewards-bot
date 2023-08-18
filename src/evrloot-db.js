@@ -16,10 +16,15 @@ async function getAccountName(filter) {
     // Fetch the document
     const doc = await collection.findOne(filter);
 
-    if (!doc || !doc.verified || doc.verified === false) {
+    console.log(doc);
+
+    console.log('(1)', !doc)
+    console.log('(2)', !doc.verified)
+    if (!doc || !doc.verified) {
       return 'An unknown traveller'
     }
 
+    console.log('(3)', doc.isAnonymous)
     if (doc.isAnonymous) {
       return 'An anonymous traveller'
     }
