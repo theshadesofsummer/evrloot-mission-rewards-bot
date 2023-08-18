@@ -41,6 +41,7 @@ async function verificationMessage(member, wallet) {
     }
 
   } catch (e) {
+    await deleteDocument({wallet})
     console.log('could not create DM for', member.user.username)
   }
 }
