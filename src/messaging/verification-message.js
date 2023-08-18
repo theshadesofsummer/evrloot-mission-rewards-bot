@@ -70,9 +70,8 @@ async function handleVerificationConfirmation(confirmation, member, wallet) {
 
       await handleAnonConfirmation(confirmation, member, wallet)
     } catch (e) {
-      console.log('user did not react or some error happened:', e)
-      await deleteDocument({wallet})
-      await member.send({ content: `Not the most talkative, are you traveller? Do not worry, i'll just throw the paper into the well.`, components: [] });
+      console.log('user did not react on the anon request or some error happened:', e)
+      await member.send({ content: `Alright, if you stay that silent i will take that as a no.`, components: [] });
     }
 
   } else if (confirmation.customId === 'deny') {
