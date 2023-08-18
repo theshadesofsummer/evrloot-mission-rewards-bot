@@ -7,6 +7,7 @@ const { getFromIpfs } = require('./evrloot-ipfs.js')
 const config = require('./config.js')
 const { addToStats, increaseMissionCounter, getStats } = require('./summary/daily-stats.js')
 const {getAccountName} = require("./evrloot-db");
+const {getAccountFromTx} = require("./abi-interaction");
 
 module.exports = {
   fetchMissionReward
@@ -56,8 +57,9 @@ async function fetchMissionReward(eventInput) {
     return;
   }
 
-  console.log(eventInput.address)
-  let accountName = await getAccountName({wallet: eventInput.address})
+  const from = await getAccountFromTx(eventInput.transactionHash)
+
+  let accountName = await getAccountName({wallet: from})
   console.log(accountName)
 
   if (!accountName) {

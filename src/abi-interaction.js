@@ -7,5 +7,11 @@ const ABI_EVRLOOT_RESOURCES = require('./abi/ABI_EVRLOOT_RESOURCES.json');
 
 module.exports = {
   MISSION_CONTRACT: new web3.eth.Contract(ABI_MISSION_CONTRACT, CONTRACT_ADDRESS_EVRLOOT_BOUND),
-  EVRLOOT_RESOURCES: new web3.eth.Contract(ABI_EVRLOOT_RESOURCES, CONTRACT_ADDRESS_EVRLOOT_BOUND)
+  EVRLOOT_RESOURCES: new web3.eth.Contract(ABI_EVRLOOT_RESOURCES, CONTRACT_ADDRESS_EVRLOOT_BOUND),
+  getAccountFromTx
+}
+
+async function getAccountFromTx(txhash) {
+  const tx = await web3.eth.getTransaction(txhash)
+  return tx.from
 }
