@@ -4,7 +4,7 @@ const {updateDocument, deleteDocument} = require("../evrloot-db");
 module.exports = {
   verificationMessage
 }
-async function verificationMessage(memberMap, wallet) {
+async function verificationMessage(member, wallet) {
   const dmMessage = `Welcome Traveller, i found a ripped piece of paper in the palace, it recited your name and the following combination i can't seem to make sense of...\n` +
     `It stated: \`${wallet}\`\n` +
     `Can you make sense of this?`;
@@ -16,28 +16,26 @@ async function verificationMessage(memberMap, wallet) {
 
   const deny = new ButtonBuilder()
     .setCustomId('deny')
-    .setLabel('No, i have never that!')
+    .setLabel('No, i have never seen that!')
     .setStyle(ButtonStyle.Danger);
 
   const row = new ActionRowBuilder()
     .addComponents(deny, confirm);
 
-  for (let member of memberMap.values()){
-    await member.createDM()
-    const confirmationDm = await member.send({
-      content: dmMessage,
-      components: [row],
-    })
+  await member.createDM()
+  const confirmationDm = await member.send({
+    content: dmMessage,
+    components: [row],
+  })
 
-    try {
-      const confirmation = await confirmationDm.awaitMessageComponent({ time: 60_000 });
+  try {
+    const confirmation = await confirmationDm.awaitMessageComponent({ time: 60_000 });
 
-      await handleVerificationConfirmation(confirmation, member, wallet)
-    } catch (e) {
-      console.log('user did not react or some error happened:', e)
-      await deleteDocument({wallet})
-      await member.send({ content: `Not the most talkative, are you traveller? Do not worry, i'll just throw the paper into the well.`, components: [] });
-    }
+    await handleVerificationConfirmation(confirmation, member, wallet)
+  } catch (e) {
+    console.log('user did not react or some error happened:', e)
+    await deleteDocument({wallet})
+    await member.send({ content: `Not the most talkative, are you traveller? Do not worry, i'll just throw the paper into the well.`, components: [] });
   }
 }
 

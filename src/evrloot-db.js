@@ -45,7 +45,7 @@ async function getConnectedWallets(filter) {
 
     console.log('fetching wallets for', filter)
     // Fetch the documents
-    const docs = await collection.find(filter);
+    const docs = await collection.find(filter).toArray();
     console.log('found wallets', docs)
     return docs.map(doc => doc.wallet)
   } catch (error) {
@@ -63,7 +63,9 @@ async function userWithWallet(filter) {
 
     console.log('checks if user with wallet exists for', filter)
     // Fetch the documents
-    return await collection.findOne(filter)
+    const doc = await collection.findOne(filter)
+    console.log('found doc:', doc)
+    return doc
   } catch (error) {
     console.error('db error while trying to check if user has wallet for:', filter, error);
     return undefined

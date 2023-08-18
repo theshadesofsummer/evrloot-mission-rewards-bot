@@ -4,6 +4,7 @@ const generateSummary = require('./summary/generate-summary.js');
 const {verificationMessage} = require("./messaging/verification-message");
 const connectedWalletsCommand = require("./commands/connected-wallets");
 const walletSettingsCommand = require("./commands/wallet-settings");
+const {deleteDocument} = require("./evrloot-db");
 
 module.exports = {
   setupDiscordBot,
@@ -94,10 +95,24 @@ async function sendVerificationDm(discordId, wallet) {
   await client.guilds.fetch();
   const guild = client.guilds.cache.get(process.env.GUILD_ID);
 
-  // tho only 1 member can be found, it is still a map, don't ask me
-  const memberMap = await guild.members.fetch({ query: discordId, limit: 1 })
+  const memberMap = await guild.members.fetch({ query: discordId, limit: 10})
 
-  await verificationMessage(memberMap, wallet)
+  let userWithMatchingUsername = undefined;
+  memberMap.forEach(member => {
+    const username = member.user.username;
+    console.log('found possible user named', username)
+    if (username === discordId) {
+      userWithMatchingUsername = member;
+    }
+  })
+
+  if (!userWithMatchingUsername) {
+    console.log('could not find member for', discordId)
+    await deleteDocument({wallet})
+  } else {
+    console.log('found member for', discordId)
+    await verificationMessage(userWithMatchingUsername, wallet)
+  }
 }
 
 async function getChannel(client, channelId) {

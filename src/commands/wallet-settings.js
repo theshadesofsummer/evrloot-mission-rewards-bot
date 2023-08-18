@@ -13,24 +13,21 @@ module.exports = {
         .setMinLength(42)
     ),
   async execute(interaction) {
-    interaction.deferReply({
-      ephemeral: true
-    })
 
     const address = interaction.options.getString('address')
-    const username = 'summershades'
+    const username = interaction.user.globalName
     const entry = await userWithWallet({discordId: username, wallet: address})
 
     if (entry === null || entry === undefined) {
-      await interaction.editReply({
+      await interaction.reply({
         ephemeral: true,
         content: `Sorry, I don't think i recall that combination, are you sure you ever approved this address?`
       })
     } else {
-      const walletSettingMessage = await interaction.editReply({
+      const walletSettingMessage = await interaction.reply({
         ephemeral: true,
         content: `Ah yes, here is your entry! So what do you want to do with it?`,
-        components: walletSettingsRow(entry)
+        components: [walletSettingsRow(entry)]
       })
 
       try {
@@ -48,7 +45,7 @@ module.exports = {
           await confirmation.update({ components: [] });
           await interaction.followUp({
             ephemeral: true,
-            content: 'I successfully toggled your anonymity, traveller.',
+            content: 'I successfully toggled your anonymity, you are now ' + getAnonState(!entry.isAnonymous),
           })
         } else if (confirmation.customId === 'wallet-delete') {
           await deleteDocument({wallet: address})
@@ -56,7 +53,7 @@ module.exports = {
           await confirmation.update({ components: [] });
           await interaction.followUp({
             ephemeral: true,
-            content: 'Successfully deleted your wallet, I will burn that piece of paper right now',
+            content: 'I successfully deleted this information, I will burn that piece of paper right now',
           })
         }
 
@@ -81,18 +78,18 @@ function walletSettingsRow(entry) {
 
   const toggleAnonButton = new ButtonBuilder()
     .setCustomId('wallet-toggle-anon')
-    .setLabel('Toggle Anonymity, currently ' + getAnonState(entry))
+    .setLabel('Toggle Anonymity, currently ' + getAnonState(entry.isAnonymous)+ '.')
     .setStyle(ButtonStyle.Primary);
 
   const deleteButton = new ButtonBuilder()
     .setCustomId('wallet-delete')
-    .setLabel('No thanks, i rather want to stay undercover!')
+    .setLabel('Please remove my entry!')
     .setStyle(ButtonStyle.Danger);
 
   return new ActionRowBuilder()
     .addComponents(nothingButton, toggleAnonButton, deleteButton);
 }
 
-function getAnonState(entry) {
-  return entry.isAnonymous ? 'undercover' : 'public'
+function getAnonState(isAnonymous) {
+  return isAnonymous ? 'undercover' : 'public'
 }

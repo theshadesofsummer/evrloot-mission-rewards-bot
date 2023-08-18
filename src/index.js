@@ -32,9 +32,8 @@ function setupMongoDbConnection() {
 
     // Start listening to changes
     changeStream.on('change', (next) => {
-      sendVerificationDm(next.fullDocument.discordId, next.fullDocument.wallet).then(() =>
-        console.log('sent discord dm to', next.fullDocument.discordId, 'with', next.fullDocument.wallet)
-      )
+      console.log('sending discord dm to', next.fullDocument.discordId, 'with', next.fullDocument.wallet)
+      sendVerificationDm(next.fullDocument.discordId, next.fullDocument.wallet)
     });
 
     // Handle errors (optional but recommended)

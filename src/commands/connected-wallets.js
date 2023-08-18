@@ -7,23 +7,19 @@ module.exports = {
     .setName('connected-wallets')
     .setDescription('See what addresses you have connected!'),
   async execute(interaction) {
-    interaction.deferReply({
+    await interaction.deferReply({
       ephemeral: true
     })
 
-    console.log(interaction)
-
-    const username = 'summershades'
+    const username = interaction.user.globalName
     const accounts = await getConnectedWallets({discordId: username})
 
-    if (!accounts) {
+    if (!accounts || accounts.length <= 0) {
       await interaction.editReply({
-        ephemeral: true,
         content: `I couldn't find anything with your name on it, I'm sorry.`
       })
     } else {
       await interaction.editReply({
-        ephemeral: true,
         content: messageContent(accounts)
       })
     }
