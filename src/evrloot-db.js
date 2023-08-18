@@ -30,7 +30,7 @@ async function getAccountName(filter) {
     return doc.discordId;
   } catch (error) {
     console.error('db error while trying to find:', error);
-    return undefined
+    return 'A unknown traveller'
   } finally {
     await client.close();
   }
