@@ -22,20 +22,26 @@ async function verificationMessage(member, wallet) {
   const row = new ActionRowBuilder()
     .addComponents(deny, confirm);
 
-  await member.createDM()
-  const confirmationDm = await member.send({
-    content: dmMessage,
-    components: [row],
-  })
-
   try {
-    const confirmation = await confirmationDm.awaitMessageComponent({ time: 60_000 });
+    await member.createDM()
 
-    await handleVerificationConfirmation(confirmation, member, wallet)
+    const confirmationDm = await member.send({
+      content: dmMessage,
+      components: [row],
+    })
+
+    try {
+      const confirmation = await confirmationDm.awaitMessageComponent({ time: 60_000 });
+
+      await handleVerificationConfirmation(confirmation, member, wallet)
+    } catch (e) {
+      console.log('user did not react or some error happened:', e)
+      await deleteDocument({wallet})
+      await member.send({ content: `Not the most talkative, are you traveller? Do not worry, i'll just throw the paper into the well.`, components: [] });
+    }
+
   } catch (e) {
-    console.log('user did not react or some error happened:', e)
-    await deleteDocument({wallet})
-    await member.send({ content: `Not the most talkative, are you traveller? Do not worry, i'll just throw the paper into the well.`, components: [] });
+    console.log('could not create DM for', member.user.username)
   }
 }
 
