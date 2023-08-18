@@ -16,11 +16,12 @@ async function getAccountName(filter) {
     // Fetch the document
     const doc = await collection.findOne(filter);
 
-    console.log('fetched', doc, 'with', filter)
-
     if (!doc || !doc.verified || doc.verified === false) {
-      console.log("Document not found or not verified with filter:", filter);
-      return undefined;
+      return 'An unknown traveller'
+    }
+
+    if (doc.isAnonymous === undefined || doc.isAnonymous) {
+      return 'An anonymous traveller'
     }
 
     return doc.discordId;

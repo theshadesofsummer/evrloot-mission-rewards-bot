@@ -60,11 +60,6 @@ async function fetchMissionReward(eventInput) {
   const from = await getAccountFromTx(eventInput.transactionHash)
 
   let accountName = await getAccountName({wallet: from})
-  console.log(accountName)
-
-  if (!accountName) {
-    accountName = 'An anonymous traveller'
-  }
 
   for (const filteredNftReward of filteredNftRewards) {
     await postEmbed(createMissionRewardEmbed(accountName, filteredNftReward));
