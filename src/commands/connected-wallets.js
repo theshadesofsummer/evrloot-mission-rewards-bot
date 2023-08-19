@@ -11,7 +11,7 @@ module.exports = {
       ephemeral: true
     })
 
-    const username = interaction.user.globalName
+    const username = interaction.user.username
     const accounts = await getConnectedWallets({discordId: username})
 
     if (!accounts || accounts.length <= 0) {
