@@ -4,7 +4,10 @@ const generateSummary = require('./summary/generate-summary.js');
 const {verificationMessage} = require("./messaging/verification-message");
 const connectedWalletsCommand = require("./commands/connected-wallets");
 const walletSettingsCommand = require("./commands/wallet-settings");
+const soulInfoCommand = require('./commands/soul-info.js');
 const {deleteDocument} = require("./evrloot-db");
+const { soulInfoSelectMenu} = require("./commands/select-menu/soul-info-select-menu.js");
+
 
 module.exports = {
   setupDiscordBot,
@@ -16,7 +19,8 @@ module.exports = {
 const client = new Client({intents: 0});
 const commands = [
   connectedWalletsCommand,
-  walletSettingsCommand
+  walletSettingsCommand,
+  soulInfoCommand
 ]
 
 async function setupDiscordBot() {
@@ -40,6 +44,21 @@ async function setupDiscordBot() {
       } catch (error) {
         console.error(error);
         await interaction.reply({content: 'There was an error while executing this command!', ephemeral: true});
+      }
+    }
+
+    if (interaction.isStringSelectMenu()) {
+      try {
+        if (interaction.customId === 'choose-soul-menu')
+          await soulInfoSelectMenu.execute(interaction)
+        else if (interaction.customId === 'choose-fishing-board-menu') {
+          // await fishingBoardSelectMenu.execute(interaction)
+        } else
+          interaction.reply('no matching interaction found')
+      }
+      catch (error) {
+        console.log(error);
+        await interaction.editReply({ content: 'There was an error while interacting with the string select menu!' });
       }
     }
   });

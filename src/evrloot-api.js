@@ -1,8 +1,15 @@
-const { getIpfsLinkForItem } = require("./abi-interaction");
 const linkWithoutIpfs = require("./ipfs-link-tools")
 
 module.exports = {
-  getFromIpfs
+  getFromIpfs,
+  getSouls
+}
+
+async function getSouls(address) {
+  console.log(`https://api.evrloot.xyz/api/evmnfts/evmwallet/${address}`)
+  const walletInfo = await fetchAsync(`https://api.evrloot.xyz/api/evmnfts/evmwallet/${address}`);
+  console.log(walletInfo)
+  return walletInfo.evmSouls;
 }
 
 async function getFromIpfs(ipfsLink) {
