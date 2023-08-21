@@ -1,6 +1,6 @@
 const { postEmbed } = require('./discord-bot.js')
 const createMissionRewardEmbed = require('./embeds/mission-reward-embed.js')
-const { itemIds } = require('./mappings/fish-types.js')
+const { itemIds } = require('./mappings/item-ids.js')
 const { MISSION_CONTRACT } = require("./abi-interaction.js");
 const resourceRewards = require('./mappings/resource-types.js');
 const { getFromIpfs } = require('./evrloot-api.js')
@@ -8,6 +8,7 @@ const config = require('./config.js')
 const { addToStats, increaseMissionCounter, getStats } = require('./summary/daily-stats.js')
 const {getAccountName} = require("./evrloot-db");
 const {getAccountFromTx} = require("./abi-interaction");
+const {nftMapping} = require("./mappings/item-ids");
 
 module.exports = {
   fetchMissionReward
@@ -89,33 +90,35 @@ async function getResourceRewardInfos(resourceReward) {
 }
 
 async function getNftRewardInfos(nftReward) {
-  const itemId = Number.parseInt(nftReward.itemId)
   const amount = Number.parseInt(nftReward.amount)
 
   if (amount > 0) {
-    const poolId = itemId >> 8;
-    const memberId = itemId & 0xff;
-    const contractAddress = nftReward.contractAddress
+    const nftInfo = nftMapping[`${nftReward.contractAddress}+${nftReward.itemId}`];
 
-    const metadataUri = Object.values(itemIds).find((t) =>
-      t.poolId == poolId
-      && t.memberId == memberId
-      && t.contractAddress == contractAddress
-    ).tokenUri;
-
-    const retrievedMetadata = metadataUri
-      ? await getFromIpfs(metadataUri)
+    const retrievedMetadata = nftInfo.metadataUri
+      ? await getFromIpfs(nftInfo.metadataUri)
       : undefined;
 
     return {
-      id: itemId,
+      id: Number.parseInt(nftReward.itemId),
       amount,
-      metadata: metadataUri,
+      metadata: nftInfo.metadataUri,
       retrievedMetadata: retrievedMetadata,
     };
   }
 
   return undefined;
+}
+
+function getItemId(poolId, memberId) {
+  // Combine poolId and memberId into a single uint
+  if (poolId > 255 || memberId > 255) {
+    throw new Error('poolId or memberId too large');
+  }
+
+  let itemId = BigInt(0);
+  itemId = (BigInt(poolId) << BigInt(8)) | BigInt(memberId);
+  return itemId;
 }
 
 function containsShowableRarity(nftRewardWithMetadata) {
