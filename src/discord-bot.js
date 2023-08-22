@@ -16,6 +16,7 @@ module.exports = {
   setupDiscordBot,
   publishSummary,
   postEmbed,
+  postFightResult,
   sendVerificationDm
 };
 
@@ -122,6 +123,11 @@ async function publishSummary() {
 
 async function postEmbed(embed) {
   const channel = await getChannel(client, process.env.PUBLISH_CHANNEL_ID)
+  await channel.send({embeds: [embed]});
+}
+
+async function postFightResult(embed) {
+  const channel = await getChannel(client, process.env.ARENA_CHANNEL_ID)
   await channel.send({embeds: [embed]});
 }
 

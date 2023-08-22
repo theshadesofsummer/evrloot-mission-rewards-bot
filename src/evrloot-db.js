@@ -7,10 +7,12 @@ module.exports = {
   updateDocument,
   deleteDocument,
   createNewFight,
-  getRunningFight,
+  getFightByFighters,
+  getFightByFightId,
   soulIsNotInFight,
   addFightingSoul,
   getOpenInvitations,
+  deleteFight,
 }
 
 const uri = `mongodb+srv://${process.env.MONGODB_ACCESS}@cluster0.cbrbn.mongodb.net/evrloot?retryWrites=true&w=majority`;
@@ -141,12 +143,26 @@ async function createNewFight(fighterA, fighterB) {
   }
 }
 
-async function getRunningFight(fighterA, fighterB) {
+async function getFightByFighters(fighterA, fighterB) {
   const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
   try {
     const collection = client.db("evrloot").collection("discordfights");
 
     return await collection.findOne({fighterA, fighterB});
+  } catch (error) {
+    console.error('Error searching for a running fight', error);
+  } finally {
+    await client.close();
+  }
+}
+
+async function getFightByFightId(fightId) {
+  const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+  try {
+    const collection = client.db("evrloot").collection("discordfights");
+
+    const fightObjectId = new ObjectId(fightId)
+    return await collection.findOne({_id: fightObjectId})
   } catch (error) {
     console.error('Error searching for a running fight', error);
   } finally {
@@ -195,7 +211,6 @@ async function addFightingSoul(fightId, soul, firstFighter) {
     const soulToAdd = firstFighter ? {soulA: soul} : {soulB: soul}
     await collection.updateOne({_id: fightObjectId}, { $set: soulToAdd});
     console.log("fight updated successfully");
-
   } catch (error) {
     console.error('Error updating the fight', error);
   } finally {
@@ -211,6 +226,19 @@ async function getOpenInvitations(username) {
     return await collection.find({fighterB: username, soulA: {$exists: true}}).toArray();
   } catch (error) {
     console.error('Error updating the fight', error);
+  } finally {
+    await client.close();
+  }
+}
+
+async function deleteFight(fightId) {
+  const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+  try {
+    const collection = client.db("evrloot").collection("discordfights");
+
+    return await collection.deleteOne({_id: fightId});
+  } catch (error) {
+    console.error('Error deleting the fight', error);
   } finally {
     await client.close();
   }

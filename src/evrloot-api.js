@@ -4,6 +4,7 @@ const dns = require("dns");
 module.exports = {
   getSouls,
   getOnlySouls,
+  startFight,
   getFromIpfs,
 }
 
@@ -17,13 +18,26 @@ async function getOnlySouls(address) {
   return await fetchAsync(`https://api.evrloot.xyz/api/evmnfts/evmwallet/soulsOnly/${address}`);
 }
 
+async function startFight(attackers, defenders) {
+  console.log('attackers', process.env.API_PASSWORD, 'defenders', defenders)
+  return await fetchAsync(`https://api.evrloot.xyz/api/combat/fight`, {
+    method: 'POST',
+    body: JSON.stringify({
+      attackers,
+      defenders,
+      password: process.env.API_PASSWORD
+    }),
+    headers: { 'Content-Type': 'application/json' }
+  });
+}
+
 async function getFromIpfs(ipfsLink) {
   return await fetchAsync(`https://evrloot.myfilebase.com/ipfs/${linkWithoutIpfs(ipfsLink)}`);
 }
 
-async function fetchAsync(url) {
+async function fetchAsync(url, options = {}) {
   dns.setDefaultResultOrder('ipv4first')
-  return fetch(url).then(response => {
+  return fetch(url, options).then(response => {
     if (!response.ok) {
       throw new Error(`Request failed with status ${response.status}`)
     }

@@ -1,4 +1,4 @@
-const {addFightingSoul, getConnectedWallets, soulIsNotInFight, getRunningFight} = require("../../evrloot-db");
+const {getConnectedWallets, soulIsNotInFight, getFightByFighters} = require("../../evrloot-db");
 const {getOnlySouls} = require("../../evrloot-api");
 const {createChooseSoulEmbeds} = require("../../embeds/choose-from-select-menu-embeds");
 const {Pagination, ExtraRowPosition} = require("pagination.djs");
@@ -9,7 +9,7 @@ module.exports = {
     const fighterA = interaction.values[0];
     const fighterB = interaction.user.username;
 
-    const fight = await getRunningFight(fighterA, fighterB)
+    const fight = await getFightByFighters(fighterA, fighterB)
 
     const wallets = await getConnectedWallets({discordId: fighterB})
 

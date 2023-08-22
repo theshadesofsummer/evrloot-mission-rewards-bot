@@ -1,4 +1,4 @@
-const {getRunningFight, createNewFight, soulIsNotInFight} = require("../../evrloot-db");
+const {getFightByFighters, createNewFight, soulIsNotInFight} = require("../../evrloot-db");
 const {getOnlySouls} = require("../../evrloot-api");
 const {createChooseSoulEmbeds} = require("../../embeds/choose-from-select-menu-embeds");
 const {Pagination, ExtraRowPosition} = require("pagination.djs");
@@ -8,7 +8,7 @@ module.exports = async function (interaction, wallets) {
   let opponent = interaction.options.getUser('opponent');
 
   let fightId;
-  const runningFight = await getRunningFight(interaction.user.username, opponent.username)
+  const runningFight = await getFightByFighters(interaction.user.username, opponent.username)
   if (runningFight === null) {
     console.log('need to create a new fight')
     const insertResult = await createNewFight(interaction.user.username, opponent.username)
@@ -48,4 +48,12 @@ module.exports = async function (interaction, wallets) {
   })
 }
 
+function mapAsync(array, callbackfn) {
+  return Promise.all(array.map(callbackfn));
+}
+
+async function filterAsync(array, callbackfn) {
+  const filterMap = await mapAsync(array, callbackfn);
+  return array.filter((value, index) => filterMap[index]);
+}
 

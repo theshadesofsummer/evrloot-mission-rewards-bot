@@ -1,4 +1,5 @@
 const {addFightingSoul} = require("../../evrloot-db");
+const handleFight = require('../fight/handle-fight')
 
 module.exports = {
   async execute(interaction, firstFighter) {
@@ -8,9 +9,15 @@ module.exports = {
 
     await addFightingSoul(fightId, soulId, firstFighter)
 
-    interaction.reply({
+    await interaction.reply({
       ephemeral: true,
-      content: 'Your soul will await your opponents decision'
+      content: 'Thanks, the fight will happen soon!'
     })
+
+    // error handling like shit needs to be done here
+    if (!firstFighter) {
+      await handleFight(interaction, fightId)
+    }
+
   },
 }
