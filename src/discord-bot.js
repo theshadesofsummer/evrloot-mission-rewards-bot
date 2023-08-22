@@ -8,7 +8,7 @@ const soulInfoCommand = require('./commands/soul-info.js');
 const fightCommand = require('./commands/fight');
 const {deleteDocument} = require("./evrloot-db");
 const soulInfoSelectMenu = require("./commands/select-menu/soul-info-select-menu.js");
-const selectedFighterSelectMenu = require("./commands/select-menu/selected-fighter-select-menu");
+const selectedFighterSelectMenu = require("./commands/select-menu/select-fighter");
 
 
 module.exports = {
@@ -56,8 +56,10 @@ async function setupDiscordBot() {
           await soulInfoSelectMenu.execute(interaction)
         else if (interaction.customId === 'choose-fishing-board-menu') {
           // await fishingBoardSelectMenu.execute(interaction)
-        } else if (interaction.customId === 'choose-fight-menu')
-          await selectedFighterSelectMenu.execute(interaction)
+        } else if (interaction.customId === 'choose-fighter-a-menu')
+          await selectedFighterSelectMenu.execute(interaction, true)
+        else if (interaction.customId === 'choose-fighter-b-menu')
+          await selectedFighterSelectMenu.execute(interaction, false)
       }
       catch (error) {
         console.log(error);

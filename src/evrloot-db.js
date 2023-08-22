@@ -8,7 +8,8 @@ module.exports = {
   deleteDocument,
   createNewFight,
   getRunningFight,
-  addFightingSoulA,
+  soulIsNotInFight,
+  addFightingSoul,
 }
 
 const uri = `mongodb+srv://${process.env.MONGODB_ACCESS}@cluster0.cbrbn.mongodb.net/evrloot?retryWrites=true&w=majority`;
@@ -152,7 +153,30 @@ async function getRunningFight(fighterA, fighterB) {
   }
 }
 
-async function addFightingSoulA(fightId, soulA) {
+async function soulIsNotInFight(soul) {
+  const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+  try {
+    const collection = client.db("evrloot").collection("discordfights");
+
+    const fight = await collection.findOne({soulA: soul.id});
+    console.log('fight', fight)
+
+    if (!fight) {
+      console.log('soul is not in fight')
+      return true
+    } else {
+      console.log('soul is in fight')
+      return false
+    }
+
+  } catch (error) {
+    console.error('Error searching for a running fight', error);
+  } finally {
+    await client.close();
+  }
+}
+
+async function addFightingSoul(fightId, soul, firstFighter) {
   const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
   try {
     const collection = client.db("evrloot").collection("discordfights");
@@ -167,10 +191,8 @@ async function addFightingSoulA(fightId, soulA) {
     }
 
     // Update the document with provided data
-    await collection.updateOne({_id: fightObjectId}, { $set: {
-        soulA,
-      }
-    });
+    const soulToAdd = firstFighter ? {soulA: soul} : {soulB: soul}
+    await collection.updateOne({_id: fightObjectId}, { $set: soulToAdd});
     console.log("fight updated successfully");
 
   } catch (error) {

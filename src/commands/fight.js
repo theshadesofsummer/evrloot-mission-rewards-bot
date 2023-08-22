@@ -1,5 +1,5 @@
 const {SlashCommandBuilder} = require("discord.js");
-const {getConnectedWallets, createNewFight, getRunningFight} = require("../evrloot-db");
+const {getConnectedWallets, createNewFight, getRunningFight, soulIsNotInFight} = require("../evrloot-db");
 const {getOnlySouls} = require("../evrloot-api");
 const {createChooseSoulEmbeds} = require("../embeds/choose-soul-embeds");
 const {Pagination, ExtraRowPosition} = require("pagination.djs");
@@ -50,19 +50,33 @@ module.exports = {
       } else {
         console.log('running fight found')
         fightId = runningFight._id
+
+        if (runningFight.soulA) {
+          interaction.editReply({
+            content: `You already have an outgoing invitation to ${runningFight.fighterB} with one of your souls.\n` +
+                     `Wait for your opponent to accept or withdraw your invitation.`
+          })
+          return;
+        }
       }
 
 
       const allAccountsWithSouls = wallets.map(getOnlySouls)
       Promise.all(allAccountsWithSouls).then(async soulsInAllAccounts => {
-        const soulList = soulsInAllAccounts.flat();
+        const soulList = soulsInAllAccounts
+          .flat()
 
-        const embeds = createChooseSoulEmbeds(soulList);
+        const availableSouls = await filterAsync(soulList, soulIsNotInFight)
+
+        if (availableSouls.length <= 0)
+          interaction.editReply('You currently have no souls available for fighting,')
+
+        const embeds = createChooseSoulEmbeds(availableSouls);
 
         const pagination = new Pagination(interaction)
           .setEmbeds(embeds)
           .setEphemeral(true)
-          .addActionRows([createSelectMenuRow(soulList, 'choose-fight-menu', fightId)], ExtraRowPosition.Below);
+          .addActionRows([createSelectMenuRow(availableSouls, 'choose-fighter-a-menu', fightId)], ExtraRowPosition.Below);
 
         await pagination.render();
       })
@@ -70,3 +84,11 @@ module.exports = {
   },
 };
 
+function mapAsync(array, callbackfn) {
+  return Promise.all(array.map(callbackfn));
+}
+
+async function filterAsync(array, callbackfn) {
+  const filterMap = await mapAsync(array, callbackfn);
+  return array.filter((value, index) => filterMap[index]);
+}
