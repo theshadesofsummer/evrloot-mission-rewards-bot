@@ -1,11 +1,14 @@
-const {MongoClient} = require('mongodb');
+const {MongoClient, ObjectId} = require('mongodb');
 
 module.exports = {
   getAccountName,
   getConnectedWallets,
   userWithWallet,
   updateDocument,
-  deleteDocument
+  deleteDocument,
+  createNewFight,
+  getRunningFight,
+  addFightingSoulA,
 }
 
 const uri = `mongodb+srv://${process.env.MONGODB_ACCESS}@cluster0.cbrbn.mongodb.net/evrloot?retryWrites=true&w=majority`;
@@ -118,6 +121,60 @@ async function deleteDocument(filter) {
 
   } catch (error) {
     console.error('Error deleted the document', error);
+  } finally {
+    await client.close();
+  }
+}
+
+async function createNewFight(fighterA, fighterB) {
+  const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+  try {
+    const collection = client.db("evrloot").collection("discordfights");
+
+    return await collection.insertOne({fighterA, fighterB});
+  } catch (error) {
+    console.error('Error creating the new fight', error);
+  } finally {
+    await client.close();
+  }
+}
+
+async function getRunningFight(fighterA, fighterB) {
+  const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+  try {
+    const collection = client.db("evrloot").collection("discordfights");
+
+    return await collection.findOne({fighterA, fighterB});
+  } catch (error) {
+    console.error('Error searching for a running fight', error);
+  } finally {
+    await client.close();
+  }
+}
+
+async function addFightingSoulA(fightId, soulA) {
+  const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+  try {
+    const collection = client.db("evrloot").collection("discordfights");
+
+    // Fetch the document
+    const fightObjectId = new ObjectId(fightId)
+    const doc = await collection.findOne({_id: fightObjectId});
+
+    if (!doc) {
+      console.log("fight not found with id:", fightId);
+      return;
+    }
+
+    // Update the document with provided data
+    await collection.updateOne({_id: fightObjectId}, { $set: {
+        soulA,
+      }
+    });
+    console.log("fight updated successfully");
+
+  } catch (error) {
+    console.error('Error updating the fight', error);
   } finally {
     await client.close();
   }

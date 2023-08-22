@@ -1,6 +1,9 @@
 const {SlashCommandBuilder} = require("discord.js");
-const {getConnectedWallets} = require("../evrloot-db");
+const {getConnectedWallets, createNewFight, getRunningFight} = require("../evrloot-db");
 const {getOnlySouls} = require("../evrloot-api");
+const {createChooseSoulEmbeds} = require("../embeds/choose-soul-embeds");
+const {Pagination, ExtraRowPosition} = require("pagination.djs");
+const {createSelectMenuRow} = require("../helpers/select-menu");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -25,9 +28,9 @@ module.exports = {
     })
 
     const username = interaction.user.username
-    const accounts = await getConnectedWallets({discordId: username})
+    const wallets = await getConnectedWallets({discordId: username})
 
-    if (!accounts || accounts.length <= 0) {
+    if (!wallets || wallets.length <= 0) {
       await interaction.editReply({
         content: `To have access to your souls you need to connect your wallet(s) to your discord account!`
       })
@@ -38,24 +41,32 @@ module.exports = {
     if (subcommand === 'invite') {
       let opponent = interaction.options.getUser('opponent');
 
-      accounts.map(getOnlySouls)
+      let fightId;
+      const runningFight = await getRunningFight(interaction.user.username, opponent.username)
+      if (runningFight === null) {
+        console.log('need to create a new fight')
+        const insertResult = await createNewFight(interaction.user.username, opponent.username)
+        fightId = insertResult.insertedId
+      } else {
+        console.log('running fight found')
+        fightId = runningFight._id
+      }
 
-    }
 
-    if (!accounts || accounts.length <= 0) {
-      await interaction.editReply({
-        content: `I couldn't find anything with your name on it, I'm sorry.`
-      })
-    } else {
-      await interaction.editReply({
-        content: messageContent(accounts)
+      const allAccountsWithSouls = wallets.map(getOnlySouls)
+      Promise.all(allAccountsWithSouls).then(async soulsInAllAccounts => {
+        const soulList = soulsInAllAccounts.flat();
+
+        const embeds = createChooseSoulEmbeds(soulList);
+
+        const pagination = new Pagination(interaction)
+          .setEmbeds(embeds)
+          .setEphemeral(true)
+          .addActionRows([createSelectMenuRow(soulList, 'choose-fight-menu', fightId)], ExtraRowPosition.Below);
+
+        await pagination.render();
       })
     }
   },
 };
 
-function messageContent(wallets) {
-  const walletList = wallets.map(wallet => `\`${wallet}\`\n`)
-  return `Hello Traveller, i searched my personal safe and found the following addresses associated to your name:\n` +
-    walletList
-}

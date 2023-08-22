@@ -1,8 +1,6 @@
 const linkWithoutIpfs = require("./ipfs-link-tools");
 const dns = require("dns");
 
-
-
 module.exports = {
   getSouls,
   getOnlySouls,
@@ -11,17 +9,12 @@ module.exports = {
 
 // could maybe be deprecated for getOnlySouls for speed/wide-band reasons?
 async function getSouls(address) {
-  console.log(`https://api.evrloot.xyz/api/evmnfts/evmwallet/${address}`)
   const walletInfo = await fetchAsync(`https://api.evrloot.xyz/api/evmnfts/evmwallet/${address}`);
-  console.log(walletInfo)
   return walletInfo.evmSouls;
 }
 
 async function getOnlySouls(address) {
-  console.log(`https://api.evrloot.xyz/api/evmnfts/evmwallet/soulsOnly/${address}`)
-  const evmSouls = await fetchAsync(`https://api.evrloot.xyz/api/evmnfts/evmwallet/${address}`);
-  console.log(evmSouls)
-  return evmSouls;
+  return await fetchAsync(`https://api.evrloot.xyz/api/evmnfts/evmwallet/soulsOnly/${address}`);
 }
 
 async function getFromIpfs(ipfsLink) {

@@ -1,8 +1,8 @@
-const {ActionRowBuilder, StringSelectMenuBuilder, SlashCommandBuilder} = require("discord.js");
+const {SlashCommandBuilder} = require("discord.js");
 const {createChooseSoulEmbeds} = require("../embeds/choose-soul-embeds.js");
 const {ExtraRowPosition, Pagination} = require("pagination.djs");
-const {findClassEmoteObject} = require("../helpers/emotes.js");
 const {getSouls} = require("../evrloot-api.js");
+const {createSelectMenuRow} = require("../helpers/select-menu");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -30,20 +30,8 @@ module.exports = {
         const pagination = new Pagination(interaction)
             .setEmbeds(embeds)
             .setEphemeral(true)
-            .addActionRows([createSelectMenuRow(souls)], ExtraRowPosition.Below);
+            .addActionRows([createSelectMenuRow(souls, 'choose-soul-menu')], ExtraRowPosition.Below);
 
         await pagination.render();
     },
 };
-
-function createSelectMenuRow(souls) {
-    const chooseSoulButtons = souls.map((soul, index) => ({
-        label: `[${index+1}] ${soul.retrievedMetadata.name}`,
-        value: soul.id,
-        emoji: findClassEmoteObject(soul.retrievedMetadata.properties['Soul Class'].value)
-    }));
-    const chooseSoulSelectMenu = new StringSelectMenuBuilder()
-        .setCustomId("choose-soul-menu")
-        .addOptions(chooseSoulButtons)
-    return new ActionRowBuilder().setComponents(chooseSoulSelectMenu)
-}
