@@ -5,6 +5,7 @@ const {verificationMessage} = require("./messaging/verification-message");
 const connectedWalletsCommand = require("./commands/connected-wallets");
 const walletSettingsCommand = require("./commands/wallet-settings");
 const soulInfoCommand = require('./commands/soul-info.js');
+const fightCommand = require('./commands/fight');
 const {deleteDocument} = require("./evrloot-db");
 const { soulInfoSelectMenu} = require("./commands/select-menu/soul-info-select-menu.js");
 
@@ -20,7 +21,8 @@ const client = new Client({intents: 0});
 const commands = [
   connectedWalletsCommand,
   walletSettingsCommand,
-  soulInfoCommand
+  soulInfoCommand,
+  fightCommand
 ]
 
 async function setupDiscordBot() {
