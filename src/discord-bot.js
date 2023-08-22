@@ -8,7 +8,8 @@ const soulInfoCommand = require('./commands/soul-info.js');
 const fightCommand = require('./commands/fight');
 const {deleteDocument} = require("./evrloot-db");
 const soulInfoSelectMenu = require("./commands/select-menu/soul-info-select-menu.js");
-const selectedFighterSelectMenu = require("./commands/select-menu/select-fighter");
+const selectedFighterSelectMenu = require("./commands/select-menu/after-select-fighter");
+const selectedOpponentSelectMenu = require("./commands/select-menu/after-select-opponent")
 
 
 module.exports = {
@@ -58,8 +59,17 @@ async function setupDiscordBot() {
           // await fishingBoardSelectMenu.execute(interaction)
         } else if (interaction.customId === 'choose-fighter-a-menu')
           await selectedFighterSelectMenu.execute(interaction, true)
+        else if (interaction.customId === 'choose-opponent-menu')
+          await selectedOpponentSelectMenu.execute(interaction, false)
         else if (interaction.customId === 'choose-fighter-b-menu')
           await selectedFighterSelectMenu.execute(interaction, false)
+        else {
+          interaction.reply({
+            ephemeral: true,
+            content: 'no matching string select found'
+          })
+        }
+
       }
       catch (error) {
         console.log(error);

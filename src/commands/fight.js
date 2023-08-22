@@ -1,9 +1,7 @@
 const {SlashCommandBuilder} = require("discord.js");
-const {getConnectedWallets, createNewFight, getRunningFight, soulIsNotInFight} = require("../evrloot-db");
-const {getOnlySouls} = require("../evrloot-api");
-const {createChooseSoulEmbeds} = require("../embeds/choose-soul-embeds");
-const {Pagination, ExtraRowPosition} = require("pagination.djs");
-const {createSelectMenuRow} = require("../helpers/select-menu");
+const {getConnectedWallets} = require("../evrloot-db");
+const handleInvite = require('./fight/handle-invite')
+const showOpenInvitations = require('./fight/open-invitations')
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -19,8 +17,8 @@ module.exports = {
         )
     )
     .addSubcommand(subcommand =>
-      subcommand.setName('accept')
-        .setDescription('tbd!')
+      subcommand.setName('open-invitations')
+        .setDescription('Some people might want you challenge, check it out right here!')
     ),
   async execute(interaction) {
     await interaction.deferReply({
@@ -39,56 +37,9 @@ module.exports = {
     const subcommand = interaction.options.getSubcommand();
 
     if (subcommand === 'invite') {
-      let opponent = interaction.options.getUser('opponent');
-
-      let fightId;
-      const runningFight = await getRunningFight(interaction.user.username, opponent.username)
-      if (runningFight === null) {
-        console.log('need to create a new fight')
-        const insertResult = await createNewFight(interaction.user.username, opponent.username)
-        fightId = insertResult.insertedId
-      } else {
-        console.log('running fight found')
-        fightId = runningFight._id
-
-        if (runningFight.soulA) {
-          interaction.editReply({
-            content: `You already have an outgoing invitation to ${runningFight.fighterB} with one of your souls.\n` +
-                     `Wait for your opponent to accept or withdraw your invitation.`
-          })
-          return;
-        }
-      }
-
-
-      const allAccountsWithSouls = wallets.map(getOnlySouls)
-      Promise.all(allAccountsWithSouls).then(async soulsInAllAccounts => {
-        const soulList = soulsInAllAccounts
-          .flat()
-
-        const availableSouls = await filterAsync(soulList, soulIsNotInFight)
-
-        if (availableSouls.length <= 0)
-          interaction.editReply('You currently have no souls available for fighting,')
-
-        const embeds = createChooseSoulEmbeds(availableSouls);
-
-        const pagination = new Pagination(interaction)
-          .setEmbeds(embeds)
-          .setEphemeral(true)
-          .addActionRows([createSelectMenuRow(availableSouls, 'choose-fighter-a-menu', fightId)], ExtraRowPosition.Below);
-
-        await pagination.render();
-      })
+      await handleInvite(interaction, wallets)
+    } else if (subcommand === 'open-invitations') {
+      await showOpenInvitations(interaction)
     }
   },
 };
-
-function mapAsync(array, callbackfn) {
-  return Promise.all(array.map(callbackfn));
-}
-
-async function filterAsync(array, callbackfn) {
-  const filterMap = await mapAsync(array, callbackfn);
-  return array.filter((value, index) => filterMap[index]);
-}

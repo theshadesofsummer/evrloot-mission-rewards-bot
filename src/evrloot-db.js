@@ -10,6 +10,7 @@ module.exports = {
   getRunningFight,
   soulIsNotInFight,
   addFightingSoul,
+  getOpenInvitations,
 }
 
 const uri = `mongodb+srv://${process.env.MONGODB_ACCESS}@cluster0.cbrbn.mongodb.net/evrloot?retryWrites=true&w=majority`;
@@ -195,6 +196,19 @@ async function addFightingSoul(fightId, soul, firstFighter) {
     await collection.updateOne({_id: fightObjectId}, { $set: soulToAdd});
     console.log("fight updated successfully");
 
+  } catch (error) {
+    console.error('Error updating the fight', error);
+  } finally {
+    await client.close();
+  }
+}
+
+async function getOpenInvitations(username) {
+  const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+  try {
+    const collection = client.db("evrloot").collection("discordfights");
+
+    return await collection.find({fighterB: username, soulA: {$exists: true}}).toArray();
   } catch (error) {
     console.error('Error updating the fight', error);
   } finally {

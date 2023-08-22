@@ -1,8 +1,8 @@
 const {SlashCommandBuilder} = require("discord.js");
-const {createChooseSoulEmbeds} = require("../embeds/choose-soul-embeds.js");
+const {createChooseSoulEmbeds} = require("../embeds/choose-from-select-menu-embeds.js");
 const {ExtraRowPosition, Pagination} = require("pagination.djs");
 const {getSouls} = require("../evrloot-api.js");
-const {createSelectMenuRow} = require("../helpers/select-menu");
+const {createSoulSelectMenuRow} = require("../helpers/select-menu");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -30,7 +30,7 @@ module.exports = {
         const pagination = new Pagination(interaction)
             .setEmbeds(embeds)
             .setEphemeral(true)
-            .addActionRows([createSelectMenuRow(souls, 'choose-soul-menu')], ExtraRowPosition.Below);
+            .addActionRows([createSoulSelectMenuRow(souls, 'choose-soul-menu')], ExtraRowPosition.Below);
 
         await pagination.render();
     },
