@@ -7,20 +7,28 @@ const {createSoulSelectMenuRow} = require("../../helpers/select-menu");
 module.exports = async function (interaction, wallets) {
   let opponent = interaction.options.getUser('opponent');
 
-  const opponentIsConnected = await getConnectedWallets(opponent.username)
+  if (opponent.username === 'Trader Khalil') {
+    await interaction.editReply(`Hah you really want to fight me? How foolish of you, go ahead and train more before you challenge me!`)
+    return;
+  }
+
+  const walletsOfOpponent = await getConnectedWallets(opponent.username)
+
+  if (!walletsOfOpponent || walletsOfOpponent.length === 0) {
+    await interaction.editReply(`Your desired opponent does not have registered wallets!`)
+    return;
+  }
 
   let fightId;
   const runningFight = await getFightByFighters(interaction.user.username, opponent.username)
   if (runningFight === null) {
-    console.log('need to create a new fight')
     const insertResult = await createNewFight(interaction.user.username, opponent.username)
     fightId = insertResult.insertedId
   } else {
-    console.log('running fight found')
     fightId = runningFight._id
 
     if (runningFight.soulA) {
-      interaction.editReply({
+      await interaction.editReply({
         content: `You already have an outgoing invitation to ${runningFight.fighterB} with one of your souls.\n` +
           `Wait for your opponent to accept or withdraw your invitation.`
       })
@@ -36,8 +44,10 @@ module.exports = async function (interaction, wallets) {
 
     const availableSouls = await filterAsync(soulList, soulIsNotInFight)
 
-    if (availableSouls.length <= 0)
-      interaction.editReply('You currently have no souls available for fighting.')
+    if (availableSouls.length <= 0) {
+      await interaction.editReply('You currently have no souls available for fighting.');
+      return;
+    }
 
     const embeds = createChooseSoulEmbeds(availableSouls);
 

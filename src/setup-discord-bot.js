@@ -6,7 +6,8 @@ const walletSettingsCommand = require("./commands/wallet-settings");
 const soulInfoCommand = require('./commands/soul-info.js');
 const fightCommand = require('./commands/fight');
 const soulInfoSelectMenu = require("./commands/select-menu/soul-info-select-menu.js");
-const selectedFighterSelectMenu = require("./commands/select-menu/after-select-fighter");
+const finishedInviteSelectMenu = require("./commands/select-menu/finished-invite-select-menu");
+const finishedAcceptFightSelectMenu = require("./commands/select-menu/finished-accept-fight-select-menu");
 const selectedOpponentSelectMenu = require("./commands/select-menu/after-select-opponent")
 
 
@@ -52,11 +53,11 @@ async function setupDiscordBot() {
         else if (interaction.customId === 'choose-fishing-board-menu') {
           // await fishingBoardSelectMenu.execute(interaction)
         } else if (interaction.customId === 'choose-fighter-a-menu')
-          await selectedFighterSelectMenu.execute(interaction, true)
+          await finishedInviteSelectMenu.execute(interaction)
         else if (interaction.customId === 'choose-opponent-menu')
-          await selectedOpponentSelectMenu.execute(interaction, false)
+          await selectedOpponentSelectMenu.execute(interaction)
         else if (interaction.customId === 'choose-fighter-b-menu')
-          await selectedFighterSelectMenu.execute(interaction, false)
+          await finishedAcceptFightSelectMenu.execute(interaction)
         else {
           interaction.reply({
             ephemeral: true,

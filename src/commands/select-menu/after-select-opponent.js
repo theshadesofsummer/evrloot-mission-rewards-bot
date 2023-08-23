@@ -5,11 +5,16 @@ const {Pagination, ExtraRowPosition} = require("pagination.djs");
 const {createSoulSelectMenuRow} = require("../../helpers/select-menu");
 
 module.exports = {
-  async execute(interaction, firstFighter) {
+  async execute(interaction) {
     const fighterA = interaction.values[0];
     const fighterB = interaction.user.username;
 
     const fight = await getFightByFighters(fighterA, fighterB)
+
+    if (!fight) {
+      interaction.editReply('This fight cannot be found or has already happened.')
+      return;
+    }
 
     const wallets = await getConnectedWallets(fighterB)
 
@@ -20,8 +25,11 @@ module.exports = {
 
       const availableSouls = await filterAsync(soulList, soulIsNotInFight)
 
-      if (availableSouls.length <= 0)
+      if (availableSouls.length <= 0) {
         interaction.editReply('You currently have no souls available for fighting,')
+        return;
+      }
+
 
       const embeds = createChooseSoulEmbeds(availableSouls);
 

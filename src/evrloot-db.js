@@ -11,7 +11,8 @@ module.exports = {
   getFightByFightId,
   soulIsNotInFight,
   addFightingSoul,
-  getOpenInvitations,
+  getOpenInvitationsToYou,
+  getOpenInvitationsFromYou,
   deleteFight,
 }
 
@@ -50,7 +51,8 @@ async function getConnectedWallets(username) {
     console.log('fetching wallets for', username)
     // Fetch the documents
     const docs = await collection.find({
-      discordId: username
+      discordId: username,
+      verified: true
     }).toArray();
 
     console.log('found wallets', docs)
@@ -151,6 +153,7 @@ async function getFightByFighters(fighterA, fighterB) {
     return await collection.findOne({fighterA, fighterB});
   } catch (error) {
     console.error('Error searching for a running fight', error);
+    return undefined;
   } finally {
     await client.close();
   }
@@ -218,12 +221,28 @@ async function addFightingSoul(fightId, soul, firstFighter) {
   }
 }
 
-async function getOpenInvitations(username) {
+async function getOpenInvitationsToYou(username) {
   const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
   try {
     const collection = client.db("evrloot").collection("discordfights");
 
     return await collection.find({fighterB: username, soulA: {$exists: true}}).toArray();
+  } catch (error) {
+    console.error('Error updating the fight', error);
+  } finally {
+    await client.close();
+  }
+}
+
+async function getOpenInvitationsFromYou(username, withFighter) {
+  const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+  try {
+    const collection = client.db("evrloot").collection("discordfights");
+
+    const filter = withFighter ?
+      {fighterA: username, soulA: {$exists: true}} :
+      {fighterA: username, soulA: {$exists: false}}
+    return await collection.find(filter).toArray();
   } catch (error) {
     console.error('Error updating the fight', error);
   } finally {

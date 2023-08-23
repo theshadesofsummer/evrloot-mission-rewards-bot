@@ -1,11 +1,18 @@
-const {getOpenInvitations} = require("../../evrloot-db");
+const {getOpenInvitationsToYou} = require("../../evrloot-db");
 const {createChooseOpponentEmbeds} = require("../../embeds/choose-from-select-menu-embeds");
 const {Pagination, ExtraRowPosition} = require("pagination.djs");
 const {createOpponentSelectMenuRow} = require("../../helpers/select-menu");
 
 module.exports = async function (interaction) {
-  const openInvitations = await getOpenInvitations(interaction.user.username);
+  const openInvitations = await getOpenInvitationsToYou(interaction.user.username);
+
+  if (!openInvitations || openInvitations.length <= 0) {
+    interaction.editReply('You currently have no incoming fight requests! You might want to send some invites yourself.')
+    return;
+  }
+
   const opponents = openInvitations.map(fight => fight.fighterA)
+
 
   const embeds = createChooseOpponentEmbeds(opponents);
 

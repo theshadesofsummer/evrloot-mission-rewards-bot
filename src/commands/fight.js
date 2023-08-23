@@ -1,7 +1,8 @@
 const {SlashCommandBuilder} = require("discord.js");
 const {getConnectedWallets} = require("../evrloot-db");
 const handleInvite = require('./fight/handle-invite')
-const showOpenInvitations = require('./fight/open-invitations')
+const handleFightAccept = require('./fight/fight-accept')
+const fightOverview = require('./fight/fight-overview')
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -17,8 +18,12 @@ module.exports = {
         )
     )
     .addSubcommand(subcommand =>
-      subcommand.setName('open-invitations')
-        .setDescription('Some people might want you challenge, check it out right here!')
+      subcommand.setName('accept')
+        .setDescription('Some people might have challenged you, check it out right here!')
+    )
+    .addSubcommand(subcommand =>
+      subcommand.setName('overview')
+        .setDescription('See all your pending and incoming fights!')
     ),
   async execute(interaction) {
     await interaction.deferReply({
@@ -29,17 +34,18 @@ module.exports = {
     const wallets = await getConnectedWallets(username)
 
     if (!wallets || wallets.length <= 0) {
-      await interaction.editReply({
-        content: `To have access to your souls you need to connect your wallet(s) to your discord account!`
-      })
+      await interaction.editReply(`To use the fights you need to have at least one wallet connected!`)
+      return;
     }
 
     const subcommand = interaction.options.getSubcommand();
 
     if (subcommand === 'invite') {
       await handleInvite(interaction, wallets)
-    } else if (subcommand === 'open-invitations') {
-      await showOpenInvitations(interaction)
+    } else if (subcommand === 'accept') {
+      await handleFightAccept(interaction)
+    } else if (subcommand === 'overview') {
+      await fightOverview(interaction)
     }
   },
 };
