@@ -1,12 +1,10 @@
-const { Client, REST, Collection } = require('discord.js');
+const {  REST, Collection } = require('discord.js');
 const { Routes } = require('discord-api-types/v9');
-const generateSummary = require('./summary/generate-summary.js');
-const {verificationMessage} = require("./messaging/verification-message");
+const {client} = require('./discord-client')
 const connectedWalletsCommand = require("./commands/connected-wallets");
 const walletSettingsCommand = require("./commands/wallet-settings");
 const soulInfoCommand = require('./commands/soul-info.js');
 const fightCommand = require('./commands/fight');
-const {deleteDocument} = require("./evrloot-db");
 const soulInfoSelectMenu = require("./commands/select-menu/soul-info-select-menu.js");
 const selectedFighterSelectMenu = require("./commands/select-menu/after-select-fighter");
 const selectedOpponentSelectMenu = require("./commands/select-menu/after-select-opponent")
@@ -14,13 +12,8 @@ const selectedOpponentSelectMenu = require("./commands/select-menu/after-select-
 
 module.exports = {
   setupDiscordBot,
-  publishSummary,
-  postEmbed,
-  postFightResult,
-  sendVerificationDm
 };
 
-const client = new Client({intents: 0});
 const commands = [
   connectedWalletsCommand,
   walletSettingsCommand,
@@ -113,52 +106,4 @@ function getCollectionForCommands() {
   }
 
   return collection;
-}
-
-async function publishSummary() {
-  const channel = await getChannel(client, process.env.STATS_CHANNEL_ID)
-  const summary = generateSummary()
-  await channel.send(summary);
-}
-
-async function postEmbed(embed) {
-  const channel = await getChannel(client, process.env.PUBLISH_CHANNEL_ID)
-  await channel.send({embeds: [embed]});
-}
-
-async function postFightResult(embed) {
-  const channel = await getChannel(client, process.env.ARENA_CHANNEL_ID)
-  await channel.send({embeds: [embed]});
-}
-
-async function sendVerificationDm(discordId, wallet) {
-  await client.guilds.fetch();
-  const guild = client.guilds.cache.get(process.env.GUILD_ID);
-
-  const memberMap = await guild.members.fetch({ query: discordId, limit: 10})
-
-  let userWithMatchingUsername = undefined;
-  memberMap.forEach(member => {
-    const username = member.user.username;
-    console.log('found possible user named', username)
-    if (username === discordId) {
-      userWithMatchingUsername = member;
-    }
-  })
-
-  if (!userWithMatchingUsername) {
-    console.log('could not find member for', discordId)
-    await deleteDocument({wallet})
-  } else {
-    console.log('found member for', discordId)
-    await verificationMessage(userWithMatchingUsername, wallet)
-  }
-}
-
-async function getChannel(client, channelId) {
-  await client.guilds.fetch();
-  const guild = client.guilds.cache.get(process.env.GUILD_ID);
-
-  await guild.channels.fetch();
-  return guild.channels.cache.get(channelId);
 }

@@ -1,4 +1,3 @@
-const { postEmbed } = require('./discord-bot.js')
 const createMissionRewardEmbed = require('./embeds/mission-reward-embed.js')
 const { itemIds } = require('./mappings/item-ids.js')
 const { MISSION_CONTRACT } = require("./abi-interaction.js");
@@ -9,6 +8,7 @@ const { addToStats, increaseMissionCounter, getStats } = require('./summary/dail
 const {getAccountName} = require("./evrloot-db");
 const {getAccountFromTx} = require("./abi-interaction");
 const {nftMapping} = require("./mappings/item-ids");
+const {postEmbed} = require("./discord-client");
 
 module.exports = {
   fetchMissionReward

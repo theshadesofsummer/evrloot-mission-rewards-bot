@@ -1,6 +1,7 @@
 const {getFightByFightId, deleteFight} = require("../../evrloot-db");
 const {startFight} = require("../../evrloot-api");
 const createFightEmbed = require('../../embeds/fight-embed')
+const {postFightResult} = require("../../discord-client");
 
 module.exports = async function (interaction, fightId) {
   const fight = await getFightByFightId(fightId);
@@ -10,7 +11,7 @@ module.exports = async function (interaction, fightId) {
   await deleteFight(fight._id)
 
   console.log('fightResult', fightResult)
-  interaction.followUp({
-    embeds: [createFightEmbed(fight, fightResult)]
-  })
+
+  await postFightResult(createFightEmbed(fight, fightResult))
+
 }

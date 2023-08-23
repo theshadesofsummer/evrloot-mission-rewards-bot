@@ -1,9 +1,10 @@
 require('dotenv').config();
-const { setupDiscordBot, publishSummary, sendVerificationDm } = require("./discord-bot.js");
+const { setupDiscordBot } = require("./setup-discord-bot.js");
 const { MISSION_CONTRACT } = require("./abi-interaction.js")
 const { fetchMissionReward } = require('./mission-interaction.js');
 const cron = require('node-cron');
 const {MongoClient} = require("mongodb");
+const {publishSummary, sendVerificationDm} = require("./discord-client");
 
 setupDiscordBot().then(() => {
     setupMissionRewardListener()

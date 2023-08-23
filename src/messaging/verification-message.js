@@ -1,5 +1,5 @@
 const {ButtonBuilder, ButtonStyle, ActionRowBuilder} = require("discord.js");
-const {updateDocument, deleteDocument} = require("../evrloot-db");
+const {updateDocument, deleteWallet} = require("../evrloot-db");
 
 module.exports = {
   verificationMessage
@@ -36,12 +36,12 @@ async function verificationMessage(member, wallet) {
       await handleVerificationConfirmation(confirmation, member, wallet)
     } catch (e) {
       console.log('user did not react or some error happened:', e)
-      await deleteDocument({wallet})
+      await deleteWallet(wallet)
       await member.send({ content: `Not the most talkative, are you traveller? Do not worry, i'll just throw the paper into the well.`, components: [] });
     }
 
   } catch (e) {
-    await deleteDocument({wallet})
+    await deleteWallet(wallet)
     console.log('could not create DM for', member.user.username)
   }
 }
@@ -80,7 +80,7 @@ async function handleVerificationConfirmation(confirmation, member, wallet) {
     }
 
   } else if (confirmation.customId === 'deny') {
-    await deleteDocument({wallet})
+    await deleteWallet(wallet)
     await confirmation.update({ components: [] });
     await member.send(`Of course, this looked like total gibberish. I'm sorry for wasting your time, traveller!`)
   }

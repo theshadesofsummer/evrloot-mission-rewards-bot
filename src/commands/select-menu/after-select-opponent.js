@@ -11,7 +11,7 @@ module.exports = {
 
     const fight = await getFightByFighters(fighterA, fighterB)
 
-    const wallets = await getConnectedWallets({discordId: fighterB})
+    const wallets = await getConnectedWallets(fighterB)
 
     const allAccountsWithSouls = wallets.map(getOnlySouls)
     Promise.all(allAccountsWithSouls).then(async soulsInAllAccounts => {

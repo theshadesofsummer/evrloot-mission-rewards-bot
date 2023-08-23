@@ -1,4 +1,4 @@
-const {getFightByFighters, createNewFight, soulIsNotInFight} = require("../../evrloot-db");
+const {getFightByFighters, createNewFight, soulIsNotInFight, getConnectedWallets} = require("../../evrloot-db");
 const {getOnlySouls} = require("../../evrloot-api");
 const {createChooseSoulEmbeds} = require("../../embeds/choose-from-select-menu-embeds");
 const {Pagination, ExtraRowPosition} = require("pagination.djs");
@@ -6,6 +6,8 @@ const {createSoulSelectMenuRow} = require("../../helpers/select-menu");
 
 module.exports = async function (interaction, wallets) {
   let opponent = interaction.options.getUser('opponent');
+
+  const opponentIsConnected = await getConnectedWallets(opponent.username)
 
   let fightId;
   const runningFight = await getFightByFighters(interaction.user.username, opponent.username)
@@ -35,7 +37,7 @@ module.exports = async function (interaction, wallets) {
     const availableSouls = await filterAsync(soulList, soulIsNotInFight)
 
     if (availableSouls.length <= 0)
-      interaction.editReply('You currently have no souls available for fighting,')
+      interaction.editReply('You currently have no souls available for fighting.')
 
     const embeds = createChooseSoulEmbeds(availableSouls);
 

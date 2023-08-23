@@ -1,5 +1,5 @@
 const {SlashCommandBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder} = require("discord.js");
-const {userWithWallet, updateDocument, deleteDocument} = require("../evrloot-db");
+const {userWithWallet, updateDocument, deleteWallet} = require("../evrloot-db");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -16,7 +16,7 @@ module.exports = {
 
     const address = interaction.options.getString('address')
     const username = interaction.user.globalName
-    const entry = await userWithWallet({discordId: username, wallet: address})
+    const entry = await userWithWallet(username, address)
 
     if (entry === null || entry === undefined) {
       await interaction.reply({
@@ -48,7 +48,7 @@ module.exports = {
             content: 'I successfully toggled your anonymity, you are now ' + getAnonState(!entry.isAnonymous),
           })
         } else if (confirmation.customId === 'wallet-delete') {
-          await deleteDocument({wallet: address})
+          await deleteWallet(address)
 
           await confirmation.update({ components: [] });
           await interaction.followUp({

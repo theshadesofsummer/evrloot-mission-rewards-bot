@@ -12,7 +12,7 @@ module.exports = {
     })
 
     const username = interaction.user.username
-    const accounts = await getConnectedWallets({discordId: username})
+    const accounts = await getConnectedWallets(username)
 
     if (!accounts || accounts.length <= 0) {
       await interaction.editReply({

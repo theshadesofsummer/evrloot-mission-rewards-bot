@@ -5,7 +5,7 @@ module.exports = {
   getConnectedWallets,
   userWithWallet,
   updateDocument,
-  deleteDocument,
+  deleteWallet,
   createNewFight,
   getFightByFighters,
   getFightByFightId,
@@ -25,13 +25,10 @@ async function getAccountName(filter) {
     // Fetch the document
     const doc = await collection.findOne(filter);
 
-    console.log(doc);
-
     if (doc === null || !doc.verified) {
       return 'An unknown traveller'
     }
 
-    console.log('(3)', doc.isAnonymous)
     if (doc.isAnonymous) {
       return 'An anonymous traveller'
     }
@@ -45,14 +42,17 @@ async function getAccountName(filter) {
   }
 }
 
-async function getConnectedWallets(filter) {
+async function getConnectedWallets(username) {
   const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
   try {
     const collection = client.db("evrloot").collection("discordverifications");
 
-    console.log('fetching wallets for', filter)
+    console.log('fetching wallets for', username)
     // Fetch the documents
-    const docs = await collection.find(filter).toArray();
+    const docs = await collection.find({
+      discordId: username
+    }).toArray();
+
     console.log('found wallets', docs)
     return docs.map(doc => doc.wallet)
   } catch (error) {
@@ -63,14 +63,14 @@ async function getConnectedWallets(filter) {
   }
 }
 
-async function userWithWallet(filter) {
+async function userWithWallet(username, address) {
   const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
   try {
     const collection = client.db("evrloot").collection("discordverifications");
 
     console.log('checks if user with wallet exists for', filter)
     // Fetch the documents
-    const doc = await collection.findOne(filter)
+    const doc = await collection.findOne({discordId: username, wallet: address})
     console.log('found doc:', doc)
     return doc
   } catch (error) {
@@ -106,13 +106,13 @@ async function updateDocument(filter, updateData) {
   }
 }
 
-async function deleteDocument(filter) {
+async function deleteWallet(address) {
   const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
   try {
     const collection = client.db("evrloot").collection("discordverifications");
 
     // Fetch the document
-    const doc = await collection.findOne(filter);
+    const doc = await collection.findOne({wallet: address});
 
     if (!doc) {
       console.log("Document not found with filter:", filter);
