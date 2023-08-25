@@ -5,10 +5,12 @@ const { fetchMissionReward } = require('./mission-interaction.js');
 const cron = require('node-cron');
 const {MongoClient} = require("mongodb");
 const {publishSummary, sendVerificationDm} = require("./discord-client");
+const {initStats} = require("./summary/daily-stats");
 
 setupDiscordBot().then(() => {
     setupMissionRewardListener()
     setupMongoDbConnection()
+    initStats()
 
     cron.schedule('0 * * * *', () => {
         publishSummary();

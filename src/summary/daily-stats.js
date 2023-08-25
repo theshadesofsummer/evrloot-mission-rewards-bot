@@ -1,11 +1,14 @@
+const fs = require("fs");
+
 module.exports = {
     getStats,
     resetStats,
     addToStats,
-    increaseMissionCounter
+    increaseMissionCounter,
+    initStats,
 }
 
-const stats = new Map();
+let stats = new Map();
 // <
 //   key: string, 
 //   val: {
@@ -14,6 +17,18 @@ const stats = new Map();
 //   }
 // >
 let missionCounter = 0;
+
+function initStats() {
+    console.log('init stats')
+    let statsMapAsArray = []
+    try {
+        const oldItems = fs.readFileSync('./stats.json', 'utf8')
+        statsMapAsArray = JSON.parse(oldItems);
+    } catch (err) {
+        console.warn('could not load init map', err)
+    }
+    stats = new Map(statsMapAsArray)
+}
 
 function getStats() {
     return {
@@ -42,6 +57,7 @@ function addToStats(reward) {
             }
         )
     }
+    fs.writeFileSync('./stats.json', JSON.stringify([...stats]) , 'utf-8');
 }
 
 
