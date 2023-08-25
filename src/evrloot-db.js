@@ -14,6 +14,7 @@ module.exports = {
   getOpenInvitationsToYou,
   getOpenInvitationsFromYou,
   deleteFight,
+  saveFightResult,
 }
 
 const uri = `mongodb+srv://${process.env.MONGODB_ACCESS}@cluster0.cbrbn.mongodb.net/evrloot?retryWrites=true&w=majority`;
@@ -259,6 +260,19 @@ async function deleteFight(fightId) {
     return await collection.deleteOne({_id: fightId});
   } catch (error) {
     console.error('Error deleting the fight', error);
+  } finally {
+    await client.close();
+  }
+}
+
+async function saveFightResult(fightResult){
+  const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+  try {
+    const collection = client.db("evrloot").collection("fightresults");
+
+    await collection.insertOne({fightResult});
+  } catch (error) {
+    console.error('Error inserting the fight results', error);
   } finally {
     await client.close();
   }
