@@ -1,5 +1,6 @@
 const {SlashCommandBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder} = require("discord.js");
 const {userWithWallet, updateDocument, deleteWallet} = require("../evrloot-db");
+const {verificationMessage} = require("../messaging/verification-message");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -23,6 +24,14 @@ module.exports = {
         ephemeral: true,
         content: `Sorry, I don't think i recall that combination, are you sure you ever approved this address?`
       })
+    } else if (entry.verified === undefined) {
+      await interaction.reply({
+        ephemeral: true,
+        content: `This address is still not verified, i just send you a DM so you can re-verify this wallet.`
+      })
+
+      await verificationMessage(interaction.user, address)
+
     } else {
       const walletSettingMessage = await interaction.reply({
         ephemeral: true,
@@ -31,10 +40,10 @@ module.exports = {
       })
 
       try {
-        const confirmation = await walletSettingMessage.awaitMessageComponent({ time: 60_000 });
+        const confirmation = await walletSettingMessage.awaitMessageComponent({time: 60_000});
 
         if (confirmation.customId === 'wallet-nothing') {
-          await confirmation.update({ components: [] });
+          await confirmation.update({components: []});
           await interaction.followUp({
             ephemeral: true,
             content: 'No problem, I will always be glad to help you.'
@@ -42,7 +51,7 @@ module.exports = {
         } else if (confirmation.customId === 'wallet-toggle-anon') {
           await updateDocument({wallet: address}, {isAnonymous: !entry.isAnonymous})
 
-          await confirmation.update({ components: [] });
+          await confirmation.update({components: []});
           await interaction.followUp({
             ephemeral: true,
             content: 'I successfully toggled your anonymity, you are now ' + getAnonState(!entry.isAnonymous),
@@ -50,14 +59,12 @@ module.exports = {
         } else if (confirmation.customId === 'wallet-delete') {
           await deleteWallet(address)
 
-          await confirmation.update({ components: [] });
+          await confirmation.update({components: []});
           await interaction.followUp({
             ephemeral: true,
             content: 'I successfully deleted this information, I will burn that piece of paper right now',
           })
         }
-
-
       } catch (e) {
         console.log('user did not react on the setting command or some error happened:', e)
 

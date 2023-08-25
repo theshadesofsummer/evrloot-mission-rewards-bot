@@ -2,7 +2,7 @@ const {MongoClient, ObjectId} = require('mongodb');
 
 module.exports = {
   getAccountName,
-  getConnectedWallets,
+  getConnectedAccounts,
   userWithWallet,
   updateDocument,
   deleteWallet,
@@ -43,23 +43,24 @@ async function getAccountName(filter) {
   }
 }
 
-async function getConnectedWallets(username) {
+async function getConnectedAccounts(username, onlyVerified = true) {
   const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
   try {
     const collection = client.db("evrloot").collection("discordverifications");
 
     console.log('fetching wallets for', username)
-    // Fetch the documents
-    const docs = await collection.find({
+
+    const filter = onlyVerified ? {
       discordId: username,
       verified: true
-    }).toArray();
-
-    console.log('found wallets', docs)
-    return docs.map(doc => doc.wallet)
+    } : {
+      discordId: username
+    }
+    // Fetch the documents
+    return await collection.find(filter).toArray();
   } catch (error) {
     console.error('db error while trying to find wallets for:', filter, error);
-    return undefined
+    return []
   } finally {
     await client.close();
   }
@@ -70,13 +71,13 @@ async function userWithWallet(username, address) {
   try {
     const collection = client.db("evrloot").collection("discordverifications");
 
-    console.log('checks if user with wallet exists for', filter)
+    console.log('checks if user with wallet exists for', username, address)
     // Fetch the documents
     const doc = await collection.findOne({discordId: username, wallet: address})
     console.log('found doc:', doc)
     return doc
   } catch (error) {
-    console.error('db error while trying to check if user has wallet for:', filter, error);
+    console.error('db error while trying to check if user has wallet for:', username, address, error);
     return undefined
   } finally {
     await client.close();
@@ -117,12 +118,12 @@ async function deleteWallet(address) {
     const doc = await collection.findOne({wallet: address});
 
     if (!doc) {
-      console.log("Document not found with filter:", filter);
+      console.log("Document not found with filter:", address);
       return;
     }
 
     // Update the document with provided data
-    await collection.deleteOne(filter);
+    await collection.deleteOne({wallet: address});
     console.log("Document deleted successfully");
 
   } catch (error) {

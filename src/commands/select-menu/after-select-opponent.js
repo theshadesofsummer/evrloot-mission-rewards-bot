@@ -1,4 +1,4 @@
-const {getConnectedWallets, soulIsNotInFight, getFightByFighters} = require("../../evrloot-db");
+const {getConnectedAccounts, soulIsNotInFight, getFightByFighters} = require("../../evrloot-db");
 const {getOnlySouls} = require("../../evrloot-api");
 const {createChooseSoulEmbeds} = require("../../embeds/choose-from-select-menu-embeds");
 const {Pagination, ExtraRowPosition} = require("pagination.djs");
@@ -16,7 +16,8 @@ module.exports = {
       return;
     }
 
-    const wallets = await getConnectedWallets(fighterB)
+    const accounts = await getConnectedAccounts(fighterB)
+    const wallets = accounts.map(account => account.wallet)
 
     const allAccountsWithSouls = wallets.map(getOnlySouls)
     Promise.all(allAccountsWithSouls).then(async soulsInAllAccounts => {
@@ -26,7 +27,7 @@ module.exports = {
       const availableSouls = await filterAsync(soulList, soulIsNotInFight)
 
       if (availableSouls.length <= 0) {
-        interaction.editReply('You currently have no souls available for fighting,')
+        interaction.editReply('You currently have no souls available for fighting.')
         return;
       }
 

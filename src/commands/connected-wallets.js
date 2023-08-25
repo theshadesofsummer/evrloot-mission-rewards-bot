@@ -1,5 +1,5 @@
 const {SlashCommandBuilder} = require("discord.js");
-const {getConnectedWallets} = require("../evrloot-db");
+const {getConnectedAccounts} = require("../evrloot-db");
 
 
 module.exports = {
@@ -12,7 +12,7 @@ module.exports = {
     })
 
     const username = interaction.user.username
-    const accounts = await getConnectedWallets(username)
+    const accounts = await getConnectedAccounts(username, false)
 
     if (!accounts || accounts.length <= 0) {
       await interaction.editReply({
@@ -26,8 +26,12 @@ module.exports = {
   },
 };
 
-function messageContent(wallets) {
-  const walletList = wallets.map(wallet => `\`${wallet}\`\n`)
+function messageContent(accounts) {
+  const walletList = accounts.map(accountEntry).join('\n')
   return `Hello Traveller, i searched my personal safe and found the following addresses associated to your name:\n` +
     walletList
+}
+
+function accountEntry(account, idx) {
+  return `${idx+1}. ${account.wallet}\n\tverified: ${account.verified ? '✅' : '❎ '}\n\tanonymous: ${account.isAnonymous ? '✅' : '❎'}`
 }
