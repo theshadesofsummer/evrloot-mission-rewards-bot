@@ -7,7 +7,7 @@ module.exports = function createFightEmbed(fight, fightResult) {
     fields: [
       {
         name: 'Team A',
-        value: fight.fighterA,
+        value: getTeamInfo(fight, fightResult.finalState, true),
         inline: true
       },
       {
@@ -17,7 +17,7 @@ module.exports = function createFightEmbed(fight, fightResult) {
       },
       {
         name: 'Team B',
-        value: fight.fighterB,
+        value: getTeamInfo(fight, fightResult.finalState, false),
         inline: true
       },
       {
@@ -29,15 +29,33 @@ module.exports = function createFightEmbed(fight, fightResult) {
   };
 }
 
+function getTeamInfo(fight, finalState, teamA) {
+  let result = '';
+  result += teamA ? fight.fighterA : fight.fighterB;
+  result += '\n'
+  result += getFinalState(teamA ? finalState.teamAFinal : finalState.teamBFinal)
+  return result
+}
+
+function getFinalState(finalTeamMembers) {
+  return finalTeamMembers
+    .map(stateOfSoul)
+    .join('\n')
+}
+function stateOfSoul(soulState, index) {
+  return `[${index+1}] ${Math.round(Math.max(soulState.finalHp, 0) * 10) / 10}❤️ ` +
+    `${Math.round(Math.max(soulState.finalArmor, 0) * 10) / 10}🛡️ ` +
+    `${Math.round(Math.max(soulState.finalInitiative, 0) * 10) / 10}⚡ `
+}
 function getFightResult(fight, fightResult) {
   let result = '';
-  const winnerTeam = fightResult[0].winner;
+  const winnerTeam = fightResult.winner;
   if (winnerTeam === 'Team A') {
     result += `*Winner*: **${fight.fighterA}**\n`
   } else {
     result += `*Winner*: **${fight.fighterB}**\n`
   }
-  result += '*Combat Rounds*: ' + fightResult[0].combatRounds.length
+  result += '*Combat Rounds*: ' + fightResult.combatRounds.length
 
   return result
 }

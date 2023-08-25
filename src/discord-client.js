@@ -27,7 +27,7 @@ async function postEmbed(embed) {
 
 async function postFightResult(embed) {
   const channel = await getChannel(client, process.env.ARENA_CHANNEL_ID)
-  await channel.send({embeds: [embed]});
+  return await channel.send({embeds: [embed]});
 }
 
 async function sendVerificationDm(discordId, wallet) {

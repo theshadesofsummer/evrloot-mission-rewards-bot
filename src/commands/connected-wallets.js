@@ -29,7 +29,8 @@ module.exports = {
 function messageContent(accounts) {
   const walletList = accounts.map(accountEntry).join('\n')
   return `Hello Traveller, i searched my personal safe and found the following addresses associated to your name:\n` +
-    walletList
+    walletList +
+    '\n\n You can always change the individual settings with `/wallet-settings address`'
 }
 
 function accountEntry(account, idx) {

@@ -2,6 +2,7 @@ const {getFightByFightId, deleteFight} = require("../../evrloot-db");
 const {startFight} = require("../../evrloot-api");
 const createFightEmbed = require('../../embeds/fight-embed')
 const {postFightResult} = require("../../discord-client");
+const {ThreadAutoArchiveDuration} = require("discord-api-types/v10");
 
 module.exports = async function (interaction, fightId) {
   const fight = await getFightByFightId(fightId);
@@ -10,8 +11,16 @@ module.exports = async function (interaction, fightId) {
 
   await deleteFight(fight._id)
 
-  console.log('fightResult', fightResult)
+  const fightMessage = await postFightResult(createFightEmbed(fight, fightResult[0]))
 
-  await postFightResult(createFightEmbed(fight, fightResult))
+  const fightThread = await fightMessage.startThread({
+    name: `${fight.fighterA} vs. ${fight.fighterB}`,
+    autoArchiveDuration: ThreadAutoArchiveDuration.OneHour
+  })
+
+  sendCombatRounds(fightThread, fightResult[0].combatRounds)
+}
+
+function sendCombatRounds(combatRounds) {
 
 }
