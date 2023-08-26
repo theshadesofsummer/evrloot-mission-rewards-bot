@@ -22,8 +22,12 @@ function initStats() {
     console.log('init stats')
     let statsMapAsArray = []
     try {
-        const oldItems = fs.readFileSync('./stats.json', 'utf8')
-        statsMapAsArray = JSON.parse(oldItems);
+        const savedStats = fs.readFileSync('./stats.json', 'utf8')
+        const savedStatsJson = JSON.parse(savedStats);
+        if (savedStatsJson['stats'])
+            statsMapAsArray = savedStatsJson['stats'];
+        if (savedStatsJson['counter'])
+            missionCounter = savedStatsJson['counter'];
     } catch (err) {
         console.warn('could not load init map', err)
     }
@@ -57,7 +61,7 @@ function addToStats(reward) {
             }
         )
     }
-    fs.writeFileSync('./stats.json', JSON.stringify([...stats]) , 'utf-8');
+    fs.writeFileSync('./stats.json', JSON.stringify({counter: missionCounter, stats: [...stats]}) , 'utf-8');
 }
 
 
