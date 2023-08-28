@@ -93,7 +93,7 @@ async function getNftRewardInfos(nftReward) {
   const amount = Number.parseInt(nftReward.amount)
 
   if (amount > 0) {
-    const nftInfo = nftMapping[`${nftReward.contractAddress}+${nftReward.itemId}`];
+    const nftInfo = nftMapping[`${nftReward.contractAddress.toLowerCase()}+${nftReward.itemId}`];
 
     if (nftInfo === undefined) {
       console.log('no nftMapping found for' + `${nftReward.contractAddress}+${nftReward.itemId}`)

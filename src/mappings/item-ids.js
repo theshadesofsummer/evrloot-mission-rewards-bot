@@ -15,35 +15,35 @@ const itemIds = {
   'Common Fish ReqOnly': {
     poolId: 0,
     memberId: 0,
-    contractAddress: '0x95492edcc1d373e236e368973285ad47d56d07b6',
+    contractAddress: '0x95492EdCC1D373E236E368973285Ad47D56D07b6',
     tokenUri: `${UNIDENTIFIED_FISH_URI}commonFish.json`,
     name: 'Common Fish',
   }, //'COMMON',
   'Common Fish': {
     poolId: 1,
     memberId: 0,
-    contractAddress: '0x95492edcc1d373e236e368973285ad47d56d07b6',
+    contractAddress: '0x95492EdCC1D373E236E368973285Ad47D56D07b6',
     tokenUri: `${UNIDENTIFIED_FISH_URI}commonFish.json`,
     name: 'Common Fish',
   }, //'COMMON',
   'Rare Fish': {
     poolId: 2,
     memberId: 0,
-    contractAddress: '0x95492edcc1d373e236e368973285ad47d56d07b6',
+    contractAddress: '0x95492EdCC1D373E236E368973285Ad47D56D07b6',
     tokenUri: `${UNIDENTIFIED_FISH_URI}rareFish.json`,
     name: 'Rare Fish',
   }, //'RARE',
   'Epic Fish': {
     poolId: 3,
     memberId: 0,
-    contractAddress: '0x95492edcc1d373e236e368973285ad47d56d07b6',
+    contractAddress: '0x95492EdCC1D373E236E368973285Ad47D56D07b6',
     tokenUri: `${UNIDENTIFIED_FISH_URI}epicFish.json`,
     name: 'Epic Fish',
   }, //'EPIC',
   'Legendary Fish': {
     poolId: 4,
     memberId: 0,
-    contractAddress: '0x95492edcc1d373e236e368973285ad47d56d07b6',
+    contractAddress: '0x95492EdCC1D373E236E368973285Ad47D56D07b6',
     tokenUri: `${UNIDENTIFIED_FISH_URI}legendaryFish.json`,
     name: 'Legendary Fish',
   }, //'LEGENDARY',
@@ -178,7 +178,7 @@ function fillNftMapping() {
   const nftMapping = {}
   Object.values(itemIds).forEach((item) => {
     let itemId = Number(getItemId(item.poolId, item.memberId));
-    nftMapping[`${item.contractAddress}+${itemId}`] = {
+    nftMapping[`${item.contractAddress.toLowerCase()}+${itemId}`] = {
       itemId: itemId,
       name: item.name,
       metadataUri: item.tokenUri,
