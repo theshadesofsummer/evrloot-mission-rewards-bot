@@ -95,16 +95,20 @@ async function getNftRewardInfos(nftReward) {
   if (amount > 0) {
     const nftInfo = nftMapping[`${nftReward.contractAddress}+${nftReward.itemId}`];
 
-    const retrievedMetadata = nftInfo.metadataUri
-      ? await getFromIpfs(nftInfo.metadataUri)
-      : undefined;
+    if (nftInfo === undefined) {
+      console.log('no nftMapping found for' + `${nftReward.contractAddress}+${nftReward.itemId}`)
+    } else {
+      const retrievedMetadata = nftInfo.metadataUri
+        ? await getFromIpfs(nftInfo.metadataUri)
+        : undefined;
 
-    return {
-      id: Number.parseInt(nftReward.itemId),
-      amount,
-      metadata: nftInfo.metadataUri,
-      retrievedMetadata: retrievedMetadata,
-    };
+      return {
+        id: Number.parseInt(nftReward.itemId),
+        amount,
+        metadata: nftInfo.metadataUri,
+        retrievedMetadata: retrievedMetadata,
+      };
+    }
   }
 
   return undefined;

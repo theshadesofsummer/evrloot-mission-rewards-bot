@@ -6,6 +6,7 @@ const cron = require('node-cron');
 const {MongoClient} = require("mongodb");
 const {publishSummary, sendVerificationDm} = require("./discord-client");
 const {initStats} = require("./summary/daily-stats");
+const {nftMapping} = require("./mappings/item-ids");
 
 setupDiscordBot().then(() => {
     setupMissionRewardListener()
