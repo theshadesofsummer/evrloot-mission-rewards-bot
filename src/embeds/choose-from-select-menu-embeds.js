@@ -4,12 +4,21 @@ const PAGE_SIZE = 5;
 
 module.exports = {
     createChooseSoulEmbeds,
+    createChooseSoulFighterEmbeds,
     createChooseOpponentEmbeds
 }
 function createChooseSoulEmbeds(souls) {
     const embeds = [];
     for (let page = 0; page < souls.length / PAGE_SIZE; page++) {
         embeds.push(createChooseChooseEmbed(souls, page, true))
+    }
+    return embeds;
+}
+
+function createChooseSoulFighterEmbeds(souls) {
+    const embeds = [];
+    for (let page = 0; page < souls.length / PAGE_SIZE; page++) {
+        embeds.push(createChooseSoulsWithStatusEmbed(souls, page, true))
     }
     return embeds;
 }
@@ -32,6 +41,15 @@ function createChooseChooseEmbed(list, page, forSouls) {
     };
 }
 
+function createChooseSoulsWithStatusEmbed(list, page) {
+    return {
+        color: 0xae1917,
+        title: `Choose your fighting soul!`,
+        description: makeDescriptionForSoulFights(list, page),
+        timestamp: new Date().toISOString(),
+    };
+}
+
 function makeDescriptionFor(list, page, forSouls) {
     let description = '';
     const firstElementIndex = page * PAGE_SIZE;
@@ -49,6 +67,29 @@ function makeDescriptionFor(list, page, forSouls) {
             description += `\`[${firstElementIndex + idx + 1}]\` ${username}\n`
         });
     }
+
+
+    return description;
+}
+
+function makeDescriptionForSoulFights(soulList, page) {
+    let description = '';
+    const firstElementIndex = page * PAGE_SIZE;
+
+    const slicedList = soulList
+      .slice(firstElementIndex, firstElementIndex + PAGE_SIZE)
+
+    slicedList.forEach((soul, idx) => {
+        const soulClass = soul.retrievedMetadata.properties['Soul Class'].value
+        const status = soul.status;
+        if (status === 'readyForFight')
+            description += `\`[${firstElementIndex + idx + 1}]\` ${findClassEmote(soulClass)} ✅ ${soul.retrievedMetadata.name}\n`
+        else if (status === 'waitingForFight')
+            description += `\`[${firstElementIndex + idx + 1}]\` ${findClassEmote(soulClass)} ✉️ ~~${soul.retrievedMetadata.name}~~ [outgoing invitation to ${soul.opponent}]\n`
+        else if (status === 'onCooldown')
+            description += `\`[${firstElementIndex + idx + 1}]\` ${findClassEmote(soulClass)} ⏳ ~~${soul.retrievedMetadata.name}~~ [cooldown <t:${soul.cooldown}:f> (<t:${soul.cooldown}:R>)]\n`
+    });
+
 
 
     return description;

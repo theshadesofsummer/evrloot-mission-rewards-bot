@@ -9,12 +9,14 @@ module.exports = {
   createNewFight,
   getFightByFighters,
   getFightByFightId,
-  soulIsNotInFight,
+  getOutstandingInvitationWithSoul,
   addFightingSoul,
   getOpenInvitationsToYou,
   getOpenInvitationsFromYou,
   deleteFight,
   saveFightResult,
+  addSoulCooldown,
+  getSoulCooldown
 }
 
 const uri = `mongodb+srv://${process.env.MONGODB_ACCESS}@cluster0.cbrbn.mongodb.net/evrloot?retryWrites=true&w=majority`;
@@ -175,30 +177,21 @@ async function getFightByFightId(fightId) {
   }
 }
 
-async function soulIsNotInFight(soul) {
+async function getOutstandingInvitationWithSoul(soulId) {
   const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
   try {
     const collection = client.db("evrloot").collection("discordfights");
 
-    const fight = await collection.findOne({soulA: soul.id});
-    console.log('fight', fight)
-
-    if (!fight) {
-      console.log('soul is not in fight')
-      return true
-    } else {
-      console.log('soul is in fight')
-      return false
-    }
-
+    return await collection.findOne({soulA: soulId});
   } catch (error) {
     console.error('Error searching for a running fight', error);
+    return undefined;
   } finally {
     await client.close();
   }
 }
 
-async function addFightingSoul(fightId, soul, firstFighter) {
+async function addFightingSoul(fightId, soulId, firstFighter) {
   const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
   try {
     const collection = client.db("evrloot").collection("discordfights");
@@ -213,7 +206,7 @@ async function addFightingSoul(fightId, soul, firstFighter) {
     }
 
     // Update the document with provided data
-    const soulToAdd = firstFighter ? {soulA: soul} : {soulB: soul}
+    const soulToAdd = firstFighter ? {soulA: soulId} : {soulB: soulId}
     await collection.updateOne({_id: fightObjectId}, { $set: soulToAdd});
     console.log("fight updated successfully");
   } catch (error) {
@@ -273,6 +266,45 @@ async function saveFightResult(fightResult){
     await collection.insertOne({fightResult});
   } catch (error) {
     console.error('Error inserting the fight results', error);
+  } finally {
+    await client.close();
+  }
+}
+
+async function addSoulCooldown(soulId, timestamp){
+  const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+  try {
+    console.log(soulId, timestamp)
+    const collection = client.db("evrloot").collection("fightcooldowns");
+
+    await collection.insertOne({soul: soulId, cooldownUntil: timestamp});
+    console.log('successful adding of cooldown')
+  } catch (error) {
+    console.error('Error adding the soul cooldowns', error);
+  } finally {
+    await client.close();
+  }
+}
+
+async function getSoulCooldown(soulId) {
+  const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+  try {
+    const collection = client.db("evrloot").collection("fightcooldowns");
+
+    const cooldownDoc = await collection.findOne({soul: soulId});
+    if (!cooldownDoc) {
+      return undefined
+    }
+
+    if (cooldownDoc.cooldownUntil < Math.round(Date.now() / 1000)) {
+      await collection.deleteOne({soul: soulId})
+      return undefined
+    }
+
+    return cooldownDoc;
+  } catch (error) {
+    console.error('Error getting the soul cooldowns', error);
+    return undefined
   } finally {
     await client.close();
   }

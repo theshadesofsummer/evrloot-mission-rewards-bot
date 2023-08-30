@@ -52,10 +52,14 @@ function getFightResult(fight, fightResult) {
   const winnerTeam = fightResult.winner;
   if (winnerTeam === 'Team A') {
     result += `*Winner*: **${fight.fighterA}**\n`
+    result += '*Combat Rounds*: ' + fightResult.combatRounds.length + '\n\n'
+    result += `${fight.fighterA}'s soul got a cooldown for 6h\n`
+    result += `${fight.fighterB}'s soul got a cooldown for 24h`
   } else {
     result += `*Winner*: **${fight.fighterB}**\n`
+    result += '*Combat Rounds*: ' + fightResult.combatRounds.length + '\n\n'
+    result += `${fight.fighterB}'s soul got a cooldown for 6h\n`
+    result += `${fight.fighterA}'s soul got a cooldown for 24h`
   }
-  result += '*Combat Rounds*: ' + fightResult.combatRounds.length
-
   return result
 }

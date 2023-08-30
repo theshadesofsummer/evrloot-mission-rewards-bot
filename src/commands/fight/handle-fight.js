@@ -1,15 +1,19 @@
-const {getFightByFightId, deleteFight, saveFightResult} = require("../../evrloot-db");
+const {getFightByFightId, deleteFight, saveFightResult, addSoulCooldown} = require("../../evrloot-db");
 const {startFight} = require("../../evrloot-api");
 const createFightEmbed = require('../../embeds/fight-embed')
 const {postFightResult} = require("../../discord-client");
 const {ThreadAutoArchiveDuration} = require("discord-api-types/v10");
 
+const ONE_HOUR = 3600;
+
 module.exports = async function (interaction, fightId) {
   const fight = await getFightByFightId(fightId);
 
   const fightResult = await startFight(fight.soulA, fight.soulB)
+  await saveFightResult(fightResult)
+  await saveSoulCooldowns(fight, fightResult[0].winner)
 
-  saveFightResult(fightResult)
+  //await deleteFight(fightId)
 
   const fightMessage = await postFightResult(createFightEmbed(fight, fightResult[0]))
 
@@ -19,6 +23,22 @@ module.exports = async function (interaction, fightId) {
   })
 
   sendCombatRounds(fightThread, fightResult[0].combatRounds, fight)
+}
+
+async function saveSoulCooldowns(fight, winner) {
+  const soulAId = fight.soulA;
+  const soulBId = fight.soulB;
+  const currentTimestamp = Math.round(Date.now() / 1000)
+
+  if (winner === 'Team A') {
+    await addSoulCooldown(soulAId, currentTimestamp + ONE_HOUR * 6)
+    await addSoulCooldown(soulBId, currentTimestamp + ONE_HOUR * 24)
+  } else if (winner === 'Team B') {
+    await addSoulCooldown(soulAId, currentTimestamp + ONE_HOUR * 24)
+    await addSoulCooldown(soulBId, currentTimestamp + ONE_HOUR * 6)
+  } else {
+    console.log('saveSoulCooldowns, no matching winner team found:', winner)
+  }
 }
 
 function sendCombatRounds(fightThread, combatRounds, fight) {

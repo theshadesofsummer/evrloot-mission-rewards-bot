@@ -13,7 +13,6 @@ module.exports = async function (interaction) {
 
   const opponents = openInvitations.map(fight => fight.fighterA)
 
-
   const embeds = createChooseOpponentEmbeds(opponents);
 
   const pagination = new Pagination(interaction)
