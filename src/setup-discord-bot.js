@@ -19,7 +19,7 @@ const commands = [
   connectedWalletsCommand,
   walletSettingsCommand,
   soulInfoCommand,
-  fightCommand
+  //fightCommand // deactivated for mission launch
 ]
 
 async function setupDiscordBot() {
