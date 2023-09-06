@@ -19,7 +19,6 @@ async function getOnlySouls(address) {
 }
 
 async function startFight(attackers, defenders) {
-  console.log('attackers', process.env.API_PASSWORD, 'defenders', defenders)
   return await fetchAsync(`https://api.evrloot.xyz/api/combat/fight`, {
     method: 'POST',
     body: JSON.stringify({
@@ -36,6 +35,7 @@ async function getFromIpfs(ipfsLink) {
 }
 
 async function fetchAsync(url, options = {}) {
+  console.log('[API]', 'fetching from url', url)
   dns.setDefaultResultOrder('ipv4first')
   return fetch(url, options).then(response => {
     if (!response.ok) {

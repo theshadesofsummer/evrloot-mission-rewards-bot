@@ -15,17 +15,20 @@ module.exports = {
 
 
 async function publishSummary() {
+  console.log('[BOT] publish summary')
   const channel = await getChannel(client, process.env.STATS_CHANNEL_ID)
   const summary = generateSummary()
   await channel.send(summary);
 }
 
 async function postEmbed(embed) {
+  console.log('[BOT] publish embed')
   const channel = await getChannel(client, process.env.PUBLISH_CHANNEL_ID)
   await channel.send({embeds: [embed]});
 }
 
 async function postFightResult(embed) {
+  console.log('[BOT] publish fight result')
   const channel = await getChannel(client, process.env.ARENA_CHANNEL_ID)
   return await channel.send({embeds: [embed]});
 }
@@ -39,17 +42,14 @@ async function sendVerificationDm(discordId, wallet) {
   let userWithMatchingUsername = undefined;
   memberMap.forEach(member => {
     const username = member.user.username;
-    console.log('found possible user named', username)
     if (username === discordId) {
       userWithMatchingUsername = member;
     }
   })
 
   if (!userWithMatchingUsername) {
-    console.log('could not find member for', discordId)
     await deleteWallet(wallet)
   } else {
-    console.log('found member for', discordId)
     await verificationMessage(userWithMatchingUsername, wallet)
   }
 }

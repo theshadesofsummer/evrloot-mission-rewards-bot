@@ -15,6 +15,7 @@ module.exports = {
 }
 
 async function fetchMissionReward(eventInput) {
+  console.log('[RWD]', 'started fetching mission rewards')
   increaseMissionCounter();
 
   // currently not in use
@@ -30,7 +31,7 @@ async function fetchMissionReward(eventInput) {
 
     if (resourceRewardWithMetadata !== undefined) {
       if (resourceRewardWithMetadata.retrievedMetadata === undefined) {
-        console.warn('found no metadata for', resourceRewardWithMetadata)
+        console.warn('[RWD]', 'found no metadata for rr', resourceRewardWithMetadata)
         return;
       }
       addToStats(resourceRewardWithMetadata)
@@ -43,7 +44,7 @@ async function fetchMissionReward(eventInput) {
 
     if (nftRewardWithMetadata !== undefined) {
       if (nftRewardWithMetadata.retrievedMetadata === undefined) {
-        console.warn('found no metadata for', nftRewardWithMetadata)
+        console.warn('[RWD]', 'found no metadata for nr', nftRewardWithMetadata)
         return;
       }
       addToStats(nftRewardWithMetadata)
@@ -60,11 +61,12 @@ async function fetchMissionReward(eventInput) {
 
   const from = await getAccountFromTx(eventInput.transactionHash)
 
-  let accountName = await getAccountName({wallet: from})
+  let accountName = await getAccountName(from)
 
   for (const filteredNftReward of filteredNftRewards) {
     await postEmbed(createMissionRewardEmbed(accountName, filteredNftReward));
   }
+  console.log('[RWD]', 'finished mission rewards')
 }
 
 async function getResourceRewardInfos(resourceReward) {
