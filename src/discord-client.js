@@ -42,7 +42,7 @@ async function sendVerificationDm(discordId, wallet) {
   let userWithMatchingUsername = undefined;
   memberMap.forEach(member => {
     const username = member.user.username;
-    if (username === discordId) {
+    if (username === discordId.toLowerCase()) {
       userWithMatchingUsername = member;
     }
   })
