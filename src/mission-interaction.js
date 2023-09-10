@@ -61,7 +61,7 @@ async function fetchMissionReward(eventInput) {
 
   const from = await getAccountFromTx(eventInput.transactionHash)
 
-  let accountName = await getAccountName(from)
+  let accountName = await getAccountName(from.toLowerCase())
 
   for (const filteredNftReward of filteredNftRewards) {
     await postEmbed(createMissionRewardEmbed(accountName, filteredNftReward));
