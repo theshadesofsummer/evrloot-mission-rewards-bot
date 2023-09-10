@@ -62,7 +62,7 @@ async function verificationMessage(member, wallet) {
 async function handleVerificationConfirmation(confirmation, member, wallet) {
   if (confirmation.customId === 'confirm') {
     console.log('[DM]', 'user confirmed verification')
-    await updateDocument({wallet}, {verified: true, isAnonymous: true})
+    await updateDocument({wallet}, {verified: true, isAnonymous: true, discordId: member.id})
 
     await confirmation.update({ components: [] });
 

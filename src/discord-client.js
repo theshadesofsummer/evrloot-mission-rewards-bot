@@ -33,16 +33,16 @@ async function postFightResult(embed) {
   return await channel.send({embeds: [embed]});
 }
 
-async function sendVerificationDm(discordId, wallet) {
+async function sendVerificationDm(discordName, wallet) {
   await client.guilds.fetch();
   const guild = client.guilds.cache.get(process.env.GUILD_ID);
 
-  const memberMap = await guild.members.fetch({ query: discordId, limit: 10})
+  const memberMap = await guild.members.fetch({ query: discordName, limit: 10})
 
   let userWithMatchingUsername = undefined;
   memberMap.forEach(member => {
     const username = member.user.username;
-    if (username === discordId.toLowerCase()) {
+    if (username === discordName.toLowerCase()) {
       userWithMatchingUsername = member;
     }
   })

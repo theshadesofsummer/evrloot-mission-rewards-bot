@@ -66,7 +66,7 @@ async function getAccountName(wallet) {
       return 'An anonymous traveller'
     }
 
-    return doc.discordId;
+    return doc.discordName;
   } catch (error) {
     console.error('[DB] getting account name for address failed.', error);
     return 'A unknown traveller'
@@ -82,10 +82,10 @@ async function getConnectedAccounts(username, onlyVerified = true) {
     const collection = client.db("evrloot").collection("discordverifications");
 
     const filter = onlyVerified ? {
-      discordId: username,
+      discordName: username,
       verified: true
     } : {
-      discordId: username
+      discordName: username
     }
     // Fetch the documents
     return await collection.find(filter).toArray();
@@ -104,7 +104,7 @@ async function userWithWallet(username, address) {
     const collection = client.db("evrloot").collection("discordverifications");
 
     // Fetch the documents
-    const doc = await collection.findOne({discordId: username, wallet: address})
+    const doc = await collection.findOne({discordName: username, wallet: address})
     console.log('[DB]', 'found user wallet combination:', doc)
     return doc
   } catch (error) {
