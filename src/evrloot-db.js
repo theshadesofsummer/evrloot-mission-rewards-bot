@@ -75,17 +75,17 @@ async function getAccountName(wallet) {
   }
 }
 
-async function getConnectedAccounts(username, onlyVerified = true) {
+async function getConnectedAccounts(userId, onlyVerified = true) {
   const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
   try {
-    console.log('[DB]', 'getting all connected accounts for user:', username, 'onlyVerified:', onlyVerified)
+    console.log('[DB]', 'getting all connected accounts for user:', userId, 'onlyVerified:', onlyVerified)
     const collection = client.db("evrloot").collection("discordverifications");
 
     const filter = onlyVerified ? {
-      discordName: username,
+      discordId: userId,
       verified: true
     } : {
-      discordName: username
+      discordId: userId
     }
     // Fetch the documents
     return await collection.find(filter).toArray();
@@ -97,14 +97,14 @@ async function getConnectedAccounts(username, onlyVerified = true) {
   }
 }
 
-async function userWithWallet(username, address) {
+async function userWithWallet(userId, address) {
   const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
   try {
-    console.log('[DB]', 'get user wallet combination. user:', username, 'wallet:', address)
+    console.log('[DB]', 'get user wallet combination. user:', userId, 'wallet:', address)
     const collection = client.db("evrloot").collection("discordverifications");
 
     // Fetch the documents
-    const doc = await collection.findOne({discordName: username, wallet: address})
+    const doc = await collection.findOne({discordId: userId, wallet: address})
     console.log('[DB]', 'found user wallet combination:', doc)
     return doc
   } catch (error) {
@@ -247,13 +247,14 @@ async function addFightingSoul(fightId, soulId, firstFighter) {
   }
 }
 
-async function getOpenInvitationsToYou(username) {
+async function getOpenInvitationsToYou(userId) {
   const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
   try {
-    console.log('[DB]', 'get all open invitations to', username)
+
+    console.log('[DB]', 'get all open invitations to', userId)
     const collection = client.db("evrloot").collection("discordfights");
 
-    return await collection.find({fighterB: username, soulA: {$exists: true}}).toArray();
+    return await collection.find({fighterB: userId, soulA: {$exists: true}}).toArray();
   } catch (error) {
     console.error('[DB]', 'Error getting all open invitations to oneself', error);
   } finally {
@@ -261,15 +262,15 @@ async function getOpenInvitationsToYou(username) {
   }
 }
 
-async function getOpenInvitationsFromYou(username, withFighter) {
+async function getOpenInvitationsFromYou(userId, withFighter) {
   const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
   try {
-    console.log('[DB]', 'get all open invitations from', username)
+    console.log('[DB]', 'get all open invitations from', userId)
     const collection = client.db("evrloot").collection("discordfights");
 
     const filter = withFighter ?
-      {fighterA: username, soulA: {$exists: true}} :
-      {fighterA: username, soulA: {$exists: false}}
+      {fighterA: userId, soulA: {$exists: true}} :
+      {fighterA: userId, soulA: {$exists: false}}
     return await collection.find(filter).toArray();
   } catch (error) {
     console.error('[DB]', 'Error getting all open invitations to oneself', error);

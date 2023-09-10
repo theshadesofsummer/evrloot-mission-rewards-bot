@@ -15,9 +15,9 @@ module.exports = {
     ),
   async execute(interaction) {
 
-    const address = interaction.options.getString('address')
-    const username = interaction.user.globalName
-    const entry = await userWithWallet(username, address)
+    const address = interaction.options.getString('address').toLowerCase()
+    const userId = interaction.user.id
+    const entry = await userWithWallet(userId, address)
 
     if (entry === null || entry === undefined) {
       await interaction.reply({

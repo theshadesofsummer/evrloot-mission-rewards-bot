@@ -39,8 +39,8 @@ module.exports = {
       ephemeral: true
     })
 
-    const username = interaction.user.username
-    const accounts = await getConnectedAccounts(username)
+    const userId = interaction.user.id
+    const accounts = await getConnectedAccounts(userId)
     const wallets = accounts.map(account => account.wallet)
 
     if (!wallets || wallets.length <= 0) {

@@ -63,8 +63,8 @@ function makeDescriptionFor(list, page, forSouls) {
             description += `\`[${firstElementIndex + idx + 1}]\` ${findClassEmote(soulClass)} ${soul.retrievedMetadata.name}\n`
         });
     } else {
-        slicedList.forEach((username, idx) => {
-            description += `\`[${firstElementIndex + idx + 1}]\` ${username}\n`
+        slicedList.forEach((userId, idx) => {
+            description += `\`[${firstElementIndex + idx + 1}]\` <@${userId}>\n`
         });
     }
 

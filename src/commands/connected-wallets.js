@@ -11,8 +11,8 @@ module.exports = {
       ephemeral: true
     })
 
-    const username = interaction.user.username
-    const accounts = await getConnectedAccounts(username, false)
+    const userId = interaction.user.id
+    const accounts = await getConnectedAccounts(userId, false)
 
     if (!accounts || accounts.length <= 0) {
       await interaction.editReply({

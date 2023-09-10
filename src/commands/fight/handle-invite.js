@@ -1,10 +1,8 @@
-const {getFightByFighters, createNewFight, soulIsInFight, getConnectedAccounts, getSoulCooldown,
-  getOutstandingInvitationWithSoul
-} = require("../../evrloot-db");
+const {getFightByFighters, createNewFight, getConnectedAccounts} = require("../../evrloot-db");
 const {getOnlySouls} = require("../../evrloot-api");
-const {createChooseSoulEmbeds, createChooseSoulFighterEmbeds} = require("../../embeds/choose-from-select-menu-embeds");
+const {createChooseSoulFighterEmbeds} = require("../../embeds/choose-from-select-menu-embeds");
 const {Pagination, ExtraRowPosition} = require("pagination.djs");
-const {createSoulSelectMenuRow, createSoulFighterMenuRow} = require("../../helpers/select-menu");
+const {createSoulFighterMenuRow} = require("../../helpers/select-menu");
 const {mapStatusToSoul, soulSorterByStatus} = require("../../helpers/fighting-soul-helpers");
 
 module.exports = async function (interaction, wallets) {
@@ -15,7 +13,7 @@ module.exports = async function (interaction, wallets) {
     return;
   }
 
-  const accountsOfOpponent = await getConnectedAccounts(opponent.username)
+  const accountsOfOpponent = await getConnectedAccounts(opponent.id)
   const walletsOfOpponent = accountsOfOpponent.map(account => account.wallet)
 
   if (!walletsOfOpponent || walletsOfOpponent.length === 0) {
@@ -24,16 +22,16 @@ module.exports = async function (interaction, wallets) {
   }
 
   let fightId;
-  const runningFight = await getFightByFighters(interaction.user.username, opponent.username)
+  const runningFight = await getFightByFighters(interaction.user.id, opponent.id)
   if (runningFight === null) {
-    const insertResult = await createNewFight(interaction.user.username, opponent.username)
+    const insertResult = await createNewFight(interaction.user.id, opponent.id)
     fightId = insertResult.insertedId
   } else {
     fightId = runningFight._id
 
     if (runningFight.soulA) {
       await interaction.editReply({
-        content: `You already have an outgoing invitation to ${runningFight.fighterB} with one of your souls.\n` +
+        content: `You already have an outgoing invitation to <@${runningFight.fighterB}> with one of your souls.\n` +
           `Wait for your opponent to accept or withdraw your invitation.`
       })
       return;
