@@ -1,4 +1,4 @@
-const linkWithoutIpfs = require("./ipfs-link-tools");
+const linkWithoutIpfs = require("./helpers/ipfs-link-tools");
 const dns = require("dns");
 
 module.exports = {

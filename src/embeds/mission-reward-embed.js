@@ -1,4 +1,4 @@
-const removeIpfsStuff = require("../ipfs-link-tools");
+const removeIpfsStuff = require("../helpers/ipfs-link-tools");
 
 module.exports = function createMissionRewardEmbed(name, reward) {
   return {
