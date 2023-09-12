@@ -1,4 +1,6 @@
-const {getFightByFightId, deleteFight, saveFightResult, addSoulCooldown, addWinnerToLeaderboard} = require("../../evrloot-db");
+const {getFightByFightId, deleteFight, saveFightResult, addSoulCooldown, addWinnerToLeaderboard,
+  updateWinnerOnLeaderboard
+} = require("../../evrloot-db");
 const {startFight} = require("../../evrloot-api");
 const createFightEmbed = require('../../embeds/fight-embed')
 const {postFightResult} = require("../../discord-client");
@@ -12,7 +14,7 @@ module.exports = async function (interaction, fightId) {
   const fightResult = await startFight(fight.soulA, fight.soulB)
   await saveFightResult(fightResult)
   await saveSoulCooldowns(fight, fightResult[0].winner)
-  // await saveWinnerToLeaderboard(fight, fightResult[0].winner)
+  await saveWinnerToLeaderboard(fight, fightResult[0].winner)
 
   await deleteFight(fightId)
 
@@ -50,6 +52,16 @@ async function saveSoulCooldowns(fight, winner) {
     await addSoulCooldown(soulBId, currentTimestamp + ONE_HOUR * 6)
   } else {
     console.log('saveSoulCooldowns, no matching winner team found:', winner)
+  }
+}
+
+async function saveWinnerToLeaderboard(fight, winner) {
+  if (winner === 'Team A') {
+    await updateWinnerOnLeaderboard(fight.fighterA)
+  } else if (winner === 'Team B') {
+    await updateWinnerOnLeaderboard(fight.fighterB)
+  } else {
+    console.log('saveWinnerToLeaderboard, no matching winner team found:', winner)
   }
 }
 

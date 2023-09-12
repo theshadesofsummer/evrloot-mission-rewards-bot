@@ -4,6 +4,8 @@ const handleInvite = require('./fight/handle-invite')
 const handleFightAccept = require('./fight/fight-accept')
 const fightOverview = require('./fight/fight-overview')
 const fightRevoke = require('./fight/fight-revoke')
+const showLeaderboard = require('./fight/show-leaderboard')
+
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('fight')
@@ -33,6 +35,10 @@ module.exports = {
             .setDescription('Your counterpart on the battlefield')
             .setRequired(true)
         )
+    )
+    .addSubcommand(subcommand =>
+      subcommand.setName('leaderboard')
+        .setDescription('Check who has the highest rating among them all!')
     ),
   async execute(interaction) {
     await interaction.deferReply({
@@ -58,6 +64,8 @@ module.exports = {
       await fightOverview(interaction)
     } else if (subcommand === 'revoke') {
       await fightRevoke(interaction)
+    } else if (subcommand === 'leaderboard') {
+      await showLeaderboard(interaction)
     }
   },
 };

@@ -18,37 +18,11 @@ module.exports = {
   saveFightResult,
   addSoulCooldown,
   getSoulCooldown,
-  //addWinnerToLeaderboard
+  getLeaderboardEntries,
+  updateWinnerOnLeaderboard
 }
 
 const uri = `mongodb+srv://${process.env.MONGODB_ACCESS}@cluster0.cbrbn.mongodb.net/evrloot?retryWrites=true&w=majority`;
-
-// WIP, one account can have multiple wallets, might need to split accounts and use the key of an account in the verifications and so on
-// async function getAccountEntry(discordName) {
-//   const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-//   try {
-//     const collection = client.db("evrloot").collection("discordverifications");
-//
-//     const filter = {discordId: discordName}
-//     // Fetch the document
-//     const accountEntry = await collection.findOne(filter);
-//
-//     if (doc === null || !doc.verified) {
-//       return 'An unknown traveller'
-//     }
-//
-//     if (doc.isAnonymous) {
-//       return 'An anonymous traveller'
-//     }
-//
-//     return doc.discordId;
-//   } catch (error) {
-//     console.error('db error while trying to find:', error);
-//     return 'A unknown traveller'
-//   } finally {
-//     await client.close();
-//   }
-// }
 
 async function getAccountName(wallet) {
   const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -362,25 +336,37 @@ async function getSoulCooldown(soulId) {
   }
 }
 
-// async function addWinnerToLeaderboard(discordUserKey){
-//   const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-//   try {
-//     const collection = client.db("evrloot").collection("fightwins");
-//
-//     const winnerDoc = await collection.findOne({discordUserKey: discordUserKey});
-//
-//     if (!winnerDoc) {
-//       console.log('creating new leaderboard entry')
-//       await collection.insertOne({discordUserKey: discordUserKey, amount: 1});
-//     } else {
-//       console.log('updating leaderboard entry')
-//       await collection.updateOne({_id: winnerDoc._id}, { $set: {discordUserKey, amount: winnerDoc.amount + 1}})
-//     }
-//
-//     console.log('successful adding of wins to leaderboard')
-//   } catch (error) {
-//     console.error('Error adding the win to leaderboard for', discordUserKey, error);
-//   } finally {
-//     await client.close();
-//   }
-// }
+async function getLeaderboardEntries(){
+  const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+  try {
+    console.log('[DB]', 'get leaderboard')
+    const collection = client.db("evrloot").collection("fightwins");
+
+    return await collection.find({}).toArray()
+  } catch (error) {
+    console.error('[DB] Error getting the fight leaderboard');
+  } finally {
+    await client.close();
+  }
+}
+
+async function updateWinnerOnLeaderboard(discordId){
+  const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+  try {
+    const collection = client.db("evrloot").collection("fightwins");
+
+    const winnerDoc = await collection.findOne({discordId});
+
+    if (!winnerDoc) {
+      console.log('[DB] creating new leaderboard entry for', discordId)
+      await collection.insertOne({discordId, amount: 1});
+    } else {
+      console.log('[DB] updating leaderboard entry for', discordId, 'to wincount', winnerDoc.amount + 1)
+      await collection.updateOne({_id: winnerDoc._id}, { $set: {amount: winnerDoc.amount + 1}})
+    }
+  } catch (error) {
+    console.error('[DB] Error adding the win to leaderboard for', discordId, error);
+  } finally {
+    await client.close();
+  }
+}
