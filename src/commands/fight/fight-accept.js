@@ -18,7 +18,7 @@ module.exports = async function (interaction) {
   const pagination = new Pagination(interaction)
     .setEmbeds(embeds)
     .setEphemeral(true)
-    .addActionRows([createOpponentSelectMenuRow(opponents, 'choose-opponent-menu')], ExtraRowPosition.Below);
+    .addActionRows([await createOpponentSelectMenuRow(opponents, 'choose-opponent-menu')], ExtraRowPosition.Below);
 
   await pagination.render();
 }

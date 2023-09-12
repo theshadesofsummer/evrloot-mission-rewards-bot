@@ -6,7 +6,7 @@ module.exports = async function (interaction) {
   const openFight = await getFightByFighters(interaction.user.id, opponent.id);
 
   if (!openFight) {
-    interaction.editReply(`You have no open invitation to <@${opponent.username}>, you may want to check your sent invitations with \`/fight overview\`.`)
+    interaction.editReply(`You have no open invitation to <@${opponent.id}>.\nYou may want to check your sent invitations with \`/fight overview\`.`)
     return;
   }
 

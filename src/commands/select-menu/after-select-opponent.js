@@ -8,7 +8,7 @@ const {mapStatusToSoul, soulSorterByStatus, mapSoulsWithStatus} = require("../..
 module.exports = {
   async execute(interaction) {
     const fighterA = interaction.values[0];
-    const fighterB = interaction.user.username;
+    const fighterB = interaction.user.id;
 
     const fight = await getFightByFighters(fighterA, fighterB)
 

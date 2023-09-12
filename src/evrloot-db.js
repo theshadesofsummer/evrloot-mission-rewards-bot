@@ -3,6 +3,7 @@ const {MongoClient, ObjectId} = require('mongodb');
 module.exports = {
   getAccountName,
   getConnectedAccounts,
+  updateDiscordName,
   userWithWallet,
   updateDocument,
   deleteWallet,
@@ -91,6 +92,21 @@ async function getConnectedAccounts(userId, onlyVerified = true) {
     return await collection.find(filter).toArray();
   } catch (error) {
     console.error('[DB] all connected accounts failed.', error);
+    return []
+  } finally {
+    await client.close();
+  }
+}
+
+async function updateDiscordName(id, discordName) {
+  const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+  try {
+    console.log('[DB]', 'updating doc id', id, 'to discord name:', discordName)
+    const collection = client.db("evrloot").collection("discordverifications");
+
+    await collection.updateOne({_id: id}, {$set: {discordName}});
+  } catch (error) {
+    console.error('[DB] updating doc id', id, 'to discord name:', discordName, 'failed.', error);
     return []
   } finally {
     await client.close();

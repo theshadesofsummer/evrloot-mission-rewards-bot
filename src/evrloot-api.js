@@ -10,16 +10,16 @@ module.exports = {
 
 // could maybe be deprecated for getOnlySouls for speed/wide-band reasons?
 async function getSouls(address) {
-  const walletInfo = await fetchAsync(`https://api.evrloot.xyz/api/evmnfts/evmwallet/${address}`);
+  const walletInfo = await fetchAsync(`https://api.evrloot.io/api/evmnfts/evmwallet/${address}`);
   return walletInfo.evmSouls;
 }
 
 async function getOnlySouls(address) {
-  return await fetchAsync(`https://api.evrloot.xyz/api/evmnfts/evmwallet/soulsOnly/${address}`);
+  return await fetchAsync(`https://api.evrloot.io/api/evmnfts/evmwallet/soulsOnly/${address}`);
 }
 
 async function startFight(attackers, defenders) {
-  return await fetchAsync(`https://api.evrloot.xyz/api/combat/fight`, {
+  return await fetchAsync(`https://api.evrloot.io/api/combat/fight`, {
     method: 'POST',
     body: JSON.stringify({
       attackers,

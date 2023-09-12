@@ -6,7 +6,6 @@ const cron = require('node-cron');
 const {MongoClient} = require("mongodb");
 const {publishSummary, sendVerificationDm} = require("./discord-client");
 const {initStats} = require("./summary/daily-stats");
-const {nftMapping} = require("./mappings/item-ids");
 
 setupDiscordBot().then(() => {
     setupMissionRewardListener()
@@ -37,7 +36,7 @@ function setupMongoDbConnection() {
     // Start listening to changes
     changeStream.on('change', (next) => {
       console.log('sending discord dm to', next.fullDocument.discordId, 'with', next.fullDocument.wallet)
-      sendVerificationDm(next.fullDocument.discordId, next.fullDocument.wallet)
+      sendVerificationDm(next.fullDocument.discordName, next.fullDocument.wallet)
     });
 
     // Handle errors (optional but recommended)

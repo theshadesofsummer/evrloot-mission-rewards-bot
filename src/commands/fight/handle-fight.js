@@ -12,18 +12,18 @@ module.exports = async function (interaction, fightId) {
   const fightResult = await startFight(fight.soulA, fight.soulB)
   await saveFightResult(fightResult)
   await saveSoulCooldowns(fight, fightResult[0].winner)
-  await saveWinnerToLeaderboard(fight, fightResult[0].winner)
+  // await saveWinnerToLeaderboard(fight, fightResult[0].winner)
 
-  //await deleteFight(fightId)
+  await deleteFight(fightId)
 
   const fightMessage = await postFightResult(createFightEmbed(fight, fightResult[0]))
 
-  const fightThread = await fightMessage.startThread({
-    name: `${fight.fighterA} vs. ${fight.fighterB}`,
-    autoArchiveDuration: ThreadAutoArchiveDuration.OneHour
-  })
-
-  sendCombatRounds(fightThread, fightResult[0].combatRounds, fight)
+  // const fightThread = await fightMessage.startThread({
+  //   name: `<@${fight.fighterA}> vs. <@${fight.fighterB}>`,
+  //   autoArchiveDuration: ThreadAutoArchiveDuration.OneHour
+  // })
+  //
+  // sendCombatRounds(fightThread, fightResult[0].combatRounds, fight)
 }
 
 // async function saveWinnerToLeaderboard(fight, winner) {

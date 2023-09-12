@@ -31,7 +31,7 @@ module.exports = function createFightEmbed(fight, fightResult) {
 
 function getTeamInfo(fight, finalState, teamA) {
   let result = '';
-  result += teamA ? fight.fighterA : fight.fighterB;
+  result += teamA ? `<@${fight.fighterA}>` : `<@${fight.fighterB}>`;
   result += '\n'
   result += getFinalState(teamA ? finalState.teamAFinal : finalState.teamBFinal)
   return result
@@ -51,15 +51,15 @@ function getFightResult(fight, fightResult) {
   let result = '';
   const winnerTeam = fightResult.winner;
   if (winnerTeam === 'Team A') {
-    result += `*Winner*: **${fight.fighterA}**\n`
+    result += `*Winner*: <@${fight.fighterA}>\n`
     result += '*Combat Rounds*: ' + fightResult.combatRounds.length + '\n\n'
-    result += `${fight.fighterA}'s soul got a cooldown for 6h\n`
-    result += `${fight.fighterB}'s soul got a cooldown for 24h`
+    result += `<@${fight.fighterA}>'s soul got a cooldown for 6h\n`
+    result += `<@${fight.fighterB}>'s soul got a cooldown for 24h`
   } else {
-    result += `*Winner*: **${fight.fighterB}**\n`
+    result += `*Winner*: <@${fight.fighterB}>\n`
     result += '*Combat Rounds*: ' + fightResult.combatRounds.length + '\n\n'
-    result += `${fight.fighterB}'s soul got a cooldown for 6h\n`
-    result += `${fight.fighterA}'s soul got a cooldown for 24h`
+    result += `<@${fight.fighterB}>'s soul got a cooldown for 6h\n`
+    result += `<@${fight.fighterA}>'s soul got a cooldown for 24h`
   }
   return result
 }

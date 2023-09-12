@@ -1,5 +1,6 @@
 const {findClassEmoteObject} = require("./emotes");
 const {StringSelectMenuBuilder, ActionRowBuilder} = require("discord.js");
+const {mapClientIdToName} = require("../discord-client");
 
 module.exports = {
   createSoulSelectMenuRow,
@@ -31,10 +32,11 @@ function createSoulFighterMenuRow(soulsWithStatus, customId, insertId) {
   return new ActionRowBuilder().setComponents(chooseSoulSelectMenu)
 }
 
-function createOpponentSelectMenuRow(opponents, customId) {
-  const chooseOpponentButtons = opponents.map((opponent, index) => ({
-    label: `[${index+1}] ${opponent}`,
-    value: opponent
+async function createOpponentSelectMenuRow(opponentIds, customId) {
+  const opponentNames = await mapClientIdToName(opponentIds)
+  const chooseOpponentButtons = opponentNames.map((opponentName, index) => ({
+    label: `[${index+1}] ${opponentName}`,
+    value: opponentIds[index]
   }));
   const chooseSoulSelectMenu = new StringSelectMenuBuilder()
     .setCustomId(customId)

@@ -85,7 +85,7 @@ function makeDescriptionForSoulFights(soulList, page) {
         if (status === 'readyForFight')
             description += `\`[${firstElementIndex + idx + 1}]\` ${findClassEmote(soulClass)} ✅ ${soul.retrievedMetadata.name}\n`
         else if (status === 'waitingForFight')
-            description += `\`[${firstElementIndex + idx + 1}]\` ${findClassEmote(soulClass)} ✉️ ~~${soul.retrievedMetadata.name}~~ [outgoing invitation to ${soul.opponent}]\n`
+            description += `\`[${firstElementIndex + idx + 1}]\` ${findClassEmote(soulClass)} ✉️ ~~${soul.retrievedMetadata.name}~~ [outgoing invitation to <@${soul.opponent}>]\n`
         else if (status === 'onCooldown')
             description += `\`[${firstElementIndex + idx + 1}]\` ${findClassEmote(soulClass)} ⏳ ~~${soul.retrievedMetadata.name}~~ [cooldown <t:${soul.cooldown}:f> (<t:${soul.cooldown}:R>)]\n`
     });

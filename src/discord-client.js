@@ -10,7 +10,8 @@ module.exports = {
   publishSummary,
   postEmbed,
   postFightResult,
-  sendVerificationDm
+  sendVerificationDm,
+  mapClientIdToName
 }
 
 
@@ -60,4 +61,20 @@ async function getChannel(client, channelId) {
 
   await guild.channels.fetch();
   return guild.channels.cache.get(channelId);
+}
+
+function mapClientIdToName(clientIds) {
+  return Promise.all(clientIds.map(mapToName));
+}
+
+async function mapToName(clientId) {
+  await client.guilds.fetch();
+  const guild = client.guilds.cache.get(process.env.GUILD_ID);
+
+  const guildMember = await guild.members.fetch('392742443650646017')
+  if (!guildMember) {
+    console.warn('no user found for client id', clientId)
+    return 'User not found'
+  }
+  return guildMember.user.globalName
 }
