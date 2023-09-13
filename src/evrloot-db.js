@@ -2,7 +2,8 @@ const {MongoClient, ObjectId} = require('mongodb');
 
 module.exports = {
   getAccountName,
-  getConnectedAccounts,
+  getAllConnectedAccounts,
+  getAllFighterAccounts,
   updateDiscordName,
   userWithWallet,
   updateDocument,
@@ -50,16 +51,34 @@ async function getAccountName(wallet) {
   }
 }
 
-async function getConnectedAccounts(userId, onlyVerified = true) {
+async function getAllFighterAccounts(userId) {
   const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
   try {
-    console.log('[DB]', 'getting all connected accounts for user:', userId, 'onlyVerified:', onlyVerified)
+    console.log('[DB]', 'getting verified and non anonymous accounts for user:', userId)
     const collection = client.db("evrloot").collection("discordverifications");
 
-    const filter = onlyVerified ? {
+    const filter = {
       discordId: userId,
-      verified: true
-    } : {
+      verified: true,
+      isAnonymous: false
+    }
+    // Fetch the documents
+    return await collection.find(filter).toArray();
+  } catch (error) {
+    console.error('[DB] getting verified and non anonymous accounts failed.', error);
+    return []
+  } finally {
+    await client.close();
+  }
+}
+
+async function getAllConnectedAccounts(userId) {
+  const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+  try {
+    console.log('[DB]', 'getting all connected accounts for user:', userId)
+    const collection = client.db("evrloot").collection("discordverifications");
+
+    const filter = {
       discordId: userId
     }
     // Fetch the documents

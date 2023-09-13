@@ -1,5 +1,5 @@
 const {SlashCommandBuilder} = require("discord.js");
-const {getConnectedAccounts} = require("../evrloot-db");
+const {getAllConnectedAccounts} = require("../evrloot-db");
 
 
 module.exports = {
@@ -12,7 +12,7 @@ module.exports = {
     })
 
     const userId = interaction.user.id
-    const accounts = await getConnectedAccounts(userId, false)
+    const accounts = await getAllConnectedAccounts(userId)
 
     if (!accounts || accounts.length <= 0) {
       await interaction.editReply({

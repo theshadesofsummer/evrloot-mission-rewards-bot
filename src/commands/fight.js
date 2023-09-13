@@ -1,5 +1,5 @@
 const {SlashCommandBuilder} = require("discord.js");
-const {getConnectedAccounts} = require("../evrloot-db");
+const {getAllFighterAccounts} = require("../evrloot-db");
 const handleInvite = require('./fight/handle-invite')
 const handleFightAccept = require('./fight/fight-accept')
 const fightOverview = require('./fight/fight-overview')
@@ -46,11 +46,11 @@ module.exports = {
     })
 
     const userId = interaction.user.id
-    const accounts = await getConnectedAccounts(userId)
+    const accounts = await getAllFighterAccounts(userId)
     const wallets = accounts.map(account => account.wallet)
 
     if (!wallets || wallets.length <= 0) {
-      await interaction.editReply(`To use the fights you need to have at least one wallet connected!`)
+      await interaction.editReply(`To take part in the fights you need to have at least one wallet verified and not anonymous!`)
       return;
     }
 

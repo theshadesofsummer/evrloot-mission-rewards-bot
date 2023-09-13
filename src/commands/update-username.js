@@ -1,5 +1,5 @@
 const {SlashCommandBuilder} = require("discord.js");
-const {getConnectedAccounts, updateDiscordName} = require("../evrloot-db");
+const {getAllConnectedAccounts, updateDiscordName} = require("../evrloot-db");
 
 
 module.exports = {
@@ -12,9 +12,8 @@ module.exports = {
     })
 
     const userId = interaction.user.id
-    const accounts = await getConnectedAccounts(userId, false)
+    const accounts = await getAllConnectedAccounts(userId, false)
 
-    console.log(accounts)
     if (!accounts || accounts.length <= 0) {
       await interaction.editReply({
         content: `I couldn't find any accounts that belong to you, I'm sorry.`

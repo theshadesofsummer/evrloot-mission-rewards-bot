@@ -1,4 +1,4 @@
-const {getFightByFighters, createNewFight, getConnectedAccounts} = require("../../evrloot-db");
+const {getFightByFighters, createNewFight, getAllFighterAccounts} = require("../../evrloot-db");
 const {getOnlySouls} = require("../../evrloot-api");
 const {createChooseSoulFighterEmbeds} = require("../../embeds/choose-from-select-menu-embeds");
 const {Pagination, ExtraRowPosition} = require("pagination.djs");
@@ -13,11 +13,11 @@ module.exports = async function (interaction, wallets) {
     return;
   }
 
-  const accountsOfOpponent = await getConnectedAccounts(opponent.id)
+  const accountsOfOpponent = await getAllFighterAccounts(opponent.id)
   const walletsOfOpponent = accountsOfOpponent.map(account => account.wallet)
 
   if (!walletsOfOpponent || walletsOfOpponent.length === 0) {
-    await interaction.editReply(`Your desired opponent does not have registered wallets!`)
+    await interaction.editReply(`Your desired opponent does not have verified and non anonymous wallets connected!`)
     return;
   }
 

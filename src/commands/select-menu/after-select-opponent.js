@@ -1,9 +1,9 @@
-const {getConnectedAccounts, soulIsInFight, getFightByFighters, getOutstandingInvitationWithSoul, getSoulCooldown} = require("../../evrloot-db");
+const {getAllFighterAccounts, getFightByFighters} = require("../../evrloot-db");
 const {getOnlySouls} = require("../../evrloot-api");
-const {createChooseSoulEmbeds, createChooseSoulFighterEmbeds} = require("../../embeds/choose-from-select-menu-embeds");
+const {createChooseSoulFighterEmbeds} = require("../../embeds/choose-from-select-menu-embeds");
 const {Pagination, ExtraRowPosition} = require("pagination.djs");
-const {createSoulSelectMenuRow, createSoulFighterMenuRow} = require("../../helpers/select-menu");
-const {mapStatusToSoul, soulSorterByStatus, mapSoulsWithStatus} = require("../../helpers/fighting-soul-helpers");
+const {createSoulFighterMenuRow} = require("../../helpers/select-menu");
+const {mapStatusToSoul, soulSorterByStatus} = require("../../helpers/fighting-soul-helpers");
 
 module.exports = {
   async execute(interaction) {
@@ -17,8 +17,13 @@ module.exports = {
       return;
     }
 
-    const accounts = await getConnectedAccounts(fighterB)
+    const accounts = await getAllFighterAccounts(fighterB)
     const wallets = accounts.map(account => account.wallet)
+
+    if (!wallets || wallets.length <= 0) {
+      await interaction.editReply(`To accept this fights you need to have at least one wallet verified and not anonymous!`)
+      return;
+    }
 
     const allAccountsWithSouls = wallets.map(getOnlySouls)
     Promise.all(allAccountsWithSouls).then(async soulsInAllAccounts => {
@@ -26,7 +31,7 @@ module.exports = {
         .flat()
 
       if (soulList.length <= 0) {
-        await interaction.editReply('You currently have no souls in any of your connected wallets.');
+        await interaction.editReply('You currently have no souls in any of your verified and non anonymous wallets.');
         return;
       }
 
