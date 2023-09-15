@@ -1,9 +1,7 @@
-const {getFightByFightId, deleteFight, saveFightResult, addSoulCooldown, addWinnerToLeaderboard,
-  updateWinnerOnLeaderboard
-} = require("../../evrloot-db");
+const {getFightByFightId, deleteFight, saveFightResult, addSoulCooldown, updateWinnerOnLeaderboard} = require("../../evrloot-db");
 const {startFight} = require("../../evrloot-api");
 const createFightEmbed = require('../../embeds/fight-embed')
-const {postFightResult} = require("../../discord-client");
+const {postFightResult, mapClientIdToName} = require("../../discord-client");
 const {ThreadAutoArchiveDuration} = require("discord-api-types/v10");
 
 const ONE_HOUR = 3600;
@@ -20,24 +18,14 @@ module.exports = async function (interaction, fightId) {
 
   const fightMessage = await postFightResult(createFightEmbed(fight, fightResult[0]))
 
-  // const fightThread = await fightMessage.startThread({
-  //   name: `<@${fight.fighterA}> vs. <@${fight.fighterB}>`,
-  //   autoArchiveDuration: ThreadAutoArchiveDuration.OneHour
-  // })
-  //
-  // sendCombatRounds(fightThread, fightResult[0].combatRounds, fight)
-}
+  const fighters = await mapClientIdToName([fight.fighterA, fight.fighterB]);
+  const fightThread = await fightMessage.startThread({
+    name: `${fighters[0]} vs. ${fighters[1]}`,
+    autoArchiveDuration: ThreadAutoArchiveDuration.OneHour
+  })
 
-// async function saveWinnerToLeaderboard(fight, winner) {
-//   if (winner === 'Team A') {
-//     const user = await get
-//     await addWinnerToLeaderboard(fight.fighterA)
-//   } else if (winner === 'Team B') {
-//     await addWinnerToLeaderboard(fight.fighterB)
-//   } else {
-//     console.log('saveSoulCooldowns, no matching winner team found:', winner)
-//   }
-// }
+  sendCombatRounds(fightThread, fightResult[0].combatRounds, fighters)
+}
 
 async function saveSoulCooldowns(fight, winner) {
   const soulAId = fight.soulA;
@@ -65,35 +53,35 @@ async function saveWinnerToLeaderboard(fight, winner) {
   }
 }
 
-function sendCombatRounds(fightThread, combatRounds, fight) {
-  combatRounds.forEach((round, idx) => fightThread.send(summarizeRound(round, idx, fight)))
+function sendCombatRounds(fightThread, combatRounds, fighters) {
+  combatRounds.forEach((round, idx) => fightThread.send(summarizeRound(round, idx, fighters)))
 }
 
-function summarizeRound(round, idx, fight) {
+function summarizeRound(round, idx, fighters) {
   let result = '## Round #' + (idx+1) + '\n\n';
 
-  result += summarizeTeam(round.teamA, fight)
-  result += summarizeTeam(round.teamB, fight)
+  result += summarizeTeam(round.teamA, fighters[0])
+  result += summarizeTeam(round.teamB, fighters[1])
 
   result += '\n'
 
   result += Object.values(round.battleActions)
-    .map(action => summarizeAction(action, fight))
+    .map(action => summarizeAction(action, fighters))
     .join('\n')
 
   result += '\n\n End of Round #' + (idx+1)
   return result;
 }
 
-function summarizeTeam(team, fight) {
+function summarizeTeam(team, fighterName) {
   const fighter = team[0]
-  return `Status **${getUserFromFighter(fighter.id, fight)}**: ${Math.round(Math.max(fighter.hp, 0) * 10) / 10}❤️\n`
+  return `Status **${fighterName}**: ${Math.round(Math.max(fighter.hp, 0) * 10) / 10}❤️\n`
 }
 
-function summarizeAction(action, fight) {
+function summarizeAction(action, fighterNames) {
   switch (action.actionType) {
     case 'HIT':
-      return `**${getUserFromFighter(action.attacker, fight)}**: ${action.comment}`
+      return `*[HIT]*: ${action.comment}`
     case 'ATTACK_CALCULATION':
       return `*[Calculating Attack Damage]* ${action.comment}*`
     case 'ATTACK_ROLL':
@@ -101,7 +89,7 @@ function summarizeAction(action, fight) {
     case 'DMG_REDUCTION':
       return `*[Defender's Armor]* ${action.comment}*`
     case 'ATTACK':
-      return `**${getUserFromFighter(action.attacker, fight)} attacks ${getUserFromFighter(action.defender, fight)}**: ${action.comment}`
+      return `*[ATTACK]*: ${action.comment}`
     case 'SPECIAL_EFFECTS':
       return `*[Special Effects]* ${action.comment}`
     default:

@@ -71,7 +71,7 @@ async function mapToName(clientId) {
   await client.guilds.fetch();
   const guild = client.guilds.cache.get(process.env.GUILD_ID);
 
-  const guildMember = await guild.members.fetch('392742443650646017')
+  const guildMember = await guild.members.fetch(clientId)
   if (!guildMember) {
     console.warn('no user found for client id', clientId)
     return 'User not found'
