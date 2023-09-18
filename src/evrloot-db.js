@@ -294,7 +294,7 @@ async function deleteFight(fightId) {
     console.log('[DB]', 'delete fight by id', fightId)
     const collection = client.db("evrloot").collection("discordfights");
 
-    return await collection.deleteOne({_id: fightId});
+    return await collection.deleteOne({_id: new ObjectId(fightId)});
   } catch (error) {
     console.error('[DB]', 'Error deleting the fight', error);
   } finally {
