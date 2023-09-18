@@ -1,8 +1,9 @@
 const {getFightByFightId, deleteFight, saveFightResult, addSoulCooldown, updateWinnerOnLeaderboard} = require("../../evrloot-db");
-const {startFight} = require("../../evrloot-api");
+const {startFight, getSoulMetadata} = require("../../evrloot-api");
 const createFightEmbed = require('../../embeds/fight-embed')
 const {postFightResult, mapClientIdToName} = require("../../discord-client");
 const {ThreadAutoArchiveDuration} = require("discord-api-types/v10");
+const createFighterEmbed = require('../../embeds/fighter-embed')
 
 const ONE_HOUR = 3600;
 
@@ -18,13 +19,24 @@ module.exports = async function (interaction, fightId) {
 
   const fightMessage = await postFightResult(createFightEmbed(fight, fightResult[0]))
 
-  const fighters = await mapClientIdToName([fight.fighterA, fight.fighterB]);
+  const fighterNames = await mapClientIdToName([fight.fighterA, fight.fighterB]);
+  const soulAMetadata = await getSoulMetadata(fight.soulA);
+  const soulBMetadata = await getSoulMetadata(fight.soulB);
+
+  const fightInfos = {
+    ...fight,
+    fighterAName: fighterNames[0],
+    fighterBName: fighterNames[1],
+    soulAMetadata,
+    soulBMetadata
+  }
+
   const fightThread = await fightMessage.startThread({
-    name: `${fighters[0]} vs. ${fighters[1]}`,
+    name: `${fighterNames[0]} vs. ${fighterNames[1]}`,
     autoArchiveDuration: ThreadAutoArchiveDuration.OneHour
   })
 
-  sendCombatRounds(fightThread, fightResult[0].combatRounds, fighters)
+  sendCombatRounds(fightThread, fightResult[0].combatRounds, fightInfos)
 }
 
 async function saveSoulCooldowns(fight, winner) {
@@ -53,20 +65,27 @@ async function saveWinnerToLeaderboard(fight, winner) {
   }
 }
 
-function sendCombatRounds(fightThread, combatRounds, fighters) {
-  combatRounds.forEach((round, idx) => fightThread.send(summarizeRound(round, idx, fighters)))
+function sendCombatRounds(fightThread, combatRounds, fightInfos) {
+  fightThread.send({
+    content: `# Fight Overview`,
+    embeds: [
+      createFighterEmbed(fightInfos.fighterA, fightInfos.soulAMetadata),
+      createFighterEmbed(fightInfos.fighterB, fightInfos.soulBMetadata)
+    ]
+  })
+  combatRounds.forEach((round, idx) => fightThread.send(summarizeRound(round, idx, fightInfos)))
 }
 
-function summarizeRound(round, idx, fighters) {
+function summarizeRound(round, idx, fightInfos) {
   let result = '## Round #' + (idx+1) + '\n\n';
 
-  result += summarizeTeam(round.teamA, fighters[0])
-  result += summarizeTeam(round.teamB, fighters[1])
+  result += summarizeTeam(round.teamA, fightInfos.fighterAName)
+  result += summarizeTeam(round.teamB, fightInfos.fighterBName)
 
   result += '\n'
 
   result += Object.values(round.battleActions)
-    .map(action => summarizeAction(action, fighters))
+    .map(action => summarizeAction(action, fightInfos))
     .join('\n')
 
   result += '\n\n End of Round #' + (idx+1)
@@ -78,34 +97,29 @@ function summarizeTeam(team, fighterName) {
   return `Status **${fighterName}**: ${Math.round(Math.max(fighter.hp, 0) * 10) / 10}❤️\n`
 }
 
-function summarizeAction(action, fighterNames) {
+function summarizeAction(action, fightInfos) {
+  const readableComment = formatComment(action.comment, fightInfos)
   switch (action.actionType) {
     case 'HIT':
-      return `*[HIT]*: ${action.comment}`
+      return `*[HIT]*: ${readableComment}`
     case 'ATTACK_CALCULATION':
-      return `*[Calculating Attack Damage]* ${action.comment}*`
+      return `*[Calculating Attack Damage]* ${readableComment}`
     case 'ATTACK_ROLL':
-      return `*[Rolling Attack Damage]* ${action.comment}*`
+      return `*[Rolling Attack Damage]* ${readableComment}`
     case 'DMG_REDUCTION':
-      return `*[Defender's Armor]* ${action.comment}*`
+      return `*[Defender's Armor]* ${readableComment}`
     case 'ATTACK':
-      return `*[ATTACK]*: ${action.comment}`
+      return `*[ATTACK]*: ${readableComment}`
     case 'SPECIAL_EFFECTS':
-      return `*[Special Effects]* ${action.comment}`
+      return `*[Special Effects]* ${readableComment}`
     default:
       'missing type ' + action.actionType
   }
 }
 
-function getUserFromFighter(soulId, fight) {
-  switch (soulId) {
-    case fight.soulA:
-      return fight.fighterA
-    case fight.soulB:
-      return fight.fighterB
-    default:
-      console.log('could not find a matching user for', soulId, 'in', fight)
-      return 'No Name'
-
-  }
+function formatComment(comment, fightInfos) {
+  return comment.replace(fightInfos.soulA, `**${fightInfos.soulAMetadata.retrievedMetadata.name}**`)
+    .replace(fightInfos.soulB, `**${fightInfos.soulBMetadata.retrievedMetadata.name}**`)
+    .replace(fightInfos.fighterA, `**${fightInfos.fighterAName}**`)
+    .replace(fightInfos.fighterB, `**${fightInfos.fighterBName}**`)
 }

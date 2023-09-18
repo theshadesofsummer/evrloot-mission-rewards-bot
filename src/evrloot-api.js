@@ -5,6 +5,7 @@ module.exports = {
   getSouls,
   getOnlySouls,
   startFight,
+  getSoulMetadata,
   getFromIpfs,
 }
 
@@ -28,6 +29,10 @@ async function startFight(attackers, defenders) {
     }),
     headers: { 'Content-Type': 'application/json' }
   });
+}
+
+async function getSoulMetadata(soulId) {
+  return await fetchAsync(`https://api.evrloot.io/api/evmnfts/${soulId}`);
 }
 
 async function getFromIpfs(ipfsLink) {

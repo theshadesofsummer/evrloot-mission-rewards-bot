@@ -19,7 +19,7 @@ const commands = [
   connectedWalletsCommand,
   walletSettingsCommand,
   soulInfoCommand,
-  //fightCommand, // deactivated for mission launch
+  fightCommand, // deactivated for mission launch
   updateUsernameCommand
 ]
 
