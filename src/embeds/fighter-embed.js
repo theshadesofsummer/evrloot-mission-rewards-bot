@@ -44,8 +44,8 @@ module.exports = function createFighterEmbed(userId, soul) {
         inline: true
       },
       {
-        name: 'Experience',
-        value: experienceFormatter(soul.experience),
+        name: 'Equipment',
+        value: equipmentFormatter(soul.children),
         inline: true
       },
     ],
@@ -94,47 +94,23 @@ function upgradedStat(soulChildren, statType) {
   return `***+${upgradeAmount}***`;
 }
 
-function experienceFormatter(soulExperience) {
-  const validActivities = soulExperience.activities.filter(activity => activity.activityId !== 0) // activity with id 0 is called unknown kek
-
+const equipmentParts = [
+  'Head',
+  'Armor',
+  'Feet',
+  'MainHand',
+  'OffHand'
+]
+function equipmentFormatter(soulChildren) {
   let returnString = '';
-  for (const activity of validActivities) {
-    returnString += `*${activity.activityName}*: ${getRankName(activity.experience)} (${activity.experience}/${getNextLevel(activity.experience)})\n`
+  for (const partName of equipmentParts) {
+    const child = getChildForPartName(soulChildren, partName)
+    if (child)
+      returnString += `*${partName}*: ${child.retrievedMetadata.name} (${child.retrievedMetadata.properties['Rarity'].value})\n`
   }
-
   return returnString;
 }
 
-function getRankName(currentExp) {
-  const lvlNames = [
-    'Unskilled',
-    'Amateur',
-    'Beginner',
-    'Novice',
-    'Rookie',
-    'Adept',
-    'Apprentice',
-    'Journeyman',
-    'Expert',
-    'Master',
-    'Artisan',
-    'Grandmaster',
-    'Legendary',
-  ];
-
-  let nextLevelBarrier = 100;
-  let lvlNameCounter = 0;
-  while (nextLevelBarrier < currentExp) {
-    nextLevelBarrier = nextLevelBarrier << 1
-    lvlNameCounter++;
-  }
-  return lvlNames[lvlNameCounter];
-}
-
-function getNextLevel(currentExp) {
-  let nextLevelBarrier = 100;
-  while (nextLevelBarrier < currentExp) {
-    nextLevelBarrier = nextLevelBarrier << 1
-  }
-  return nextLevelBarrier
+function getChildForPartName(soulChildren, partName) {
+  return soulChildren.find(child => child.partDescription === partName)
 }
