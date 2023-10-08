@@ -1,7 +1,7 @@
 const {MongoClient, ObjectId} = require('mongodb');
 
 module.exports = {
-  getAccountName,
+  getAccountByWallet,
   getAllConnectedAccounts,
   getAllFighterAccounts,
   updateDiscordName,
@@ -25,27 +25,23 @@ module.exports = {
 
 const uri = `mongodb+srv://${process.env.MONGODB_ACCESS}@cluster0.cbrbn.mongodb.net/evrloot?retryWrites=true&w=majority`;
 
-async function getAccountName(wallet) {
+async function getAccountByWallet(wallet) {
   const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
   try {
-    console.log('[DB]', 'getting account name for wallet:', wallet)
+    console.log('[DB]', 'getting account for wallet:', wallet)
     const collection = client.db("evrloot").collection("discordverifications");
 
     // Fetch the document
     const doc = await collection.findOne({wallet});
 
-    if (doc === null || !doc.verified) {
-      return 'An unknown traveller'
+    if (doc === null || !doc.verified || doc.isAnonymous) {
+      return undefined
     }
 
-    if (doc.isAnonymous) {
-      return 'An anonymous traveller'
-    }
-
-    return doc.discordName;
+    return doc;
   } catch (error) {
     console.error('[DB] getting account name for address failed.', error);
-    return 'A unknown traveller'
+    return undefined
   } finally {
     await client.close();
   }

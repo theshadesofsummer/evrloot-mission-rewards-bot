@@ -39,6 +39,7 @@ const itemIds = {
     contractAddress: moonbeamContracts['NestableFish'],
     tokenUri: `${UNIDENTIFIED_FISH_URI}commonFish.json`,
     name: 'Common Fish',
+    emoteId: '<:common_fish:1160346016713805855>'
   }, //'COMMON',
   'Common Fish': {
     poolId: 1,
@@ -46,6 +47,7 @@ const itemIds = {
     contractAddress: moonbeamContracts['NestableFish'],
     tokenUri: `${UNIDENTIFIED_FISH_URI}commonFish.json`,
     name: 'Common Fish',
+    emoteId: '<:common_fish:1160346016713805855>'
   }, //'COMMON',
   'Rare Fish': {
     poolId: 2,
@@ -53,6 +55,7 @@ const itemIds = {
     contractAddress: moonbeamContracts['NestableFish'],
     tokenUri: `${UNIDENTIFIED_FISH_URI}rareFish.json`,
     name: 'Rare Fish',
+    emoteId: '<:rare_fish:1160348216332664842>'
   }, //'RARE',
   'Epic Fish': {
     poolId: 3,
@@ -60,6 +63,7 @@ const itemIds = {
     contractAddress: moonbeamContracts['NestableFish'],
     tokenUri: `${UNIDENTIFIED_FISH_URI}epicFish.json`,
     name: 'Epic Fish',
+    emoteId: '<:epic_fish:1160346025144373439>'
   }, //'EPIC',
   'Legendary Fish': {
     poolId: 4,
@@ -67,6 +71,7 @@ const itemIds = {
     contractAddress: moonbeamContracts['NestableFish'],
     tokenUri: `${UNIDENTIFIED_FISH_URI}legendaryFish.json`,
     name: 'Legendary Fish',
+    emoteId: '<:legendary_fish:1160369974737637376>'
   }, //'LEGENDARY',
   'Common Triumph': {
     poolId: 1,
@@ -74,6 +79,7 @@ const itemIds = {
     contractAddress: moonbeamContracts['AlphaTest'],
     tokenUri: `${UNIDENTIFIED_ALPHA_URI_COMMONTEST}`,
     name: 'Common Triumph',
+    emoteId: ''
   }, //'COMMON',
   'Rare Triumph': {
     poolId: 2,
@@ -81,6 +87,7 @@ const itemIds = {
     contractAddress: moonbeamContracts['AlphaTest'],
     tokenUri: `${UNIDENTIFIED_ALPHA_URI_RARETEST}`,
     name: 'Rare Triumph',
+    emoteId: ''
   }, //'RARE',
   'Epic Triumph': {
     poolId: 3,
@@ -88,6 +95,7 @@ const itemIds = {
     contractAddress: moonbeamContracts['AlphaTest'],
     tokenUri: `${UNIDENTIFIED_ALPHA_URI_EPICTEST}`,
     name: 'Epic Triumph',
+    emoteId: ''
   }, //'EPIC',
   'Legendary Triumph': {
     poolId: 4,
@@ -95,14 +103,15 @@ const itemIds = {
     contractAddress: moonbeamContracts['AlphaTest'],
     tokenUri: `${UNIDENTIFIED_ALPHA_URI_LEGENDARYTEST}`,
     name: 'Legendary Triumph',
+    emoteId: ''
   }, //'LEGENDARY',
-
   'Crafting Item': {
     poolId: 0,
     memberId: 0,
     contractAddress: moonbeamContracts['NestableLoot'],
     tokenUri: ``,
     name: 'Common Item',
+    emoteId: ''
   },
   'Makeshift Palm Rod': {
     poolId: 0,
@@ -110,6 +119,7 @@ const itemIds = {
     contractAddress: moonbeamContracts['NestableLoot'],
     tokenUri: `ipfs://QmTtrvYzqijTUs5b4kdCFzSrBCoydRPQm4gSo8CJomk88e/ULOXRD.json`,
     name: 'Makeshift Palm Rod',
+    emoteId: '<:makeshift_palm_rod:1160346056710705192>'
   },
   'Reinforced Palm Rod': {
     poolId: 0,
@@ -117,6 +127,7 @@ const itemIds = {
     contractAddress: moonbeamContracts['NestableLoot'],
     tokenUri: `ipfs://QmTtrvYzqijTUs5b4kdCFzSrBCoydRPQm4gSo8CJomk88e/240SHV.json`,
     name: 'Reinforced Palm Rod',
+    emoteId: '<:reinforced_palm_rod:1160346070606426122>'
   },
   'Akuban Rod': {
     poolId: 0,
@@ -124,6 +135,7 @@ const itemIds = {
     contractAddress: moonbeamContracts['NestableLoot'],
     tokenUri: `ipfs://QmTtrvYzqijTUs5b4kdCFzSrBCoydRPQm4gSo8CJomk88e/DFHM8O.json`,
     name: 'Akuban Rod',
+    emoteId: '<:akuban_rod:1160348169322901565>'
   },
   'Abyssal Rod': {
     poolId: 0,
@@ -131,6 +143,7 @@ const itemIds = {
     contractAddress: moonbeamContracts['NestableLoot'],
     tokenUri: `ipfs://QmTtrvYzqijTUs5b4kdCFzSrBCoydRPQm4gSo8CJomk88e/U97CN0.json`,
     name: 'Abyssal Rod',
+    emoteId: '<:abyssal_rod:1160348166177181707>'
   },
   'Common Pioneer Armor': {
     poolId: 1,
@@ -138,6 +151,7 @@ const itemIds = {
     contractAddress: moonbeamContracts['NestableLoot'],
     tokenUri: ``,
     name: 'Common Pioneer Armor',
+    emoteId: ''
   },
   'Rare Pioneer Armor': {
     poolId: 2,
@@ -145,6 +159,7 @@ const itemIds = {
     contractAddress: moonbeamContracts['NestableLoot'],
     tokenUri: ``,
     name: 'Rare Pioneer Armor',
+    emoteId: ''
   },
   'Epic Pioneer Armor': {
     poolId: 3,
@@ -152,6 +167,7 @@ const itemIds = {
     contractAddress: moonbeamContracts['NestableLoot'],
     tokenUri: ``,
     name: 'Epic Pioneer Armor',
+    emoteId: ''
   },
   'Legendary Pioneer Armor': {
     poolId: 4,
@@ -159,6 +175,7 @@ const itemIds = {
     contractAddress: moonbeamContracts['NestableLoot'],
     tokenUri: EVRLOOT_LEGEND_PIONEER_ARMOR,
     name: 'Legendary Pioneer Armor',
+    emoteId: '<:legendary_pioneer_armor:1160346048800235581>'
   },
   'Common Pioneer Weapon': {
     poolId: 5,
@@ -166,6 +183,7 @@ const itemIds = {
     contractAddress: moonbeamContracts['NestableLoot'],
     tokenUri: ``,
     name: 'Rare Pioneer Weapon',
+    emoteId: ''
   },
   'Rare Pioneer Weapon': {
     poolId: 6,
@@ -173,6 +191,7 @@ const itemIds = {
     contractAddress: moonbeamContracts['NestableLoot'],
     tokenUri: ``,
     name: 'Rare Pioneer Weapon',
+    emoteId: ''
   },
   'Epic Pioneer Weapon': {
     poolId: 7,
@@ -180,6 +199,7 @@ const itemIds = {
     contractAddress: moonbeamContracts['NestableLoot'],
     tokenUri: ``,
     name: 'Epic Pioneer Weapon',
+    emoteId: ''
   },
   'Legendary Pioneer Weapon': {
     poolId: 8,
@@ -187,6 +207,7 @@ const itemIds = {
     contractAddress: moonbeamContracts['NestableLoot'],
     tokenUri: EVRLOOT_LEGEND_PIONEER_WEAPON,
     name: 'Legendary Pioneer Weapon',
+    emoteId: '<:legendary_pioneer_weaponmin:1160369146165465148>'
   },
 };
 
@@ -204,6 +225,7 @@ function fillNftMapping() {
       itemId: itemId,
       name: item.name,
       metadataUri: item.tokenUri,
+      emoteId: item.emoteId
     };
   });
   return nftMapping

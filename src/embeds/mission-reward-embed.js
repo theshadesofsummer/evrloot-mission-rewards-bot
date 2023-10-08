@@ -1,17 +1,27 @@
 const removeIpfsStuff = require("../helpers/ipfs-link-tools");
 
-module.exports = function createMissionRewardEmbed(name, reward) {
+module.exports = function createMissionRewardEmbed(soul, account, reward) {
+  if (reward.emoteId === '')
+    console.log('[RWD] cannot find emote for', reward.retrievedMetadata.name)
+
   return {
     color: colorForRarity(reward.retrievedMetadata.attributes.find(m => m.label === 'Rarity')),
-    title: `${name} found ${reward.amount} ${reward.retrievedMetadata.name}!`,
     author: {
       name: 'New Mission Reward!',
       icon_url: 'https://game.evrloot.com/assets/icons/moonbeamIcon.png',
     },
+    description: `${getAccountName(account)}**${soul.retrievedMetadata.name}** found ${reward.amount} ${reward.retrievedMetadata.name}! ${reward.emoteId}`,
     thumbnail: {
-      url: `https://evrloot.myfilebase.com/ipfs/${removeIpfsStuff(reward.retrievedMetadata.image)}`,
+      url: soul.retrievedMetadata.image
     },
   };
+}
+
+function getAccountName(account) {
+  let accountInfo = '';
+  if (account)
+    accountInfo += `<@${account.discordId}>'s soul `
+  return accountInfo
 }
 
 function colorForRarity(rarityMetadata) {

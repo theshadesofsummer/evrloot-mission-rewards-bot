@@ -5,10 +5,13 @@ const resourceRewards = require('./mappings/resource-types.js');
 const { getFromIpfs } = require('./evrloot-api.js')
 const config = require('./config.js')
 const { addToStats, increaseMissionCounter, getStats } = require('./summary/daily-stats.js')
-const {getAccountName} = require("./evrloot-db");
+const {getAccountByWallet} = require("./evrloot-db");
 const {getAccountFromTx} = require("./abi-interaction");
 const {nftMapping} = require("./mappings/item-ids");
 const {postEmbed} = require("./discord-client");
+const {getSoulMetadata} = require("./evrloot-api");
+
+const EVRSOULS_PREFIX = 'EVR-SOULS-';
 
 module.exports = {
   fetchMissionReward
@@ -59,12 +62,14 @@ async function fetchMissionReward(eventInput) {
     return;
   }
 
-  const from = await getAccountFromTx(eventInput.transactionHash)
+  const tokenId = EVRSOULS_PREFIX + eventInput.returnValues.tokenId;
+  const soulMetadata = await getSoulMetadata(tokenId)
 
-  let accountName = await getAccountName(from.toLowerCase())
+  const from = await getAccountFromTx(eventInput.transactionHash)
+  let accountEntry = await getAccountByWallet(from.toLowerCase())
 
   for (const filteredNftReward of filteredNftRewards) {
-    await postEmbed(createMissionRewardEmbed(accountName, filteredNftReward));
+    await postEmbed(createMissionRewardEmbed(soulMetadata, accountEntry, filteredNftReward));
   }
   console.log('[RWD]', 'finished mission rewards')
 }
@@ -74,7 +79,8 @@ async function getResourceRewardInfos(resourceReward) {
   const resourceId = Number.parseInt(resourceReward.resourceId)
 
   if (amount > 0) {
-    const metadataUri = Object.values(resourceRewards).find(rr => rr.id === resourceId).tokenUri;
+    const resourceType = Object.values(resourceRewards).find(rr => rr.id === resourceId)
+    const metadataUri = resourceType.tokenUri;
 
     const retrievedMetadata = metadataUri
       ? await getFromIpfs(metadataUri)
@@ -85,6 +91,7 @@ async function getResourceRewardInfos(resourceReward) {
       amount,
       metadata: metadataUri,
       retrievedMetadata: retrievedMetadata,
+      emoteId: resourceType.emoteId
     };
   }
 
@@ -109,22 +116,12 @@ async function getNftRewardInfos(nftReward) {
         amount,
         metadata: nftInfo.metadataUri,
         retrievedMetadata: retrievedMetadata,
+        emoteId: nftInfo.emoteId
       };
     }
   }
 
   return undefined;
-}
-
-function getItemId(poolId, memberId) {
-  // Combine poolId and memberId into a single uint
-  if (poolId > 255 || memberId > 255) {
-    throw new Error('poolId or memberId too large');
-  }
-
-  let itemId = BigInt(0);
-  itemId = (BigInt(poolId) << BigInt(8)) | BigInt(memberId);
-  return itemId;
 }
 
 function containsShowableRarity(nftRewardWithMetadata) {
