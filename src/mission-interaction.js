@@ -65,6 +65,8 @@ async function fetchMissionReward(eventInput) {
   const tokenId = EVRSOULS_PREFIX + eventInput.returnValues.tokenId;
   const soulMetadata = await getSoulMetadata(tokenId)
 
+  console.log('[RWD]', 'soul with id', tokenId, 'has name', soulMetadata.retrievedMetadata.name)
+
   const from = await getAccountFromTx(eventInput.transactionHash)
   let accountEntry = await getAccountByWallet(from.toLowerCase())
 
