@@ -1,15 +1,13 @@
 const createMissionRewardEmbed = require('./embeds/mission-reward-embed.js')
-const { itemIds } = require('./mappings/item-ids.js')
-const { MISSION_CONTRACT } = require("./abi-interaction.js");
 const resourceRewards = require('./mappings/resource-types.js');
 const { getFromIpfs } = require('./evrloot-api.js')
 const config = require('./config.js')
-const { addToStats, increaseMissionCounter, getStats } = require('./summary/daily-stats.js')
+const { addToStats, increaseMissionCounter } = require('./summary/daily-stats.js')
 const {getAccountByWallet} = require("./evrloot-db");
 const {getAccountFromTx} = require("./abi-interaction");
 const {nftMapping} = require("./mappings/item-ids");
 const {postEmbed} = require("./discord-client");
-const {getSoulMetadata} = require("./evrloot-api");
+const {getSoulMetadata, fetchAsync} = require("./evrloot-api");
 
 const EVRSOULS_PREFIX = 'EVR-SOULS-';
 
@@ -20,6 +18,11 @@ module.exports = {
 async function fetchMissionReward(eventInput) {
   console.log('[RWD]', 'started fetching mission rewards')
   increaseMissionCounter();
+
+  const tokenId = EVRSOULS_PREFIX + eventInput.returnValues.tokenId;
+  const soulMetadata = await getSoulMetadata(tokenId)
+
+  fetchAsync(soulMetadata.retrievedMetadata.image)
 
   // currently not in use
   // const missionInformation = await MISSION_CONTRACT.methods.getMissionData(eventInput.returnValues.missionId).call();
@@ -62,8 +65,8 @@ async function fetchMissionReward(eventInput) {
     return;
   }
 
-  const tokenId = EVRSOULS_PREFIX + eventInput.returnValues.tokenId;
-  const soulMetadata = await getSoulMetadata(tokenId)
+  // const tokenId = EVRSOULS_PREFIX + eventInput.returnValues.tokenId;
+  // const soulMetadata = await getSoulMetadata(tokenId)
 
   console.log('[RWD]', 'soul with id', tokenId, 'has name', soulMetadata.retrievedMetadata.name)
 

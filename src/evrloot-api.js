@@ -7,6 +7,7 @@ module.exports = {
   startFight,
   getSoulMetadata,
   getFromIpfs,
+  fetchAsync
 }
 
 // could maybe be deprecated for getOnlySouls for speed/wide-band reasons?
