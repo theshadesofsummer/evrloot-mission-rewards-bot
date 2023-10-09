@@ -19,10 +19,12 @@ async function fetchMissionReward(eventInput) {
   console.log('[RWD]', 'started fetching mission rewards')
   increaseMissionCounter();
 
-  const tokenId = EVRSOULS_PREFIX + eventInput.returnValues.tokenId;
-  const soulMetadata = await getSoulMetadata(tokenId)
-
-  fetchAsync(soulMetadata.retrievedMetadata.image)
+  // commented out while waiting for id stuff to be sorted out
+  // const tokenId = EVRSOULS_PREFIX + eventInput.returnValues.tokenId;
+  // const soulMetadata = await getSoulMetadata(tokenId)
+  //
+  // error prone
+  // fetchAsync(soulMetadata.retrievedMetadata.image)
 
   // currently not in use
   // const missionInformation = await MISSION_CONTRACT.methods.getMissionData(eventInput.returnValues.missionId).call();
@@ -65,8 +67,8 @@ async function fetchMissionReward(eventInput) {
     return;
   }
 
-  // const tokenId = EVRSOULS_PREFIX + eventInput.returnValues.tokenId;
-  // const soulMetadata = await getSoulMetadata(tokenId)
+  const tokenId = EVRSOULS_PREFIX + eventInput.returnValues.tokenId;
+  const soulMetadata = await getSoulMetadata(tokenId)
 
   console.log('[RWD]', 'soul with id', tokenId, 'has name', soulMetadata.retrievedMetadata.name)
 
