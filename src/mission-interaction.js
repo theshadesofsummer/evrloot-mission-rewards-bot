@@ -7,7 +7,7 @@ const {getAccountByWallet} = require("./evrloot-db");
 const {getAccountFromTx} = require("./abi-interaction");
 const {nftMapping} = require("./mappings/item-ids");
 const {postEmbed} = require("./discord-client");
-const {getSoulMetadata, fetchAsync} = require("./evrloot-api");
+const {getSoulMetadata, fetchAsync, fetchSquidAsync, fetchTokenIdFromSquid, fetchSoulIdFromSquid} = require("./evrloot-api");
 
 const EVRSOULS_PREFIX = 'EVR-SOULS-';
 
@@ -67,13 +67,20 @@ async function fetchMissionReward(eventInput) {
     return;
   }
 
-  const tokenId = EVRSOULS_PREFIX + eventInput.returnValues.tokenId;
-  const soulMetadata = await getSoulMetadata(tokenId)
 
-  console.log('[RWD]', 'soul with id', tokenId, 'has name', soulMetadata.retrievedMetadata.name)
 
   const from = await getAccountFromTx(eventInput.transactionHash)
   let accountEntry = await getAccountByWallet(from.toLowerCase())
+
+  const estraTokenId = Number.parseInt(eventInput.returnValues.tokenId);
+  const soulId = await fetchSoulIdFromSquid(estraTokenId);
+
+  if (!soulId) {
+    console.log('[RWD]', 'could not resolve soulId for estraTokenId', estraTokenId)
+  }
+  const soulMetadata = await getSoulMetadata(soulId);
+
+  console.log('[RWD]', 'soul with id', soulId, 'has name', soulMetadata.retrievedMetadata.name)
 
   for (const filteredNftReward of filteredNftRewards) {
     await postEmbed(createMissionRewardEmbed(soulMetadata, accountEntry, filteredNftReward));

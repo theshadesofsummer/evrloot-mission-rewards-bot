@@ -1,14 +1,25 @@
 const linkWithoutIpfs = require("./helpers/ipfs-link-tools");
 const dns = require("dns");
 
+const SQUID_ADDRESS = 'https://squid.subsquid.io/evrsquid/graphql';
+const QUERY_SOUL_ID_BY_ESTRA_TOKEN_ID = `
+query MyQuery($estraTokenId: Int!) {
+  nfts(where: {estraTokenId_eq: $estraTokenId}) {
+    id
+  }
+}`
+
 module.exports = {
   getSouls,
   getOnlySouls,
   startFight,
   getSoulMetadata,
   getFromIpfs,
-  fetchAsync
+  fetchAsync,
+  fetchSoulIdFromSquid
 }
+
+
 
 // could maybe be deprecated for getOnlySouls for speed/wide-band reasons?
 async function getSouls(address) {
@@ -51,4 +62,29 @@ async function fetchAsync(url, options = {}) {
   }).then(json => {
     return json
   }).catch(error => console.log(error))
+}
+
+async function fetchSoulIdFromSquid(estraTokenId) {
+  console.log('[API]', 'fetching soulId from squid for estraTokenId', estraTokenId)
+  console.log('IS INTEGER:', Number.isInteger(estraTokenId))
+  return fetch(SQUID_ADDRESS, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      query: QUERY_SOUL_ID_BY_ESTRA_TOKEN_ID,
+      variables: {
+        estraTokenId: estraTokenId,
+      },
+    }),
+  })
+    .then((res) => res.json())
+    .then((result) => {
+      return result.data.nfts[0].id;
+    })
+    .catch((err) => {
+      console.log('error while fetching from squid:', err);
+      return undefined
+    });
 }
