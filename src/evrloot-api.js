@@ -1,5 +1,6 @@
 const linkWithoutIpfs = require("./helpers/ipfs-link-tools");
 const dns = require("dns");
+const fs = require("fs");
 
 const SQUID_ADDRESS = 'https://squid.subsquid.io/evrsquid/graphql';
 const QUERY_SOUL_ID_BY_ESTRA_TOKEN_ID = `
@@ -16,23 +17,24 @@ module.exports = {
   getSoulMetadata,
   getFromIpfs,
   fetchAsync,
-  fetchSoulIdFromSquid
+  fetchSoulIdFromSquid,
+  fetchSoulImage
 }
 
 
 
 // could maybe be deprecated for getOnlySouls for speed/wide-band reasons?
 async function getSouls(address) {
-  const walletInfo = await fetchAsync(`https://api.evrloot.io/api/evmnfts/evmwallet/${address}`);
+  const walletInfo = await fetchAsync(`https://api.evrloot.xyz/api/evmnfts/evmwallet/${address}`);
   return walletInfo.evmSouls;
 }
 
 async function getOnlySouls(address) {
-  return await fetchAsync(`https://api.evrloot.io/api/evmnfts/evmwallet/soulsOnly/${address}`);
+  return await fetchAsync(`https://api.evrloot.xyz/api/evmnfts/evmwallet/soulsOnly/${address}`);
 }
 
 async function startFight(attackers, defenders) {
-  return await fetchAsync(`https://api.evrloot.io/api/combat/fight`, {
+  return await fetchAsync(`https://api.evrloot.xyz/api/combat/fight`, {
     method: 'POST',
     body: JSON.stringify({
       attackers,
@@ -44,7 +46,7 @@ async function startFight(attackers, defenders) {
 }
 
 async function getSoulMetadata(soulId) {
-  return await fetchAsync(`https://api.evrloot.io/api/evmnfts/${soulId}`);
+  return await fetchAsync(`https://api.evrloot.xyz/api/evmnfts/${soulId}`);
 }
 
 async function getFromIpfs(ipfsLink) {
@@ -66,7 +68,6 @@ async function fetchAsync(url, options = {}) {
 
 async function fetchSoulIdFromSquid(estraTokenId) {
   console.log('[API]', 'fetching soulId from squid for estraTokenId', estraTokenId)
-  console.log('IS INTEGER:', Number.isInteger(estraTokenId))
   return fetch(SQUID_ADDRESS, {
     method: 'POST',
     headers: {
@@ -87,4 +88,12 @@ async function fetchSoulIdFromSquid(estraTokenId) {
       console.log('error while fetching from squid:', err);
       return undefined
     });
+}
+
+async function fetchSoulImage(imageUrl) {
+  const response = await fetch(imageUrl)
+  let blob = await response.blob();
+  let buffer = Buffer.from(await blob.text());
+  console.log(">>>>>>", "data:" + blob.type + ';base64,' + buffer.toString('base64'))
+  return "data:" + blob.type + ';base64,' + buffer.toString('base64');
 }
