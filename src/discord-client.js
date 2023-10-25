@@ -35,7 +35,7 @@ async function postFightAnnouncement(fightId) {
 
   const channel = await getChannel(client, process.env.ARENA_CHANNEL_ID)
   return await channel.send({
-    content: `<@${fight.fighterA}> has challenged <@${fight.fighterB} to a fight!`
+    content: `<@${fight.fighterA}> has challenged <@${fight.fighterB}> to a fight!`
   });
 }
 
