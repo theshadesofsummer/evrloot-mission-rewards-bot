@@ -12,7 +12,7 @@ module.exports = function createMissionRewardEmbed(soul, account, reward) {
     },
     description: `${getAccountName(account)}**${soul.retrievedMetadata.name}** found ${reward.amount} ${reward.retrievedMetadata.name}! ${reward.emoteId}`,
     thumbnail: {
-      url: soul.retrievedMetadata.image
+      url: getCorrectImageUrl(soul.retrievedMetadata.image)
     },
   };
 }
@@ -37,5 +37,13 @@ function colorForRarity(rarityMetadata) {
     return 0xD2D2D2
   } else {
     return 0xFF0000
+  }
+}
+
+function getCorrectImageUrl(imageUrl) {
+  if (imageUrl.startsWith('ipfs://')) {
+    return `https://evrloot.myfilebase.com/ipfs/${removeIpfsStuff(imageUrl)}`
+  } else {
+    return imageUrl
   }
 }

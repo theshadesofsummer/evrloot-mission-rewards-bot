@@ -1,4 +1,4 @@
-const linkWithoutIpfs = require("./helpers/ipfs-link-tools");
+const removeIpfsStuff = require("./helpers/ipfs-link-tools");
 const dns = require("dns");
 const fs = require("fs");
 
@@ -50,7 +50,7 @@ async function getSoulMetadata(soulId) {
 }
 
 async function getFromIpfs(ipfsLink) {
-  return await fetchAsync(`https://evrloot.myfilebase.com/ipfs/${linkWithoutIpfs(ipfsLink)}`);
+  return await fetchAsync(`https://evrloot.myfilebase.com/ipfs/${removeIpfsStuff(ipfsLink)}`);
 }
 
 async function fetchAsync(url, options = {}) {
