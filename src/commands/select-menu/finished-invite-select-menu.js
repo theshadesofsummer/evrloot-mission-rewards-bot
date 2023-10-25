@@ -1,6 +1,7 @@
 const {addFightingSoul, getOutstandingInvitationWithSoul, getSoulCooldown} = require("../../evrloot-db");
 const handleFight = require('../fight/handle-fight')
 const {isSoulAvailable} = require("../../helpers/fighting-soul-helpers");
+const {postFightAnnouncement} = require("../../discord-client");
 
 module.exports = {
   async execute(interaction) {
@@ -22,6 +23,8 @@ module.exports = {
       ephemeral: true,
       content: 'The invite was successful, now it is up to your opponent to accept the challenge!'
     })
+
+    await postFightAnnouncement(fightId)
   },
 }
 

@@ -1,6 +1,6 @@
 const {Client} = require("discord.js");
 const generateSummary = require("./summary/generate-summary");
-const {deleteWallet} = require("./evrloot-db");
+const {deleteWallet, getFightByFightId} = require("./evrloot-db");
 const {verificationMessage} = require("./messaging/verification-message");
 
 const client = new Client({intents: 0});
@@ -10,6 +10,7 @@ module.exports = {
   publishSummary,
   postEmbed,
   postFightResult,
+  postFightAnnouncement,
   sendVerificationDm,
   mapClientIdToName
 }
@@ -26,6 +27,16 @@ async function postEmbed(embed) {
   console.log('[BOT] publish embed')
   const channel = await getChannel(client, process.env.PUBLISH_CHANNEL_ID)
   await channel.send({embeds: [embed]});
+}
+
+async function postFightAnnouncement(fightId) {
+  console.log('[BOT] publish fight announcement')
+  const fight = await getFightByFightId(fightId)
+
+  const channel = await getChannel(client, process.env.ARENA_CHANNEL_ID)
+  return await channel.send({
+    content: `<@${fight.fighterA}> has challenged <@${fight.fighterB} to a fight!`
+  });
 }
 
 async function postFightResult(embed) {
