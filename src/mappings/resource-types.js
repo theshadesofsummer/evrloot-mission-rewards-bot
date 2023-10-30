@@ -232,4 +232,41 @@ module.exports = {
     name: "Tester's Trove",
     emoteId: ''
   },
+  // Lunar Gaming Festival
+  SMALL_FLY: {
+    id: 550,
+    tokenUri: 'ipfs://QmSwbt3AJYsJqh2c1eXq14sBMs8i4GdRttGu4NPtKB1QcQ',
+    name: 'Small Fly',
+    emoteId: '<:small_fly:1168601153957793802>'
+  },
+  BIG_FLY: {
+    id: 551,
+    tokenUri: 'ipfs://Qmak5DNPWfHH6dawLEKe4VskeZsPa9Dm5Xo1kP8NxAuEc9',
+    name: 'Big Fly',
+    emoteId: '<:big_fly:1168601147704098956>'
+  },
+  GHOSTWING: {
+    id: 552,
+    tokenUri: 'ipfs://Qmf89dWt1WPW5vdygdUUYrNuGYT1XTij5gi9qbM5Uxv64f',
+    name: 'Ghostwing',
+    emoteId: '<:ghostwing:1168601150380056718>'
+  },
+  STICKY_LURE: {
+    id: 553,
+    tokenUri: 'ipfs://Qmb8ZiiWNj8bPBCg7X3fznaBrk7ei4za5HjNfKQExhNwyi',
+    name: 'Sticky Lure',
+    emoteId: '<:sticky_lure:1168601157040615514>'
+  },
+  SUPER_STICKY_LURE: {
+    id: 554,
+    tokenUri: 'ipfs://Qmd6xHAJaJhNMk3uTi6zg7nVonHCzZe5keqD9W73pEqtqK',
+    name: 'Super Sticky Lure',
+    emoteId: '<:super_sticky_lure:1168601144218628218>'
+  },
+  SOUL_REDEEMER: {
+    id: 555,
+    tokenUri: 'ipfs://QmNbV1a8Bq4NdwtLHgzG6sJ2tYQ4wPVCT1HgMQ8Txok3ta',
+    name: 'Evrloot Soul Redeemer',
+    emoteId: '<:soul_redeemer:1168600791918071868>'
+  },
 };
