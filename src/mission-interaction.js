@@ -7,7 +7,7 @@ const {getAccountByWallet} = require("./evrloot-db");
 const {getAccountFromTx} = require("./abi-interaction");
 const {nftMapping} = require("./mappings/item-ids");
 const {postEmbed} = require("./discord-client");
-const {getSoulMetadata, fetchAsync, fetchSquidAsync, fetchTokenIdFromSquid, fetchSoulIdFromSquid} = require("./evrloot-api");
+const {getSoulMetadata, fetchAsync, fetchSquidAsync, fetchTokenIdFromSquid, fetchSoulIdFromSquid, fetchSoulImage} = require("./evrloot-api");
 
 const EVRSOULS_PREFIX = 'EVR-SOULS-';
 
@@ -81,6 +81,11 @@ async function fetchMissionReward(eventInput) {
   const soulMetadata = await getSoulMetadata(soulId);
 
   console.log('[RWD]', 'soul with id', soulId, 'has name', soulMetadata.retrievedMetadata.name)
+
+  // await the dynamic image loader so discord can get the cached image faster
+  // console.log('image pre fetch')
+  // await fetch(soulMetadata.retrievedMetadata.image)
+  // console.log('image post fetch')
 
   for (const filteredNftReward of filteredNftRewards) {
     await postEmbed(createMissionRewardEmbed(soulMetadata, accountEntry, filteredNftReward));
