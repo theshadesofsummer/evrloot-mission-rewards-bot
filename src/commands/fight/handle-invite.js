@@ -1,5 +1,5 @@
 const {getFightByFighters, createNewFight, getAllFighterAccounts} = require("../../evrloot-db");
-const {getOnlySouls} = require("../../evrloot-api");
+const {getOnlySouls, mapMetadataToSoul} = require("../../evrloot-api");
 const {createChooseSoulFighterEmbeds} = require("../../embeds/choose-from-select-menu-embeds");
 const {Pagination, ExtraRowPosition} = require("pagination.djs");
 const {createSoulFighterMenuRow} = require("../../helpers/select-menu");
@@ -43,24 +43,27 @@ module.exports = async function (interaction, wallets) {
   Promise.all(allAccountsWithSouls).then(async soulsInAllAccounts => {
     const soulList = soulsInAllAccounts
       .flat()
+      .map(mapMetadataToSoul)
 
-    if (soulList.length <= 0) {
-      await interaction.editReply('You currently have no souls in any of your connected wallets.');
-      return;
-    }
+    Promise.all(soulList).then(async soulListWithMetadata => {
+      if (soulListWithMetadata.length <= 0) {
+        await interaction.editReply('You currently have no souls in any of your connected wallets.');
+        return;
+      }
 
-    const allSoulsWithStatus = await mapStatusToSoul(soulList)
+      const allSoulsWithStatus = await mapStatusToSoul(soulListWithMetadata)
 
-    const sortedSoulsWithStatus = allSoulsWithStatus.sort(soulSorterByStatus)
+      const sortedSoulsWithStatus = allSoulsWithStatus.sort(soulSorterByStatus)
 
-    const embeds = createChooseSoulFighterEmbeds(sortedSoulsWithStatus);
+      const embeds = createChooseSoulFighterEmbeds(sortedSoulsWithStatus);
 
-    const pagination = new Pagination(interaction)
-      .setEmbeds(embeds)
-      .setEphemeral(true)
-      .addActionRows([createSoulFighterMenuRow(sortedSoulsWithStatus, 'choose-fighter-a-menu', fightId)], ExtraRowPosition.Below);
+      const pagination = new Pagination(interaction)
+        .setEmbeds(embeds)
+        .setEphemeral(true)
+        .addActionRows([createSoulFighterMenuRow(sortedSoulsWithStatus, 'choose-fighter-a-menu', fightId)], ExtraRowPosition.Below);
 
-    await pagination.render();
+      await pagination.render();
+    })
   })
 }
 

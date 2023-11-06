@@ -15,6 +15,7 @@ module.exports = {
   getOnlySouls,
   startFight,
   getSoulMetadata,
+  mapMetadataToSoul,
   getFromIpfs,
   fetchAsync,
   fetchSoulIdFromSquid,
@@ -47,8 +48,12 @@ async function startFight(attackers, defenders) {
 
 async function getSoulMetadata(soulId) {
   const soul = await fetchAsync(`https://api.evrloot.xyz/api/evmnfts/${soulId}`);
-  const soulMetadata = await getFromIpfs(soul.metadataUri)
-  return {...soul, retrievedMetadata: soulMetadata}
+  return await mapMetadataToSoul(soul);
+}
+
+async function mapMetadataToSoul(soul) {
+  const soulMetadata = await getFromIpfs(soul.metadataUri);
+  return {...soul, retrievedMetadata: soulMetadata};
 }
 
 async function getFromIpfs(ipfsLink) {
