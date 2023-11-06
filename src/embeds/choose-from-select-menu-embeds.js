@@ -80,6 +80,7 @@ function makeDescriptionForSoulFights(soulList, page) {
       .slice(firstElementIndex, firstElementIndex + PAGE_SIZE)
 
     slicedList.forEach((soul, idx) => {
+        console.log('UNDEFINED FIGHTER SPOT', soul.id, soul.retrievedMetadata.properties)
         const soulClass = soul.retrievedMetadata.properties['Soul Class'].value
         const status = soul.status;
         if (status === 'readyForFight')
