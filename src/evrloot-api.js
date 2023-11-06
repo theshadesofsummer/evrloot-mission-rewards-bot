@@ -53,7 +53,9 @@ async function getSoulMetadata(soulId) {
 
 async function mapMetadataToSoul(soul) {
   const soulMetadata = await getFromIpfs(soul.metadataUri);
-  return {...soul, retrievedMetadata: soulMetadata};
+  const x = {...soul, retrievedMetadata: soulMetadata};
+  console.log('>>>', x.retrievedMetadata)
+  return x
 }
 
 async function getFromIpfs(ipfsLink) {
