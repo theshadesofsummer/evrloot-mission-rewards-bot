@@ -46,7 +46,9 @@ async function startFight(attackers, defenders) {
 }
 
 async function getSoulMetadata(soulId) {
-  return await fetchAsync(`https://api.evrloot.xyz/api/evmnfts/${soulId}`);
+  const soul = await fetchAsync(`https://api.evrloot.xyz/api/evmnfts/${soulId}`);
+  const soulMetadata = await getFromIpfs(soul.metadataUri)
+  return {...soul, retrievedMetadata: soulMetadata}
 }
 
 async function getFromIpfs(ipfsLink) {
@@ -58,7 +60,7 @@ async function fetchAsync(url, options = {}) {
   dns.setDefaultResultOrder('ipv4first')
   return fetch(url, options).then(response => {
     if (!response.ok) {
-      throw new Error(`Request failed with status ${response.status}`)
+      throw new Error(`Request on ${url} failed with status ${response.status}`)
     }
     return response.json()
   }).then(json => {
