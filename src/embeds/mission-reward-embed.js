@@ -41,6 +41,10 @@ function colorForRarity(rarityMetadata) {
 }
 
 function getCorrectImageUrl(imageUrl) {
+  if (!imageUrl) {
+    console.log('UNDEFINED ERROR, IMAGE URL IS UNDEFINED')
+    return ''
+  }
   if (imageUrl.startsWith('ipfs://')) {
     return `https://evrloot.myfilebase.com/ipfs/${removeIpfsStuff(imageUrl)}`
   } else {
