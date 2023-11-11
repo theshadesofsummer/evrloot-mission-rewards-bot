@@ -17,9 +17,7 @@ module.exports = {
   getSoulMetadata,
   mapMetadataToSoul,
   getFromIpfs,
-  fetchAsync,
   fetchSoulIdFromSquid,
-  fetchSoulImage
 }
 
 
@@ -54,7 +52,6 @@ async function getSoulMetadata(soulId) {
 async function mapMetadataToSoul(soul) {
   const soulMetadata = await getFromIpfs(soul.metadataUri);
   const x = {...soul, retrievedMetadata: soulMetadata};
-  console.log('>>>', x.retrievedMetadata)
   return x
 }
 
@@ -97,12 +94,4 @@ async function fetchSoulIdFromSquid(estraTokenId) {
       console.log('error while fetching from squid:', err);
       return undefined
     });
-}
-
-async function fetchSoulImage(imageUrl) {
-  const response = await fetch(imageUrl)
-  let blob = await response.blob();
-  let buffer = Buffer.from(await blob.text());
-  console.log(">>>>>>", "data:" + blob.type + ';base64,' + buffer.toString('base64'))
-  return "data:" + blob.type + ';base64,' + buffer.toString('base64');
 }

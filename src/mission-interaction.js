@@ -7,7 +7,7 @@ const {getAccountByWallet} = require("./evrloot-db");
 const {getAccountFromTx} = require("./abi-interaction");
 const {nftMapping} = require("./mappings/item-ids");
 const {postEmbed} = require("./discord-client");
-const {getSoulMetadata, fetchAsync, fetchSquidAsync, fetchTokenIdFromSquid, fetchSoulIdFromSquid, fetchSoulImage} = require("./evrloot-api");
+const {getSoulMetadata, fetchSoulIdFromSquid} = require("./evrloot-api");
 
 const EVRSOULS_PREFIX = 'EVR-SOULS-';
 
