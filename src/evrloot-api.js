@@ -1,6 +1,7 @@
 const removeIpfsStuff = require("./helpers/ipfs-link-tools");
 const dns = require("dns");
 const fs = require("fs");
+const {getSoulIpfsLink} = require("./abi-interaction");
 
 const SQUID_ADDRESS = 'https://squid.subsquid.io/evrsquid/graphql';
 const QUERY_SOUL_ID_BY_ESTRA_TOKEN_ID = `
@@ -50,8 +51,10 @@ async function getSoulMetadata(soulId) {
 }
 
 async function mapMetadataToSoul(soul) {
-  const soulMetadata = await getFromIpfs(soul.metadataUri);
+  const soulMetadataLink = await getSoulIpfsLink(soul.id);
+  const soulMetadata = await getFromIpfs(soulMetadataLink);
   const x = {...soul, retrievedMetadata: soulMetadata};
+  console.log("found metadata: ", x)
   return x
 }
 
