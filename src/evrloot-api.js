@@ -51,7 +51,7 @@ async function getSoulMetadata(soulId) {
 }
 
 async function mapMetadataToSoul(soul) {
-  const soulMetadataLink = await getSoulIpfsLink(soul.id);
+  const soulMetadataLink = await getSoulIpfsLink(Number.parseInt(soul.id.split('-').reverse()[0]));
   const soulMetadata = await getFromIpfs(soulMetadataLink);
   const x = {...soul, retrievedMetadata: soulMetadata};
   console.log("found metadata: ", x)
