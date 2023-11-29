@@ -1,6 +1,7 @@
 const {findClassEmoteObject} = require("./emotes");
 const {StringSelectMenuBuilder, ActionRowBuilder} = require("discord.js");
 const {mapClientIdToName} = require("../discord-client");
+const {findValueForAttribute} = require("./attribute-finder");
 
 module.exports = {
   createSoulSelectMenuRow,
@@ -12,7 +13,7 @@ function createSoulSelectMenuRow(souls, customId) {
   const chooseSoulButtons = souls.map((soul, index) => ({
     label: `[${index+1}] ${soul.retrievedMetadata.name}`,
     value: soul.id,
-    emoji: findClassEmoteObject(soul.retrievedMetadata.properties['Soul Class'].value)
+    emoji: findClassEmoteObject(findValueForAttribute(soul.retrievedMetadata.attributes, 'Soul Class'))
   }));
   const chooseSoulSelectMenu = new StringSelectMenuBuilder()
     .setCustomId(customId)
@@ -24,7 +25,7 @@ function createSoulFighterMenuRow(soulsWithStatus, customId, insertId) {
   const chooseSoulButtons = soulsWithStatus.map((soulWithStatus, index) => ({
     label: `[${index+1}] ${soulWithStatus.retrievedMetadata.name}`,
     value: `${insertId};${soulWithStatus.id}`,
-    emoji: findClassEmoteObject(soulWithStatus.retrievedMetadata.properties['Soul Class'].value)
+    emoji: findClassEmoteObject(findValueForAttribute(soulWithStatus.retrievedMetadata.attributes, 'Soul Class'))
   }));
   const chooseSoulSelectMenu = new StringSelectMenuBuilder()
     .setCustomId(customId)

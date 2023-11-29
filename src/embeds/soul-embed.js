@@ -1,12 +1,14 @@
+const {findValueForAttribute} = require("../helpers/attribute-finder");
 module.exports = function createSoulEmbed(soul, user) {
     const { soulSpecificStatName, soulSpecificStatValue } = soulClassSpecificName(soul);
+    const attributes = soul.retrievedMetadata.attributes;
 
     return [{
         color: 0xae1917,
         title: soul.retrievedMetadata.name,
         author: {
             name: `requested by ${user.username}`,
-            icon_url: `https://game.evrloot.com/Soulclaim/${getProperty(soul, 'Soul Class').toLowerCase()}.png`,
+            icon_url: `https://game.evrloot.com/Soulclaim/${findValueForAttribute(attributes, 'Soul Class').toLowerCase()}.png`,
         },
         thumbnail: {
             url: soul.retrievedMetadata.image
@@ -14,22 +16,22 @@ module.exports = function createSoulEmbed(soul, user) {
         fields: [
             {
                 name: 'Personality',
-                value: getProperty(soul, 'Personality'),
+                value: findValueForAttribute(attributes, 'Personality'),
                 inline: true
             },
             {
                 name: 'Talent',
-                value: getProperty(soul, 'Talent'),
+                value: findValueForAttribute(attributes, 'Talent'),
                 inline: true
             },
             {
                 name: 'Origin',
-                value: getProperty(soul, 'Origin'),
+                value: findValueForAttribute(attributes, 'Origin'),
                 inline: true
             },
             {
                 name: 'Condition',
-                value: getProperty(soul, 'Condition'),
+                value: findValueForAttribute(attributes, 'Condition'),
                 inline: true
             },
             {
@@ -62,9 +64,9 @@ const specificClassNames = new Map([
     ["Berserker", "Role"],
     ["Ranger", "Spirit Animal"]
 ])
-function soulClassSpecificName(soul) {
-    const statName = specificClassNames.get(soul.retrievedMetadata.properties["Soul Class"].value);
-    const statValue = soul.retrievedMetadata.properties[statName].value;
+function soulClassSpecificName(attributes) {
+    const statName = specificClassNames.get(findValueForAttribute(attributes, "Soul Class"));
+    const statValue = findValueForAttribute(attributes, statName);
 
     return {
         soulSpecificStatName: statName,
@@ -73,16 +75,14 @@ function soulClassSpecificName(soul) {
 }
 
 function statsFormatter(soul) {
-    return `*Strength*: ${getStatFormat(getProperty(soul, 'Strength'), 8)} ${upgradedStat(soul.children, 'Strength')}\n` +
-            `*Dexterity*: ${getStatFormat(getProperty(soul, 'Dexterity'), 8)} ${upgradedStat(soul.children, 'Dexterity')}\n` +
-            `*Intelligence*: ${getStatFormat(getProperty(soul, 'Intelligence'), 8)} ${upgradedStat(soul.children, 'Intelligence')}\n` +
-            `*Wisdom*: ${getStatFormat(getProperty(soul, 'Wisdom'), 8)} ${upgradedStat(soul.children, 'Wisdom')}\n` +
-            `*Fortitude*: ${getStatFormat(getProperty(soul, 'Fortitude'), 8)} ${upgradedStat(soul.children, 'Fortitude')}\n` +
-            `*Luck*: ${getStatFormat(getProperty(soul, 'Luck'), 4)} ${upgradedStat(soul.children, 'Luck')}`;
-}
+    const attributes = soul.retrievedMetadata.attributes;
 
-function getProperty(soul, attribute) {
-    return soul.retrievedMetadata.properties[attribute].value
+    return `*Strength*: ${getStatFormat(findValueForAttribute(attributes, 'Strength'), 8)} ${upgradedStat(soul.children, 'Strength')}\n` +
+            `*Dexterity*: ${getStatFormat(findValueForAttribute(attributes, 'Dexterity'), 8)} ${upgradedStat(soul.children, 'Dexterity')}\n` +
+            `*Intelligence*: ${getStatFormat(findValueForAttribute(attributes, 'Intelligence'), 8)} ${upgradedStat(soul.children, 'Intelligence')}\n` +
+            `*Wisdom*: ${getStatFormat(findValueForAttribute(attributes, 'Wisdom'), 8)} ${upgradedStat(soul.children, 'Wisdom')}\n` +
+            `*Fortitude*: ${getStatFormat(findValueForAttribute(attributes, 'Fortitude'), 8)} ${upgradedStat(soul.children, 'Fortitude')}\n` +
+            `*Luck*: ${getStatFormat(findValueForAttribute(attributes, 'Luck'), 4)} ${upgradedStat(soul.children, 'Luck')}`;
 }
 
 function getStatFormat(stat, goodValue) {
@@ -90,13 +90,14 @@ function getStatFormat(stat, goodValue) {
 }
 
 function upgradedStat(soulChildren, statType) {
-    const effectingChildNfts = soulChildren
-        .filter(childNft => childNft.retrievedMetadata.properties[statType])
-
-    if (effectingChildNfts.length < 1) return ""
-
-    const upgradeAmount = effectingChildNfts.reduce((acc, childNft) => acc + Number(childNft.retrievedMetadata.properties[statType].value), 0)
-    return `***+${upgradeAmount}***`;
+    // const effectingChildNfts = soulChildren
+    //     .filter(childNft => childNft.retrievedMetadata.properties[statType])
+    //
+    // if (effectingChildNfts.length < 1) return ""
+    //
+    // const upgradeAmount = effectingChildNfts.reduce((acc, childNft) => acc + Number(childNft.retrievedMetadata.properties[statType].value), 0)
+    // return `***+${upgradeAmount}***`;
+    return ''
 }
 
 function experienceFormatter(soulExperience) {

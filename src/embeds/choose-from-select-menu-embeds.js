@@ -1,4 +1,5 @@
 const {findClassEmote} = require("../helpers/emotes.js");
+const {findValueForAttribute} = require("../helpers/attribute-finder");
 
 const PAGE_SIZE = 5;
 
@@ -59,7 +60,7 @@ function makeDescriptionFor(list, page, forSouls) {
 
     if (forSouls) {
         slicedList.forEach((soul, idx) => {
-            const soulClass = soul.retrievedMetadata.properties['Soul Class'].value
+            const soulClass = findValueForAttribute(soul.retrievedMetadata.attributes, 'Soul Class')
             description += `\`[${firstElementIndex + idx + 1}]\` ${findClassEmote(soulClass)} ${soul.retrievedMetadata.name}\n`
         });
     } else {
@@ -80,8 +81,7 @@ function makeDescriptionForSoulFights(soulList, page) {
       .slice(firstElementIndex, firstElementIndex + PAGE_SIZE)
 
     slicedList.forEach((soul, idx) => {
-        console.log('UNDEFINED FIGHTER SPOT', soul.id, soul.retrievedMetadata.properties)
-        const soulClass = soul.retrievedMetadata.properties['Soul Class'].value
+        const soulClass = findValueForAttribute(soul.retrievedMetadata.attributes, 'Soul Class')
         const status = soul.status;
         if (status === 'readyForFight')
             description += `\`[${firstElementIndex + idx + 1}]\` ${findClassEmote(soulClass)} ✅ ${soul.retrievedMetadata.name}\n`
