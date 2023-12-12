@@ -34,15 +34,13 @@ async function getOnlySouls(address) {
 }
 
 async function startFight(attackers, defenders) {
-  const body = JSON.stringify({
-    attackers,
-    defenders,
-    password: process.env.API_PASSWORD
-  })
-  console.log('>>> body:', body)
   return await fetchAsync(`https://api.evrloot.io/api/combat/fight`, {
     method: 'POST',
-    body,
+    body: JSON.stringify({
+      attackers,
+      defenders,
+      password: process.env.API_PASSWORD
+    }),
     headers: { 'Content-Type': 'application/json' }
   });
 }
