@@ -34,7 +34,7 @@ async function getOnlySouls(address) {
 }
 
 async function startFight(attackers, defenders) {
-  return await fetchAsync(`https://api.evrloot.xyz/api/combat/fight`, {
+  return await fetchAsync(`https://api.evrloot.io/api/combat/fight`, {
     method: 'POST',
     body: JSON.stringify({
       attackers,
