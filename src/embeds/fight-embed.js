@@ -33,7 +33,7 @@ function getTeamInfo(fight, finalState, teamA) {
   let result = '';
   result += teamA ? `<@${fight.fighterA}>` : `<@${fight.fighterB}>`;
   result += '\n'
-  result += getFinalState(teamA ? finalState.teamAFinal : finalState.teamBFinal)
+  result += getFinalState(teamA ? finalState.teamA : finalState.teamB)
   return result
 }
 
@@ -43,9 +43,9 @@ function getFinalState(finalTeamMembers) {
     .join('\n')
 }
 function stateOfSoul(soulState, index) {
-  return `[${index+1}] ${Math.round(Math.max(soulState.finalHp, 0) * 10) / 10}❤️ ` +
-    `${Math.round(Math.max(soulState.finalArmor, 0) * 10) / 10}🛡️ ` +
-    `${Math.round(Math.max(soulState.finalInitiative, 0) * 10) / 10}⚡ `
+  return `[${index+1}] ${Math.round(Math.max(soulState.hp, 0) * 10) / 10}❤️ ` +
+    `${Math.round(Math.max(soulState.armor, 0) * 10) / 10}🛡️ ` +
+    `${Math.round(Math.max(soulState.initiative, 0) * 10) / 10}⚡ `
 }
 function getFightResult(fight, fightResult) {
   let result = '';
