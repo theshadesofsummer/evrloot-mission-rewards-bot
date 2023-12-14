@@ -101,12 +101,13 @@ function summarizeAction(action, fightInfos) {
   const attacker = action.attacker;
   const defender = action.defender;
 
+  console.log('TEST:', attacker, defender, fightInfos.fighterA, fightInfos.fighterB)
+
   let summary = '';
 
-  summary += `${attacker.id} attacks ${defender.id} first!\n\n`
-
-  for (const attack of action.attacks) {
-    summary += formatAttack(attack, attacker.id, defender.id)
+  for (const [idx, attack] of action.attacks) {
+    if (idx === 0) summary += `${attacker.id} attacks ${defender.id} first!\n\n`
+    summary += formatAttack(attack, idx, attacker.id, defender.id)
   }
 
   return formatComment(summary, fightInfos)
@@ -117,23 +118,23 @@ function formatAttack(attack, attackerId, defenderId) {
   let attackSummary = '';
   switch (attack.hand) {
     case 'Main':
-      attackSummary = `${attackerId} tries to attack ${defenderId} with main hand for ${attack.damage} damage`
+      attackSummary = `${attackerId} tries to attack ${defenderId} with main hand for ${attack.damage} damage `
       break;
     case 'Off':
-      attackSummary = `${attackerId} tries to attack ${defenderId} with off hand for ${attack.damage} damage`
+      attackSummary = `${attackerId} tries to attack ${defenderId} with off hand for ${attack.damage} damage `
       break;
     case 'Both':
-      attackSummary = `${attackerId} tries to attack ${defenderId} with both hands for ${attack.damage} damage`
+      attackSummary = `${attackerId} tries to attack ${defenderId} with both hands for ${attack.damage} damage `
       break;
     case 'None':
-      attackSummary = `${attackerId} tries to attack ${defenderId} with no hand for ${attack.damage} damage`
+      attackSummary = `${attackerId} tries to attack ${defenderId} with no hand for ${attack.damage} damage `
       break;
     default:
-      attackSummary = `[MISSING attack.hand: ${attack.hand}]`
+      attackSummary = `[MISSING attack.hand: ${attack.hand}] `
   }
 
   attackSummary += attack.miss ? 'successfully.' : 'but misses.';
-
+  attackSummary += '\n'
   return attackSummary;
 }
 
