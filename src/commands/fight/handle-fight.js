@@ -148,10 +148,10 @@ function healthChange(attack) {
 function formatComment(comment, fightInfos) {
   console.log('>>>', typeof fightInfos.soulA, typeof fightInfos.soulB, typeof comment)
   return comment
-    .replace(fightInfos.soulA, `**${fightInfos.soulAMetadata.retrievedMetadata.name}**`)
-    .replace(fightInfos.soulB, `**${fightInfos.soulBMetadata.retrievedMetadata.name}**`)
-    .replace(fightInfos.fighterA, `**${fightInfos.fighterAName}**`)
-    .replace(fightInfos.fighterB, `**${fightInfos.fighterBName}**`)
+    .replaceAll(fightInfos.soulA, `**${fightInfos.soulAMetadata.retrievedMetadata.name}**`)
+    .replaceAll(fightInfos.soulB, `**${fightInfos.soulBMetadata.retrievedMetadata.name}**`)
+    .replaceAll(fightInfos.fighterA, `**${fightInfos.fighterAName}**`)
+    .replaceAll(fightInfos.fighterB, `**${fightInfos.fighterBName}**`)
 }
 
 function formatHealth(hp) {
