@@ -116,6 +116,7 @@ function summarizeAction(action, idxOfBattleActions, fightInfos) {
 }
 
 function formatAttack(attack, attackerId, defenderId) {
+  console.log('>>> attack', attack)
   let attackSummary = '';
   switch (attack.hand) {
     case 'Main':
