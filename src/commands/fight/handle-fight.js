@@ -88,7 +88,7 @@ function summarizeRound(round, idx, fightInfos) {
     .map((action, idxOfBattleActions) => summarizeAction(action, idxOfBattleActions, fightInfos))
     .join('\n')
 
-  result += '\n\n End of Round #' + (idx+1)
+  result += '\n\n---End of Round #' + (idx+1) + '---'
   return result;
 }
 
@@ -104,7 +104,7 @@ function summarizeAction(action, idxOfBattleActions, fightInfos) {
 
   let summary = '';
 
-  if (idxOfBattleActions === 0) summary += `${attackerId} attacks ${defenderId} first!\n\n`
+  if (idxOfBattleActions === 0) summary += `⚡ ${attackerId} attacks ${defenderId} first!\n\n`
   for (const attack of action.attacks) {
     summary += formatAttack(attack, attackerId, defenderId)
   }
@@ -116,20 +116,19 @@ function summarizeAction(action, idxOfBattleActions, fightInfos) {
 }
 
 function formatAttack(attack, attackerId, defenderId) {
-  console.log('>>> attack', attack)
-  let attackSummary = '';
+  let attackSummary = '⚔️ ';
   switch (attack.hand) {
     case 'Main':
-      attackSummary = `${attackerId} tries to attack ${defenderId} with main hand for ${attack.damage} damage `
+      attackSummary += `${attackerId} tries to attack ${defenderId} with main hand for ${attack.damage} damage `
       break;
     case 'Off':
-      attackSummary = `${attackerId} tries to attack ${defenderId} with off hand for ${attack.damage} damage `
+      attackSummary += `${attackerId} tries to attack ${defenderId} with off hand for ${attack.damage} damage `
       break;
     case 'Both':
-      attackSummary = `${attackerId} tries to attack ${defenderId} with both hands for ${attack.damage} damage `
+      attackSummary += `${attackerId} tries to attack ${defenderId} with both hands for ${attack.damage} damage `
       break;
     case 'None':
-      attackSummary = `${attackerId} tries to attack ${defenderId} with no hand for ${attack.damage} damage `
+      attackSummary += `${attackerId} tries to attack ${defenderId} with no hand for ${attack.damage} damage `
       break;
     default:
       attackSummary = `[MISSING attack.hand: ${attack.hand}] `
