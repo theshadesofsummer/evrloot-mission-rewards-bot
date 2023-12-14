@@ -105,7 +105,7 @@ function summarizeAction(action, idxOfBattleActions, fightInfos) {
   let summary = '';
 
   if (idxOfBattleActions === 0) summary += `${attackerId} attacks ${defenderId} first!\n\n`
-  for (const attack of action.attacks.entries()) {
+  for (const attack of action.attacks) {
     summary += formatAttack(attack, attackerId, defenderId)
   }
 
