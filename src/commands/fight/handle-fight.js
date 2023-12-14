@@ -85,7 +85,7 @@ function summarizeRound(round, idx, fightInfos) {
   result += '\n'
 
   result += Object.values(round.battleActions)
-    .map((action, idx) => summarizeAction(action, idx, fightInfos))
+    .map((action, idxOfBattleActions) => summarizeAction(action, idxOfBattleActions, fightInfos))
     .join('\n')
 
   result += '\n\n End of Round #' + (idx+1)
@@ -97,13 +97,14 @@ function summarizeTeam(team, fighterName) {
   return `Status **${fighterName}**: ${formatHealth(fighter.hp)}\n`
 }
 
-function summarizeAction(action, idx, fightInfos) {
+function summarizeAction(action, idxOfBattleActions, fightInfos) {
+  console.log('idx', idxOfBattleActions, 'action', action)
   const attackerId = action.attacker.id;
   const defenderId = action.defender.id;
 
   let summary = '';
 
-  if (idx === 0) summary += `${attackerId} attacks ${defenderId} first!\n\n`
+  if (idxOfBattleActions === 0) summary += `${attackerId} attacks ${defenderId} first!\n\n`
   for (const attack of action.attacks.entries()) {
     summary += formatAttack(attack, attackerId, defenderId)
   }
