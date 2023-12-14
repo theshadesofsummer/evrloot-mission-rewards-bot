@@ -133,8 +133,9 @@ function formatAttack(attack, attackerId, defenderId) {
       attackSummary = `[MISSING attack.hand: ${attack.hand}] `
   }
 
-  attackSummary += attack.miss ? 'successfully.' : 'but misses.';
+  attackSummary += attack.miss ? 'but misses.' : 'successfully.';
   attackSummary += '\n'
+
   return attackSummary;
 }
 
