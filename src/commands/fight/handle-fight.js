@@ -106,6 +106,7 @@ function summarizeAction(action, fightInfos) {
   for (const [idx, attack] of action.attacks.entries()) {
     if (idx === 0) summary += `${attackerId} attacks ${defenderId} first!\n\n`
     summary += formatAttack(attack, attackerId, defenderId)
+    summary += healthChange(action)
   }
 
   return formatComment(summary, fightInfos)
@@ -136,8 +137,13 @@ function formatAttack(attack, attackerId, defenderId) {
   return attackSummary;
 }
 
+function healthChange(attack) {
+  return `Attacker ${attack.attacker.id}: ${attack.attacker.hp.starting}❤️ -> ${attack.attacker.hp.ending}❤️\n`
+    + `Defender ${attack.defender.id}: ${attack.defender.hp.starting}❤️ -> ${attack.defender.hp.ending}❤️\n`
+}
+
 function formatComment(comment, fightInfos) {
-  console.log('>>>', fightInfos.fighterA, fightInfos.fighterB, comment)
+  console.log('>>>', fightInfos.soulA, fightInfos.soulB, comment)
   return comment
     .replace(fightInfos.soulA, `**${fightInfos.soulAMetadata.retrievedMetadata.name}**`)
     .replace(fightInfos.soulB, `**${fightInfos.soulBMetadata.retrievedMetadata.name}**`)
