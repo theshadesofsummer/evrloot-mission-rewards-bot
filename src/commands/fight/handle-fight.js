@@ -98,16 +98,14 @@ function summarizeTeam(team, fighterName) {
 }
 
 function summarizeAction(action, fightInfos) {
-  const attacker = action.attacker;
-  const defender = action.defender;
-
-  console.log('TEST:', attacker, defender, fightInfos.fighterA, fightInfos.fighterB)
+  const attackerId = action.attacker.id;
+  const defenderId = action.defender.id;
 
   let summary = '';
 
   for (const [idx, attack] of action.attacks.entries()) {
-    if (idx === 0) summary += `${attacker.id} attacks ${defender.id} first!\n\n`
-    summary += formatAttack(attack, idx, attacker.id, defender.id)
+    if (idx === 0) summary += `${attackerId} attacks ${defenderId} first!\n\n`
+    summary += formatAttack(attack, attackerId, defenderId)
   }
 
   return formatComment(summary, fightInfos)
@@ -139,7 +137,9 @@ function formatAttack(attack, attackerId, defenderId) {
 }
 
 function formatComment(comment, fightInfos) {
-  return comment.replace(fightInfos.soulA, `**${fightInfos.soulAMetadata.retrievedMetadata.name}**`)
+  console.log('>>>', fightInfos.fighterA, fightInfos.fighterB, comment)
+  return comment
+    .replace(fightInfos.soulA, `**${fightInfos.soulAMetadata.retrievedMetadata.name}**`)
     .replace(fightInfos.soulB, `**${fightInfos.soulBMetadata.retrievedMetadata.name}**`)
     .replace(fightInfos.fighterA, `**${fightInfos.fighterAName}**`)
     .replace(fightInfos.fighterB, `**${fightInfos.fighterBName}**`)
