@@ -94,7 +94,7 @@ function summarizeRound(round, idx, fightInfos) {
 
 function summarizeTeam(team, fighterName) {
   const fighter = team[0]
-  return `Status **${fighterName}**: ${Math.round(Math.max(fighter.hp, 0) * 10) / 10}❤️\n`
+  return `Status **${fighterName}**: ${formatHealth(fighter.hp)}\n`
 }
 
 function summarizeAction(action, fightInfos) {
@@ -106,8 +106,9 @@ function summarizeAction(action, fightInfos) {
   for (const [idx, attack] of action.attacks.entries()) {
     if (idx === 0) summary += `${attackerId} attacks ${defenderId} first!\n\n`
     summary += formatAttack(attack, attackerId, defenderId)
-    summary += healthChange(action)
   }
+
+  summary += '\n' + healthChange(action)
 
   return formatComment(summary, fightInfos)
 
@@ -138,15 +139,19 @@ function formatAttack(attack, attackerId, defenderId) {
 }
 
 function healthChange(attack) {
-  return `Attacker ${attack.attacker.id}: ${attack.attacker.hp.starting}❤️ -> ${attack.attacker.hp.ending}❤️\n`
-    + `Defender ${attack.defender.id}: ${attack.defender.hp.starting}❤️ -> ${attack.defender.hp.ending}❤️\n`
+  return `Attacker ${attack.attacker.id}: ${formatHealth(attack.attacker.hp.starting)} ➡ ${formatHealth(attack.attacker.hp.ending)}\n`
+    + `Defender ${attack.defender.id}: ${formatHealth(attack.defender.hp.starting)} ➡ ${formatHealth(attack.defender.hp.ending)}\n`
 }
 
 function formatComment(comment, fightInfos) {
-  console.log('>>>', fightInfos.soulA, fightInfos.soulB, comment)
+  console.log('>>>', typeof fightInfos.soulA, typeof fightInfos.soulB, typeof comment)
   return comment
     .replace(fightInfos.soulA, `**${fightInfos.soulAMetadata.retrievedMetadata.name}**`)
     .replace(fightInfos.soulB, `**${fightInfos.soulBMetadata.retrievedMetadata.name}**`)
     .replace(fightInfos.fighterA, `**${fightInfos.fighterAName}**`)
     .replace(fightInfos.fighterB, `**${fightInfos.fighterBName}**`)
+}
+
+function formatHealth(hp) {
+  return `${Math.round(hp * 100) / 100}❤️`
 }
