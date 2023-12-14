@@ -20,10 +20,8 @@ module.exports = async function (interaction, fightId) {
   const fightMessage = await postFightResult(createFightEmbed(fight, fightResult[0]))
 
   const fighterNames = await mapClientIdToName([fight.fighterA, fight.fighterB]);
-  const soulA = await getSoulMetadata(fight.soulA);
-  const soulAMetadata = await mapMetadataToSoul(soulA)
-  const soulB = await getSoulMetadata(fight.soulB);
-  const soulBMetadata = await mapMetadataToSoul(soulB)
+  const soulAMetadata = await getSoulMetadata(fight.soulA);
+  const soulBMetadata = await getSoulMetadata(fight.soulB);
 
   const fightInfos = {
     ...fight,
@@ -100,23 +98,43 @@ function summarizeTeam(team, fighterName) {
 }
 
 function summarizeAction(action, fightInfos) {
-  const readableComment = formatComment(action.comment, fightInfos)
-  switch (action.actionType) {
-    case 'HIT':
-      return `*[HIT]*: ${readableComment}`
-    case 'ATTACK_CALCULATION':
-      return `*[Calculating Attack Damage]* ${readableComment}`
-    case 'ATTACK_ROLL':
-      return `*[Rolling Attack Damage]* ${readableComment}`
-    case 'DMG_REDUCTION':
-      return `*[Defender's Armor]* ${readableComment}`
-    case 'ATTACK':
-      return `*[ATTACK]*: ${readableComment}`
-    case 'SPECIAL_EFFECTS':
-      return `*[Special Effects]* ${readableComment}`
-    default:
-      'missing type ' + action.actionType
+  const attacker = action.attacker;
+  const defender = action.defender;
+
+  let summary = '';
+
+  summary += `${attacker.id} attacks ${defender.id} first!\n\n`
+
+  for (const attack of action.attacks) {
+    summary += formatAttack(attack, attacker.id, defender.id)
   }
+
+  return formatComment(summary, fightInfos)
+
+}
+
+function formatAttack(attack, attackerId, defenderId) {
+  let attackSummary = '';
+  switch (attack.hand) {
+    case 'Main':
+      attackSummary = `${attackerId} tries to attack ${defenderId} with main hand for ${attack.damage} damage`
+      break;
+    case 'Off':
+      attackSummary = `${attackerId} tries to attack ${defenderId} with off hand for ${attack.damage} damage`
+      break;
+    case 'Both':
+      attackSummary = `${attackerId} tries to attack ${defenderId} with both hands for ${attack.damage} damage`
+      break;
+    case 'None':
+      attackSummary = `${attackerId} tries to attack ${defenderId} with no hand for ${attack.damage} damage`
+      break;
+    default:
+      attackSummary = `[MISSING attack.hand: ${attack.hand}]`
+  }
+
+  attackSummary += attack.miss ? 'successfully.' : 'but misses.';
+
+  return attackSummary;
 }
 
 function formatComment(comment, fightInfos) {
