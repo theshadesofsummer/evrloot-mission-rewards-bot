@@ -98,7 +98,6 @@ function summarizeTeam(team, fighterName) {
 }
 
 function summarizeAction(action, idxOfBattleActions, fightInfos) {
-  console.log('idx', idxOfBattleActions, 'action', action)
   const attackerId = action.attacker.id;
   const defenderId = action.defender.id;
 
@@ -145,7 +144,6 @@ function healthChange(attack) {
 }
 
 function formatComment(comment, fightInfos) {
-  console.log('>>>', typeof fightInfos.soulA, typeof fightInfos.soulB, typeof comment)
   return comment
     .replaceAll(fightInfos.soulA, `**${fightInfos.soulAMetadata.retrievedMetadata.name}**`)
     .replaceAll(fightInfos.soulB, `**${fightInfos.soulBMetadata.retrievedMetadata.name}**`)
