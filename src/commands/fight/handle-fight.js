@@ -1,5 +1,5 @@
-const {getFightByFightId, deleteFight, saveFightResult, addSoulCooldown, updateWinnerOnLeaderboard} = require("../../evrloot-db");
-const {startFight, getSoulMetadata, mapMetadataToSoul} = require("../../evrloot-api");
+const {getFightByFightId, deleteFight, addSoulCooldown, updateWinnerOnLeaderboard} = require("../../evrloot-db");
+const {startFight, getSoulMetadata} = require("../../evrloot-api");
 const createFightEmbed = require('../../embeds/fight-embed')
 const {postFightResult, mapClientIdToName} = require("../../discord-client");
 const {ThreadAutoArchiveDuration} = require("discord-api-types/v10");
@@ -11,7 +11,6 @@ module.exports = async function (interaction, fightId) {
   const fight = await getFightByFightId(fightId);
 
   const fightResult = await startFight(fight.soulA, fight.soulB)
-  await saveFightResult(fightResult)
   await saveSoulCooldowns(fight, fightResult[0].winner)
   await saveWinnerToLeaderboard(fight, fightResult[0].winner)
 

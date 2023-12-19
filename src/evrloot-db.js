@@ -298,20 +298,6 @@ async function deleteFight(fightId) {
   }
 }
 
-async function saveFightResult(fightResult){
-  const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-  try {
-    console.log('[DB]', 'saving a fightResult for luuu to get fight data')
-    const collection = client.db("evrloot").collection("fightresults");
-
-    await collection.insertOne({fightResult});
-  } catch (error) {
-    console.error('[DB]', 'Error saving the fight result', error);
-  } finally {
-    await client.close();
-  }
-}
-
 async function addSoulCooldown(soulId, timestamp){
   const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
   try {
