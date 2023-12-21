@@ -20,12 +20,15 @@ module.exports = async function (interaction, fightId) {
 
   const fighterNames = await mapClientIdToName([fight.fighterA, fight.fighterB]);
 
+  console.log('>>> fightresult', fightResult)
   const fightInfos = {
     ...fight,
     fighterAName: fighterNames[0],
     fighterBName: fighterNames[1],
     fightResponse: fightResult[0]
   }
+
+  console.log('>>> fightInfos', fightInfos)
 
   const fightThread = await fightMessage.startThread({
     name: `${fighterNames[0]} vs. ${fighterNames[1]}`,
@@ -62,6 +65,7 @@ async function saveWinnerToLeaderboard(fight, winner) {
 }
 
 function sendCombatRounds(fightThread, combatRounds, fightInfos) {
+  console.log('>>> fightInfos.fighterA', fightInfos.fightResponse.teamA)
   fightThread.send({
     content: `# Fight Overview`,
     embeds: [

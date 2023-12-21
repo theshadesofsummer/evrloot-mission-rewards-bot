@@ -1,6 +1,7 @@
 const {findValueForAttribute} = require("../helpers/attribute-finder");
 
 module.exports = function createFighterEmbed(userId, souls) {
+  console.log('incoming souls:', souls)
   const soul = souls[0]
   const properties = soul.retrievedMetadata.properties
   const { soulSpecificStatName, soulSpecificStatValue } = soulClassSpecificName(properties);
