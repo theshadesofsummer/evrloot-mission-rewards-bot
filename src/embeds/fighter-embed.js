@@ -3,7 +3,8 @@ module.exports = function createFighterEmbed(userId, souls) {
   return {
     color: 0xae1917,
     author: {
-      icon_url: `https://discord.com/users/${userId}`
+      icon_url: `https://discord.com/users/${userId}`,
+      name: 'test'
     },
     title: `**${soul.metadata.name}**`,
     thumbnail: {
