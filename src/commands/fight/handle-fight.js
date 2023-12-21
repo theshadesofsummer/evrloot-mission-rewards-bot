@@ -1,5 +1,5 @@
 const {getFightByFightId, deleteFight, addSoulCooldown, updateWinnerOnLeaderboard} = require("../../evrloot-db");
-const {startFight, getSoulMetadata} = require("../../evrloot-api");
+const {startFight} = require("../../evrloot-api");
 const createFightEmbed = require('../../embeds/fight-embed')
 const {postFightResult, mapClientIdToName} = require("../../discord-client");
 const {ThreadAutoArchiveDuration} = require("discord-api-types/v10");
@@ -32,7 +32,7 @@ module.exports = async function (interaction, fightId) {
     autoArchiveDuration: ThreadAutoArchiveDuration.OneHour
   })
 
-  sendCombatRounds(fightThread, fightResult[0].combatRounds, fightInfos)
+  sendCombatRounds(fightThread, fightInfos)
 }
 
 async function saveSoulCooldowns(fight, winner) {
@@ -61,7 +61,7 @@ async function saveWinnerToLeaderboard(fight, winner) {
   }
 }
 
-function sendCombatRounds(fightThread, combatRounds, fightInfos) {
+function sendCombatRounds(fightThread, fightInfos) {
   fightThread.send({
     content: `# Fight Overview`,
     embeds: [
@@ -69,10 +69,11 @@ function sendCombatRounds(fightThread, combatRounds, fightInfos) {
       createFighterEmbed(fightInfos.fighterB, fightInfos.fightResponse.teamB)
     ]
   })
-  combatRounds.forEach((round, idx) => fightThread.send(summarizeRound(round, idx, fightInfos)))
+  fightInfos.fightResponse.combatRounds.forEach((round, idx) => fightThread.send(summarizeRound(round, idx, fightInfos)))
 }
 
 function summarizeRound(round, idx, fightInfos) {
+  console.log('round', round)
   let result = '## Round #' + (idx+1) + '\n\n';
 
   result += summarizeTeam(round.teamA, fightInfos.fighterAName)

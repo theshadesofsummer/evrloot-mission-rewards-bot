@@ -49,6 +49,6 @@ function formatWeapon(weapon) {
   console.log('weapon', weapon)
   if (!weapon) return '-';
 
-
-  return `*${weapon.name}*`
+  return `*${weapon.name}* (${weapon.properties['Rarity'].value})\n` +
+    `Damage: ${weapon.properties['MinDamage'].value}-${weapon.properties['MaxDamage'].value}`
 }
