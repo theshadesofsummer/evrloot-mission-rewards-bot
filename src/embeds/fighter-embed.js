@@ -2,7 +2,11 @@ module.exports = function createFighterEmbed(userId, souls) {
   const soul = souls[0]
   return {
     color: 0xae1917,
-    description: `<@${userId}> is fighting with **${soul.metadata.name}**`,
+    author: {
+      name: `<@${userId}>`,
+      iconURL: `https://discord.com/users/${userId}`
+    },
+    description: `**${soul.metadata.name}**`,
     thumbnail: {
       url: soul.metadata.image
     },
