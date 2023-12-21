@@ -51,7 +51,7 @@ function formatWeapon(weapon) {
 
   let weaponDisplay = `*${weapon.name}* (${weapon.properties['Rarity'].value})\n`
 
-  if (weapon.properties['MinDamage'].value && weapon.properties['MaxDamage'].value)
+  if (weapon.properties['MinDamage'] && weapon.properties['MaxDamage'])
     weaponDisplay += `Damage: ${weapon.properties['MinDamage'].value}-${weapon.properties['MaxDamage'].value}`
 
   return weaponDisplay
