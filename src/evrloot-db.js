@@ -16,7 +16,6 @@ module.exports = {
   getOpenInvitationsToYou,
   getOpenInvitationsFromYou,
   deleteFight,
-  saveFightResult,
   addSoulCooldown,
   getSoulCooldown,
   getLeaderboardEntries,
