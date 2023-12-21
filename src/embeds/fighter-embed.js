@@ -1,11 +1,5 @@
-const {findValueForAttribute} = require("../helpers/attribute-finder");
-
 module.exports = function createFighterEmbed(userId, souls) {
-  console.log('incoming souls:', souls)
   const soul = souls[0]
-  const properties = soul.metadata.properties
-  const { soulSpecificStatName, soulSpecificStatValue } = soulClassSpecificName(properties);
-
   return {
     color: 0xae1917,
     description: `<@${userId}> is fighting with **${soul.metadata.name}**`,
@@ -14,33 +8,18 @@ module.exports = function createFighterEmbed(userId, souls) {
     },
     fields: [
       {
-        name: 'Personality',
-        value: properties['Personality'],
-        inline: true
-      },
-      {
-        name: 'Talent',
-        value: properties['Talent'],
-        inline: true
-      },
-      {
-        name: 'Origin',
-        value: properties['Origin'],
-        inline: true
-      },
-      {
-        name: 'Condition',
-        value: properties['Condition'],
-        inline: true
-      },
-      {
-        name: soulSpecificStatName,
-        value: soulSpecificStatValue,
+        name: 'Level',
+        value: soul.level,
         inline: true,
       },
       {
-        name: '',
-        value: '',
+        name: 'Main Hand',
+        value: formatWeapon(soul.mainHandWeapon),
+        inline: true,
+      },
+      {
+        name: 'Off Hand',
+        value: formatWeapon(soul.offHandWeapon),
         inline: true,
       },
       {
@@ -48,38 +27,17 @@ module.exports = function createFighterEmbed(userId, souls) {
         value: statsFormatter(soul),
         inline: true
       },
-      {
-        name: 'Equipment',
-        value: equipmentFormatter(soul.children),
-        inline: true
-      },
     ],
   };
 }
 
-const specificClassNames = new Map([
-  ["Alchemist", "Specialty"],
-  ["Berserker", "Role"],
-  ["Ranger", "Spirit Animal"]
-])
-function soulClassSpecificName(properties) {
-  const statName = specificClassNames.get(properties["Soul Class"]);
-  const statValue = properties.statName;
-
-  return {
-    soulSpecificStatName: statName,
-    soulSpecificStatValue: statValue,
-  }
-}
-
 function statsFormatter(soul) {
-  const properties = soul.metadata.properties
-  return `*Strength*: ${getStatFormat(properties['Strength'], 8)} ${upgradedStat(soul.children, 'Strength')}\n` +
-    `*Dexterity*: ${getStatFormat(properties['Dexterity'], 8)} ${upgradedStat(soul.children, 'Dexterity')}\n` +
-    `*Intelligence*: ${getStatFormat(properties['Intelligence'], 8)} ${upgradedStat(soul.children, 'Intelligence')}\n` +
-    `*Wisdom*: ${getStatFormat(properties['Wisdom'], 8)} ${upgradedStat(soul.children, 'Wisdom')}\n` +
-    `*Fortitude*: ${getStatFormat(properties['Fortitude'], 8)} ${upgradedStat(soul.children, 'Fortitude')}\n` +
-    `*Luck*: ${getStatFormat(properties['Luck'], 4)} ${upgradedStat(soul.children, 'Luck')}`;
+  return `*Strength*: ${getStatFormat(soul['Strength'], 8)}\n` +
+    `*Dexterity*: ${getStatFormat(soul['Dexterity'], 8)}\n` +
+    `*Intelligence*: ${getStatFormat(soul['Intelligence'], 8)}\n` +
+    `*Wisdom*: ${getStatFormat(soul['Wisdom'], 8)}\n` +
+    `*Fortitude*: ${getStatFormat(soul['Fortitude'], 8)}\n` +
+    `*Luck*: ${getStatFormat(soul['Luck'], 4)}`;
 }
 
 
@@ -87,33 +45,10 @@ function getStatFormat(stat, goodValue) {
   return stat >= goodValue ? `**${stat}**` : stat.toString();
 }
 
-function upgradedStat(soulChildren, statType) {
-  const effectingChildNfts = soulChildren
-    .filter(childNft => childNft.metadata.properties[statType])
+function formatWeapon(weapon) {
+  console.log('weapon', weapon)
+  if (!weapon) return '-';
 
-  if (effectingChildNfts.length < 1) return ""
 
-  const upgradeAmount = effectingChildNfts.reduce((acc, childNft) => acc + Number(childNft.metadata.properties[statType].value), 0)
-  return `***+${upgradeAmount}***`;
-}
-
-const equipmentParts = [
-  'Head',
-  'Armor',
-  'Feet',
-  'MainHand',
-  'OffHand'
-]
-function equipmentFormatter(soulChildren) {
-  let returnString = '';
-  for (const partName of equipmentParts) {
-    const child = getChildForPartName(soulChildren, partName)
-    if (child)
-      returnString += `*${partName}*: ${child.metadata.name} (${child.metadata.properties['Rarity'].value})\n`
-  }
-  return returnString;
-}
-
-function getChildForPartName(soulChildren, partName) {
-  return soulChildren.find(child => child.partDescription === partName)
+  return `*${weapon.name}*`
 }
