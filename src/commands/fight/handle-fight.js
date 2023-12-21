@@ -19,15 +19,11 @@ module.exports = async function (interaction, fightId) {
   const fightMessage = await postFightResult(createFightEmbed(fight, fightResult[0]))
 
   const fighterNames = await mapClientIdToName([fight.fighterA, fight.fighterB]);
-  const soulAMetadata = await getSoulMetadata(fight.soulA);
-  const soulBMetadata = await getSoulMetadata(fight.soulB);
 
   const fightInfos = {
     ...fight,
     fighterAName: fighterNames[0],
     fighterBName: fighterNames[1],
-    soulAMetadata,
-    soulBMetadata
   }
 
   const fightThread = await fightMessage.startThread({
@@ -68,8 +64,8 @@ function sendCombatRounds(fightThread, combatRounds, fightInfos) {
   fightThread.send({
     content: `# Fight Overview`,
     embeds: [
-      createFighterEmbed(fightInfos.fighterA, fightInfos.soulAMetadata),
-      createFighterEmbed(fightInfos.fighterB, fightInfos.soulBMetadata)
+      createFighterEmbed(fightInfos.fighterA, fightInfos.teamA),
+      createFighterEmbed(fightInfos.fighterB, fightInfos.teamB)
     ]
   })
   combatRounds.forEach((round, idx) => fightThread.send(summarizeRound(round, idx, fightInfos)))
