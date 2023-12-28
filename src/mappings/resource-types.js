@@ -1,4 +1,4 @@
-module.exports = {
+module.exports = { // resourceMappings.ts
   // Misc (Quests / other)
   HARPOON: {
     id: 0,
