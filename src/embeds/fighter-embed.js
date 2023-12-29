@@ -1,10 +1,13 @@
-module.exports = function createFighterEmbed(userId, souls) {
+const {getUserByClientId} = require("../discord-client");
+module.exports = async function createFighterEmbed(userId, souls) {
+  const user = await getUserByClientId(userId)
+
   const soul = souls[0]
   return {
     color: 0xae1917,
     author: {
-      icon_url: `https://discord.com/users/${userId}`,
-      name: 'test'
+      icon_url: user.avatarURL(),
+      name: user.globalName
     },
     title: `**${soul.metadata.name}**`,
     thumbnail: {
