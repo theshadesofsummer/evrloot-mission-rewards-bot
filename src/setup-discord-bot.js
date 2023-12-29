@@ -16,11 +16,11 @@ module.exports = {
 };
 
 const commands = [
-  //connectedWalletsCommand,
-  //walletSettingsCommand,
-  //soulInfoCommand,
-  //fightCommand, // deactivated for mission launch
-  //updateUsernameCommand
+  connectedWalletsCommand,
+  walletSettingsCommand,
+  soulInfoCommand,
+  fightCommand, // deactivated for mission launch
+  updateUsernameCommand
 ]
 
 async function setupDiscordBot() {
