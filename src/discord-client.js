@@ -12,7 +12,8 @@ module.exports = {
   postFightResult,
   postFightAnnouncement,
   sendVerificationDm,
-  mapClientIdToName
+  mapClientIdToName,
+  getUserByClientId
 }
 
 
@@ -88,4 +89,16 @@ async function mapToName(clientId) {
     return 'User not found'
   }
   return guildMember.user.globalName
+}
+
+async function getUserByClientId(clientId) {
+  await client.guilds.fetch();
+  const guild = client.guilds.cache.get(process.env.GUILD_ID);
+
+  const guildMember = await guild.members.fetch(clientId)
+  if (!guildMember) {
+    console.warn('no user found for client id', clientId)
+    return undefined
+  }
+  return guildMember.user
 }
