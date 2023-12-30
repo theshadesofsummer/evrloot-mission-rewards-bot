@@ -51,12 +51,12 @@ function getFightResult(fight, winPoints) {
 
   const winnerTeam = fight.winner;
   if (winnerTeam === 'Team A') {
-    result += `*Winner*: <@${fight.teamA.discordId}>'s soul ${fight.teamA.metadata.name} got ${winPoints} Points on the Leaderboard!\n`
+    result += `*Winner*: <@${fight.teamA.discordId}>'s soul ${fight.teamA.metadata.name} got **${winPoints} Points** on the Leaderboard!\n`
     result += '*Combat Rounds*: ' + fight.combatRounds.length + '\n\n'
     result += `<@${fight.teamA.discordId}>'s soul got a cooldown for 6h\n`
     result += `<@${fight.teamB.discordId}>'s soul got a cooldown for 10h`
   } else {
-    result += `*Winner*: <@${fight.teamB.discordId}>'s soul ${fight.teamB.metadata.name} got ${winPoints} Points on the Leaderboard!\n`
+    result += `*Winner*: <@${fight.teamB.discordId}>'s soul ${fight.teamB.metadata.name} got **${winPoints} Points** on the Leaderboard!\n`
     result += '*Combat Rounds*: ' + fight.combatRounds.length + '\n\n'
     result += `<@${fight.teamB.discordId}>'s soul got a cooldown for 6h\n`
     result += `<@${fight.teamA.discordId}>'s soul got a cooldown for 10h`
