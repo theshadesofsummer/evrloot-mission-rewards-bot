@@ -6,7 +6,7 @@ module.exports = async function createFighterEmbed(userId, souls) {
   return {
     color: 0xae1917,
     author: {
-      icon_url: user.avatarURL(),
+      iconURL: user.avatarURL(),
       name: user.globalName
     },
     title: `**${soul.metadata.name}**`,
