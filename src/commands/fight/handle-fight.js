@@ -143,8 +143,8 @@ function healthChange(attack) {
 
 function formatComment(comment, fightInfos) {
   return comment
-    .replaceAll(fightInfos.soulA, `**${fightInfos.soulAMetadata.retrievedMetadata.name}**`)
-    .replaceAll(fightInfos.soulB, `**${fightInfos.soulBMetadata.retrievedMetadata.name}**`)
+    .replaceAll(fightInfos.soulA, `**${fightInfos.fightResponse.teamA[0].metadata.name}**`)
+    .replaceAll(fightInfos.soulB, `**${fightInfos.fightResponse.teamB[0].metadata.name}**`)
     .replaceAll(fightInfos.fighterA, `**${fightInfos.fighterAName}**`)
     .replaceAll(fightInfos.fighterB, `**${fightInfos.fighterBName}**`)
 }
