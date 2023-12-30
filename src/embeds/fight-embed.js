@@ -1,6 +1,5 @@
-const removeIpfsStuff = require("../helpers/ipfs-link-tools");
 
-module.exports = function createFightEmbed(fight) {
+module.exports = function createFightEmbed(fight, winPoints) {
   return {
     color: 0xae1917,
     title: `New Fight on the Trakanian Battlefield!`,
@@ -22,7 +21,7 @@ module.exports = function createFightEmbed(fight) {
       },
       {
         name: 'Result',
-        value: getFightResult(fight),
+        value: getFightResult(fight, winPoints),
       }
     ],
     timestamp: new Date().toISOString(),
@@ -47,17 +46,17 @@ function stateOfSoul(soulState, index) {
     `${Math.round(Math.max(soulState.armor, 0) * 10) / 10}🛡️ ` +
     `${Math.round(Math.max(soulState.initiative, 0) * 10) / 10}⚡ `
 }
-function getFightResult(fight) {
+function getFightResult(fight, winPoints) {
   let result = '';
 
   const winnerTeam = fight.winner;
   if (winnerTeam === 'Team A') {
-    result += `*Winner*: <@${fight.teamA.discordId}>\n`
+    result += `*Winner*: <@${fight.teamA.discordId}>'s soul ${fight.teamA.metadata.name} got ${winPoints} Points on the Leaderboard!\n`
     result += '*Combat Rounds*: ' + fight.combatRounds.length + '\n\n'
     result += `<@${fight.teamA.discordId}>'s soul got a cooldown for 6h\n`
     result += `<@${fight.teamB.discordId}>'s soul got a cooldown for 10h`
   } else {
-    result += `*Winner*: <@${fight.teamB.discordId}>\n`
+    result += `*Winner*: <@${fight.teamB.discordId}>'s soul ${fight.teamA.metadata.name} got ${winPoints} Points on the Leaderboard!\n`
     result += '*Combat Rounds*: ' + fight.combatRounds.length + '\n\n'
     result += `<@${fight.teamB.discordId}>'s soul got a cooldown for 6h\n`
     result += `<@${fight.teamA.discordId}>'s soul got a cooldown for 10h`

@@ -12,22 +12,18 @@ module.exports = async function (interaction, fightId) {
 
   const fightResult = await startFight(fightInfos.soulA, fightInfos.soulB)
 
-  const fight = await addDiscordUserToFighters(fightResult[0], fightInfos.fighterA, fightInfos.fighterB);
-
-  console.log('new fight object', fight)
-
-  await saveSoulCooldowns(fight)
-  await saveWinnerToLeaderboard(fight)
-
   await deleteFight(fightId)
 
-  const fightMessage = await postFightResult(createFightEmbed(fight))
+  const fight = await addDiscordUserToFighters(fightResult[0], fightInfos.fighterA, fightInfos.fighterB);
+  const winnerPoints = calculateWinnerPoints(fight);
+  await saveSoulCooldowns(fight)
+  await saveWinnerToLeaderboard(fight, winnerPoints)
 
+  const fightMessage = await postFightResult(createFightEmbed(fight, winnerPoints))
   const fightThread = await fightMessage.startThread({
     name: `${fight.teamA.discordName} vs. ${fight.teamB.discordName}`,
     autoArchiveDuration: ThreadAutoArchiveDuration.OneHour
   })
-
   await sendCombatRounds(fightThread, fight)
 }
 
@@ -62,14 +58,49 @@ async function saveSoulCooldowns(fight) {
   }
 }
 
-async function saveWinnerToLeaderboard(fight) {
+function calculateWinnerPoints(fight) {
   const winner = fight.winner;
   if (winner === 'Team A') {
-    await updateWinnerOnLeaderboard(fight.teamA.id)
+    return getWinnerPointsFor(fight.teamA)
   } else if (winner === 'Team B') {
-    await updateWinnerOnLeaderboard(fight.teamB.id)
+    return getWinnerPointsFor(fight.teamB)
+  }
+}
+
+function getWinnerPointsFor(soul) {
+  let winningPoints = 2.0; //leg = -0.2; 2*epic = -0.2
+
+  let epicCounter = 0;
+
+  const mainHand = soul.mainHandWeapon;
+  if (mainHand) {
+    const rarity = mainHand.properties["Rarity"].value;
+    if (rarity === 'Legendary') winningPoints -= 0.2;
+    if (rarity === 'Epic') epicCounter += 1
+  }
+
+  const offHand = soul.offHandWeapon;
+  if (offHand) {
+    const rarity = offHand.properties["Rarity"].value;
+    if (rarity === 'Legendary') winningPoints -= 0.2;
+    if (rarity === 'Epic') epicCounter += 1
+  }
+
+  let epicReduction = epicCounter / 2;
+  if (epicReduction >= 1) {
+    winningPoints = winningPoints - (epicReduction * 0.2)
+  }
+
+  return winningPoints;
+}
+async function saveWinnerToLeaderboard(fight, winPoints) {
+  const winner = fight.winner;
+  if (winner === 'Team A') {
+    await updateWinnerOnLeaderboard(fight.teamA.id, winPoints)
+  } else if (winner === 'Team B') {
+    await updateWinnerOnLeaderboard(fight.teamB.id, winPoints)
   } else {
-    console.log('saveWinnerToLeaderboard, no matching winner team found:', winner)
+    console.log('saveWinnerToLeaderboard, no matching winner team found:', winner, winPoints)
   }
 }
 
