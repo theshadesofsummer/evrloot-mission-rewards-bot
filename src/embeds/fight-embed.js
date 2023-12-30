@@ -1,13 +1,13 @@
 const removeIpfsStuff = require("../helpers/ipfs-link-tools");
 
-module.exports = function createFightEmbed(fight, fightResult) {
+module.exports = function createFightEmbed(fight) {
   return {
     color: 0xae1917,
     title: `New Fight on the Trakanian Battlefield!`,
     fields: [
       {
         name: 'Team A',
-        value: getTeamInfo(fight, fightResult.finalState, true),
+        value: getTeamInfo(fight, true),
         inline: true
       },
       {
@@ -17,23 +17,23 @@ module.exports = function createFightEmbed(fight, fightResult) {
       },
       {
         name: 'Team B',
-        value: getTeamInfo(fight, fightResult.finalState, false),
+        value: getTeamInfo(fight, false),
         inline: true
       },
       {
         name: 'Result',
-        value: getFightResult(fight, fightResult),
+        value: getFightResult(fight),
       }
     ],
     timestamp: new Date().toISOString(),
   };
 }
 
-function getTeamInfo(fight, finalState, teamA) {
+function getTeamInfo(fight, teamA) {
   let result = '';
-  result += teamA ? `<@${fight.fighterA}>` : `<@${fight.fighterB}>`;
+  result += teamA ? `<@${fight.teamA.discordId}>` : `<@${fight.teamB.discordId}>`;
   result += '\n'
-  result += getFinalState(teamA ? finalState.teamA : finalState.teamB)
+  result += getFinalState(teamA ? fight.finalState.teamA : fight.finalState.teamB)
   return result
 }
 
@@ -47,19 +47,21 @@ function stateOfSoul(soulState, index) {
     `${Math.round(Math.max(soulState.armor, 0) * 10) / 10}🛡️ ` +
     `${Math.round(Math.max(soulState.initiative, 0) * 10) / 10}⚡ `
 }
-function getFightResult(fight, fightResult) {
+function getFightResult(fight) {
   let result = '';
-  const winnerTeam = fightResult.winner;
+
+  const winnerTeam = fight.winner;
   if (winnerTeam === 'Team A') {
-    result += `*Winner*: <@${fight.fighterA}>\n`
-    result += '*Combat Rounds*: ' + fightResult.combatRounds.length + '\n\n'
-    result += `<@${fight.fighterA}>'s soul got a cooldown for 6h\n`
-    result += `<@${fight.fighterB}>'s soul got a cooldown for 24h`
+    result += `*Winner*: <@${fight.teamA.discordId}>\n`
+    result += '*Combat Rounds*: ' + fight.combatRounds.length + '\n\n'
+    result += `<@${fight.teamA.discordId}>'s soul got a cooldown for 6h\n`
+    result += `<@${fight.teamB.discordId}>'s soul got a cooldown for 10h`
   } else {
-    result += `*Winner*: <@${fight.fighterB}>\n`
-    result += '*Combat Rounds*: ' + fightResult.combatRounds.length + '\n\n'
-    result += `<@${fight.fighterB}>'s soul got a cooldown for 6h\n`
-    result += `<@${fight.fighterA}>'s soul got a cooldown for 24h`
+    result += `*Winner*: <@${fight.teamB.discordId}>\n`
+    result += '*Combat Rounds*: ' + fight.combatRounds.length + '\n\n'
+    result += `<@${fight.teamB.discordId}>'s soul got a cooldown for 6h\n`
+    result += `<@${fight.teamA.discordId}>'s soul got a cooldown for 10h`
   }
+
   return result
 }

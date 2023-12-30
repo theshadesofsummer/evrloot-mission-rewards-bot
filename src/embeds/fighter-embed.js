@@ -1,8 +1,7 @@
 const {getUserByClientId} = require("../discord-client");
-module.exports = async function createFighterEmbed(userId, souls) {
-  const user = await getUserByClientId(userId)
+module.exports = async function createFighterEmbed(soul) {
+  const user = await getUserByClientId(soul.discordId)
 
-  const soul = souls[0]
   return {
     color: 0xae1917,
     author: {

@@ -8,85 +8,94 @@ const createFighterEmbed = require('../../embeds/fighter-embed')
 const ONE_HOUR = 3600;
 
 module.exports = async function (interaction, fightId) {
-  const fight = await getFightByFightId(fightId);
+  const fightInfos = await getFightByFightId(fightId);
 
-  const fightResult = await startFight(fight.soulA, fight.soulB)
-  await saveSoulCooldowns(fight, fightResult[0].winner)
-  await saveWinnerToLeaderboard(fight, fightResult[0].winner)
+  const fightResult = await startFight(fightInfos.soulA, fightInfos.soulB)
+
+  const fight = await addDiscordUserToFighters(fightResult, fightInfos.fighterA, fightInfos.fighterB);
+
+  await saveSoulCooldowns(fight)
+  await saveWinnerToLeaderboard(fight)
 
   await deleteFight(fightId)
 
-  const fightMessage = await postFightResult(createFightEmbed(fight, fightResult[0]))
-
-  const fighterNames = await mapClientIdToName([fight.fighterA, fight.fighterB]);
-
-  const fightInfos = {
-    ...fight,
-    fighterAName: fighterNames[0],
-    fighterBName: fighterNames[1],
-    fightResponse: fightResult[0]
-  }
+  const fightMessage = await postFightResult(createFightEmbed(fight))
 
   const fightThread = await fightMessage.startThread({
-    name: `${fighterNames[0]} vs. ${fighterNames[1]}`,
+    name: `${fight.teamA.discordName} vs. ${fight.teamB.discordName}`,
     autoArchiveDuration: ThreadAutoArchiveDuration.OneHour
   })
 
-  await sendCombatRounds(fightThread, fightInfos)
+  await sendCombatRounds(fightThread, fight)
 }
 
-async function saveSoulCooldowns(fight, winner) {
-  const soulAId = fight.soulA;
-  const soulBId = fight.soulB;
+async function addDiscordUserToFighters(fight, discordIdA, discordIdB) {
+  const fighterA = fight.teamA[0];
+  const fighterB = fight.teamB[0];
+
+  const fighterNames = await mapClientIdToName([discordIdA, discordIdB]);
+
+  fighterA.discordId = discordIdA;
+  fighterA.discordName = fighterNames[0];
+  fighterB.discordId = discordIdB;
+  fighterB.discordName = fighterNames[1];
+
+  return {...fight, teamA: fighterA, teamB: fighterB}
+}
+
+async function saveSoulCooldowns(fight) {
+  const soulAId = fight.teamA.id;
+  const soulBId = fight.teamB.id;
   const currentTimestamp = Math.round(Date.now() / 1000)
 
+  const winner = fight.winner;
   if (winner === 'Team A') {
     await addSoulCooldown(soulAId, currentTimestamp + ONE_HOUR * 6)
-    await addSoulCooldown(soulBId, currentTimestamp + ONE_HOUR * 24)
+    await addSoulCooldown(soulBId, currentTimestamp + ONE_HOUR * 10)
   } else if (winner === 'Team B') {
-    await addSoulCooldown(soulAId, currentTimestamp + ONE_HOUR * 24)
+    await addSoulCooldown(soulAId, currentTimestamp + ONE_HOUR * 10)
     await addSoulCooldown(soulBId, currentTimestamp + ONE_HOUR * 6)
   } else {
     console.log('saveSoulCooldowns, no matching winner team found:', winner)
   }
 }
 
-async function saveWinnerToLeaderboard(fight, winner) {
+async function saveWinnerToLeaderboard(fight) {
+  const winner = fight.winner;
   if (winner === 'Team A') {
-    await updateWinnerOnLeaderboard(fight.fighterA)
+    await updateWinnerOnLeaderboard(fight.teamA.id)
   } else if (winner === 'Team B') {
-    await updateWinnerOnLeaderboard(fight.fighterB)
+    await updateWinnerOnLeaderboard(fight.teamB.id)
   } else {
     console.log('saveWinnerToLeaderboard, no matching winner team found:', winner)
   }
 }
 
-async function sendCombatRounds(fightThread, fightInfos) {
+async function sendCombatRounds(fightThread, fight) {
   fightThread.send({
     content: `# Fight Overview`,
     embeds: [
-      await createFighterEmbed(fightInfos.fighterA, fightInfos.fightResponse.teamA),
-      await createFighterEmbed(fightInfos.fighterB, fightInfos.fightResponse.teamB)
+      await createFighterEmbed(fight.teamA),
+      await createFighterEmbed(fight.teamB)
     ]
   })
-  fightInfos.fightResponse.combatRounds.forEach((round, idx) => fightThread.send(summarizeRound(round, idx, fightInfos)))
+  fight.combatRounds.forEach((round, idx) => fightThread.send(summarizeRound(round, idx, fight)))
 }
 
-function summarizeRound(round, idx, fightInfos) {
-  console.log('round', round)
+function summarizeRound(round, idx, fight) {
   let result = '## Round #' + (idx+1) + '\n\n';
 
-  result += summarizeTeam(round.teamA, fightInfos.fighterAName)
-  result += summarizeTeam(round.teamB, fightInfos.fighterBName)
+  result += summarizeTeam(round.teamA, fight.teamA.discordName)
+  result += summarizeTeam(round.teamB, fight.teamB.discordName)
 
   result += '\n'
 
   result += Object.values(round.battleActions)
-    .map((action, idxOfBattleActions) => summarizeAction(action, idxOfBattleActions, fightInfos))
+    .map((action, idxOfBattleActions) => summarizeAction(action, idxOfBattleActions))
     .join('\n')
 
   result += '\n\n---End of Round #' + (idx+1) + '---'
-  return result;
+  return formatComment(result, fight);
 }
 
 function summarizeTeam(team, fighterName) {
@@ -94,7 +103,7 @@ function summarizeTeam(team, fighterName) {
   return `Status **${fighterName}**: ${formatHealth(fighter.hp)}\n`
 }
 
-function summarizeAction(action, idxOfBattleActions, fightInfos) {
+function summarizeAction(action, idxOfBattleActions) {
   const attackerId = action.attackers[0].id;
   const defenderId = action.defenders[0].id;
 
@@ -107,7 +116,7 @@ function summarizeAction(action, idxOfBattleActions, fightInfos) {
 
   summary += '\n' + healthChange(action)
 
-  return formatComment(summary, fightInfos)
+  return summary
 
 }
 
@@ -141,12 +150,12 @@ function healthChange(attack) {
     + `Defender ${attack.defenders[0].id}: ${formatHealth(attack.defenders[0].hp.starting)} ➡ ${formatHealth(attack.defenders[0].hp.ending)}\n`
 }
 
-function formatComment(comment, fightInfos) {
+function formatComment(comment, fight) {
   return comment
-    .replaceAll(fightInfos.soulA, `**${fightInfos.fightResponse.teamA[0].metadata.name}**`)
-    .replaceAll(fightInfos.soulB, `**${fightInfos.fightResponse.teamB[0].metadata.name}**`)
-    .replaceAll(fightInfos.fighterA, `**${fightInfos.fighterAName}**`)
-    .replaceAll(fightInfos.fighterB, `**${fightInfos.fighterBName}**`)
+    .replaceAll(fight.teamA.id, `**${fight.teamA.metadata.name}**`)
+    .replaceAll(fight.teamB.id, `**${fight.teamB.metadata.name}**`)
+    .replaceAll(fight.teamA.discordId, `**${fight.teamA.discordName}**`)
+    .replaceAll(fight.teamB.discordId, `**${fight.teamB.discordName}**`)
 }
 
 function formatHealth(hp) {
