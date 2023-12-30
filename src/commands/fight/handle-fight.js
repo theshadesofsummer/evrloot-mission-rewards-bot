@@ -32,7 +32,7 @@ module.exports = async function (interaction, fightId) {
     autoArchiveDuration: ThreadAutoArchiveDuration.OneHour
   })
 
-  sendCombatRounds(fightThread, fightInfos)
+  await sendCombatRounds(fightThread, fightInfos)
 }
 
 async function saveSoulCooldowns(fight, winner) {
@@ -61,12 +61,12 @@ async function saveWinnerToLeaderboard(fight, winner) {
   }
 }
 
-function sendCombatRounds(fightThread, fightInfos) {
+async function sendCombatRounds(fightThread, fightInfos) {
   fightThread.send({
     content: `# Fight Overview`,
     embeds: [
-      createFighterEmbed(fightInfos.fighterA, fightInfos.fightResponse.teamA),
-      createFighterEmbed(fightInfos.fighterB, fightInfos.fightResponse.teamB)
+      await createFighterEmbed(fightInfos.fighterA, fightInfos.fightResponse.teamA),
+      await createFighterEmbed(fightInfos.fighterB, fightInfos.fightResponse.teamB)
     ]
   })
   fightInfos.fightResponse.combatRounds.forEach((round, idx) => fightThread.send(summarizeRound(round, idx, fightInfos)))
