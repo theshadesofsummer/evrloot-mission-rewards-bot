@@ -14,6 +14,8 @@ module.exports = async function (interaction, fightId) {
 
   const fight = await addDiscordUserToFighters(fightResult, fightInfos.fighterA, fightInfos.fighterB);
 
+  console.log('new fight object', fight)
+
   await saveSoulCooldowns(fight)
   await saveWinnerToLeaderboard(fight)
 
@@ -29,9 +31,10 @@ module.exports = async function (interaction, fightId) {
   await sendCombatRounds(fightThread, fight)
 }
 
-async function addDiscordUserToFighters(fight, discordIdA, discordIdB) {
-  const fighterA = fight.teamA[0];
-  const fighterB = fight.teamB[0];
+async function addDiscordUserToFighters(fightResult, discordIdA, discordIdB) {
+  console.log('>>> fightResult', fightResult)
+  const fighterA = fightResult.teamA[0];
+  const fighterB = fightResult.teamB[0];
 
   const fighterNames = await mapClientIdToName([discordIdA, discordIdB]);
 
@@ -40,7 +43,7 @@ async function addDiscordUserToFighters(fight, discordIdA, discordIdB) {
   fighterB.discordId = discordIdB;
   fighterB.discordName = fighterNames[1];
 
-  return {...fight, teamA: fighterA, teamB: fighterB}
+  return {...fightResult, teamA: fighterA, teamB: fighterB}
 }
 
 async function saveSoulCooldowns(fight) {
