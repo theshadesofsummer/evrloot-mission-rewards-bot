@@ -352,6 +352,7 @@ async function getLeaderboardEntries(){
 }
 
 async function updateWinnerOnLeaderboard(soulId, soulName, winPoints){
+  console.log('soulName', soulName)
   const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
   try {
     const collection = client.db("evrloot").collection("fightwins");
@@ -359,10 +360,10 @@ async function updateWinnerOnLeaderboard(soulId, soulName, winPoints){
     const winnerDoc = await collection.findOne({soulId});
 
     if (!winnerDoc) {
-      console.log('[DB] creating new leaderboard entry for', soulId, 'with', winPoints)
+      console.log('[DB] creating new leaderboard entry for', soulId, 'with', winPoints, '>>>', soulName)
       await collection.insertOne({soulId, soulName, amount: winPoints});
     } else {
-      console.log('[DB] updating leaderboard entry for', soulId, 'to win points', winnerDoc.amount + winPoints)
+      console.log('[DB] updating leaderboard entry for', soulId, 'to win points', winnerDoc.amount + winPoints, '>>>', soulName)
       await collection.updateOne({_id: winnerDoc._id}, { $set: {amount: winnerDoc.amount + winPoints}})
     }
   } catch (error) {
