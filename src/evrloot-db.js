@@ -19,7 +19,8 @@ module.exports = {
   addSoulCooldown,
   getSoulCooldown,
   getLeaderboardEntries,
-  updateWinnerOnLeaderboard
+  updateWinnerOnLeaderboard,
+  addFightParticipants
 }
 
 const uri = `mongodb+srv://${process.env.MONGODB_ACCESS}@cluster0.cbrbn.mongodb.net/evrloot?retryWrites=true&w=majority`;
@@ -350,7 +351,7 @@ async function getLeaderboardEntries(){
   }
 }
 
-async function updateWinnerOnLeaderboard(soulId, winPoints){
+async function updateWinnerOnLeaderboard(soulId, soulName, winPoints){
   const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
   try {
     const collection = client.db("evrloot").collection("fightwins");
@@ -359,13 +360,33 @@ async function updateWinnerOnLeaderboard(soulId, winPoints){
 
     if (!winnerDoc) {
       console.log('[DB] creating new leaderboard entry for', soulId, 'with', winPoints)
-      await collection.insertOne({soulId, amount: winPoints});
+      await collection.insertOne({soulId, soulName, amount: winPoints});
     } else {
       console.log('[DB] updating leaderboard entry for', soulId, 'to win points', winnerDoc.amount + winPoints)
       await collection.updateOne({_id: winnerDoc._id}, { $set: {amount: winnerDoc.amount + winPoints}})
     }
   } catch (error) {
     console.error('[DB] Error adding the win to leaderboard for', soulId, 'with', winPoints, error);
+  } finally {
+    await client.close();
+  }
+}
+
+async function addFightParticipants(discordId){
+  const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+  try {
+    const collection = client.db("evrloot").collection("fightparticipants");
+
+    const participantDoc = await collection.findOne({discordId});
+
+    if (!participantDoc) {
+      console.log('[DB] creating new participant entry for', discordId)
+      await collection.insertOne({discordId});
+    } else {
+      console.log('[DB] participant already added', discordId)
+    }
+  } catch (error) {
+    console.error('[DB] Error adding the participant', discordId, error);
   } finally {
     await client.close();
   }

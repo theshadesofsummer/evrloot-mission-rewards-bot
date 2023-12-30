@@ -1,4 +1,4 @@
-const {getFightByFightId, deleteFight, addSoulCooldown, updateWinnerOnLeaderboard} = require("../../evrloot-db");
+const {getFightByFightId, deleteFight, addSoulCooldown, updateWinnerOnLeaderboard, addFightParticipants} = require("../../evrloot-db");
 const {startFight} = require("../../evrloot-api");
 const createFightEmbed = require('../../embeds/fight-embed')
 const {postFightResult, mapClientIdToName} = require("../../discord-client");
@@ -10,14 +10,17 @@ const ONE_HOUR = 3600;
 module.exports = async function (interaction, fightId) {
   const fightInfos = await getFightByFightId(fightId);
 
-  const fightResult = await startFight(fightInfos.soulA, fightInfos.soulB)
+  const fightResult = await startFight(fightInfos.soulA, fightInfos.soulB);
 
-  await deleteFight(fightId)
+  await deleteFight(fightId);
 
   const fight = await addDiscordUserToFighters(fightResult[0], fightInfos.fighterA, fightInfos.fighterB);
   const winnerPoints = calculateWinnerPoints(fight);
-  await saveSoulCooldowns(fight)
-  await saveWinnerToLeaderboard(fight, winnerPoints)
+  await saveSoulCooldowns(fight);
+  await saveWinnerToLeaderboard(fight, winnerPoints);
+
+  await addFightParticipants(fight.teamA.discordId);
+  await addFightParticipants(fight.teamB.discordId);
 
   const fightMessage = await postFightResult(createFightEmbed(fight, winnerPoints))
   const fightThread = await fightMessage.startThread({
@@ -96,9 +99,9 @@ function getWinnerPointsFor(soul) {
 async function saveWinnerToLeaderboard(fight, winPoints) {
   const winner = fight.winner;
   if (winner === 'Team A') {
-    await updateWinnerOnLeaderboard(fight.teamA.id, winPoints)
+    await updateWinnerOnLeaderboard(fight.teamA.id, fight.teamA.name, winPoints)
   } else if (winner === 'Team B') {
-    await updateWinnerOnLeaderboard(fight.teamB.id, winPoints)
+    await updateWinnerOnLeaderboard(fight.teamB.id, fight.teamB.name, winPoints)
   } else {
     console.log('saveWinnerToLeaderboard, no matching winner team found:', winner, winPoints)
   }

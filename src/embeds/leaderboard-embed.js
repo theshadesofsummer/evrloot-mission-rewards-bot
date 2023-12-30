@@ -23,24 +23,18 @@ function listTopEntries(topTenEntries) {
   topTenEntries.forEach((entry, index) => {
     switch (index) {
       case 0:
-        topListMessage +=`🥇 <@${entry.discordId}> (${entry.amount} 🏆)\n`
+        topListMessage +=`🥇 **${entry.soulName}**: ${entry.amount} 🏆 (${entry.soulId})\n`
         break;
       case 1:
-        topListMessage += `🥈 <@${entry.discordId}> (${entry.amount} 🏆)\n`
+        topListMessage += `🥈 **${entry.soulName}**: ${entry.amount} 🏆 (${entry.soulId})\n`
         break;
       case 2:
-        topListMessage += `🥉 <@${entry.discordId}> (${entry.amount} 🏆)\n`
+        topListMessage += `🥉 **${entry.soulName}**: ${entry.amount} 🏆 (${entry.soulId})\n`
         break;
       default:
-        topListMessage += `${index+1}: <@${entry.discordId}> (${entry.amount} 🏆)\n`
+        topListMessage += `${index+1}: **${entry.soulName}**: ${entry.amount} 🏆 (${entry.soulId})\n`
         break;
     }
   })
-  return topListMessage
-}
-
-function listRest(lastSevenEntries) {
-  let topListMessage = '';
-  lastSevenEntries.forEach((leaderboardEntry, index) => topListMessage += `${index+4}: <@${leaderboardEntry[index].discordId}> (${leaderboardEntry[index].amount} 🏆)\n`)
   return topListMessage
 }
