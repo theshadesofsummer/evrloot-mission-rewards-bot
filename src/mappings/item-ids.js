@@ -433,8 +433,6 @@ const itemIds = {
 
 const nftMapping = fillNftMapping()
 
-console.log(nftMapping)
-
 module.exports = {
   nftMapping
 }
