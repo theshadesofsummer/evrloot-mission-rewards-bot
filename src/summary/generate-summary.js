@@ -61,6 +61,6 @@ function raritySorter(entryA, entryB) {
 }
 
 function hasSelectedRarity(entry) {
-    const entryRarity = entry.rarity
+    const entryRarity = entry[1].rarity
     return ['Common', 'Rare', 'Epic', 'Legendary'].includes(entryRarity)
 }
