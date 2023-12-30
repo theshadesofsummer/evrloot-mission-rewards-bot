@@ -95,6 +95,7 @@ function summarizeTeam(team, fighterName) {
 }
 
 function summarizeAction(action, idxOfBattleActions, fightInfos) {
+  console.log('>>> action', action)
   const attackerId = action.attacker.id;
   const defenderId = action.defender.id;
 
