@@ -137,8 +137,8 @@ function formatAttack(attack, attackerId, defenderId) {
 }
 
 function healthChange(attack) {
-  return `Attacker ${attack.attacker.id}: ${formatHealth(attack.attacker.hp.starting)} ➡ ${formatHealth(attack.attacker.hp.ending)}\n`
-    + `Defender ${attack.defender.id}: ${formatHealth(attack.defender.hp.starting)} ➡ ${formatHealth(attack.defender.hp.ending)}\n`
+  return `Attacker ${attack.attackers[0].id}: ${formatHealth(attack.attackers[0].hp.starting)} ➡ ${formatHealth(attack.attackers[0].hp.ending)}\n`
+    + `Defender ${attack.defenders[0].id}: ${formatHealth(attack.defenders[0].hp.starting)} ➡ ${formatHealth(attack.defenders[0].hp.ending)}\n`
 }
 
 function formatComment(comment, fightInfos) {

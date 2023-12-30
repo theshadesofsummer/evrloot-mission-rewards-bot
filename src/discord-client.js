@@ -63,7 +63,7 @@ async function sendVerificationDm(discordName, wallet) {
   if (!userWithMatchingUsername) {
     await deleteWallet(wallet)
   } else {
-    //await verificationMessage(userWithMatchingUsername, wallet)
+    await verificationMessage(userWithMatchingUsername, wallet)
   }
 }
 
