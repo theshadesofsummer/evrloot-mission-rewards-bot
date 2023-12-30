@@ -12,7 +12,7 @@ module.exports = async function (interaction, fightId) {
 
   const fightResult = await startFight(fightInfos.soulA, fightInfos.soulB)
 
-  const fight = await addDiscordUserToFighters(fightResult, fightInfos.fighterA, fightInfos.fighterB);
+  const fight = await addDiscordUserToFighters(fightResult[0], fightInfos.fighterA, fightInfos.fighterB);
 
   console.log('new fight object', fight)
 
@@ -32,7 +32,6 @@ module.exports = async function (interaction, fightId) {
 }
 
 async function addDiscordUserToFighters(fightResult, discordIdA, discordIdB) {
-  console.log('>>> fightResult', fightResult)
   const fighterA = fightResult.teamA[0];
   const fighterB = fightResult.teamB[0];
 
