@@ -45,13 +45,14 @@ module.exports = {
     const defenderSoulId = 'EVR-SOULS-' + interaction.options.getInteger('defender-soul-id');
 
     const newFight = await createNewFight(attackerDiscordId, defenderDiscordId);
-    console.log('newFight', newFight)
-    await addFightingSoul(newFight._id, attackerSoulId, true);
-    await addFightingSoul(newFight._id, attackerSoulId, defenderSoulId);
+    const fightId = newFight.insertedId
+
+    await addFightingSoul(fightId, attackerSoulId, true);
+    await addFightingSoul(fightId, attackerSoulId, defenderSoulId);
 
     await interaction.editReply({ content: 'initialized fight; starting battle!', ephemeral: true });
 
-    await handleFight(interaction, newFight._id)
+    await handleFight(interaction, fightId)
 
     await interaction.editReply({ content: 'fight finished!', ephemeral: true });
   },
