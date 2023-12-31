@@ -11,6 +11,8 @@ module.exports = {
   postEmbed,
   postFightResult,
   postFightAnnouncement,
+  postTournamentStart,
+  postTournamentStop,
   sendVerificationDm,
   mapClientIdToName,
   getUserByClientId
@@ -37,6 +39,29 @@ async function postFightAnnouncement(fightId) {
   const channel = await getChannel(client, process.env.ARENA_CHANNEL_ID)
   return await channel.send({
     content: `<@${fight.fighterA}> has challenged <@${fight.fighterB}> to a fight!`
+  });
+}
+
+async function postTournamentStart() {
+  const channel = await getChannel(client, process.env.ARENA_CHANNEL_ID)
+  return await channel.send({
+    content: `# The tournament has been started!\n`
+          + 'Prove your worth among the ranks of your fellow souls, only the best ones may ascend into the finals.\n'
+          + 'Initiate the combat with the `/fight` commands. Use `/fight invite` to invite other players, '
+          + '`/fight accept` to accept other peoples invitation and `/fight overview` if you were away and want to check'
+          + ' incoming outgoing fight requests.\n'
+          + 'You can check the best souls with `/fight leaderboard`\n\n'
+          + 'Good Luck out there, you will need it.'
+  });
+}
+
+async function postTournamentStop() {
+  const channel = await getChannel(client, process.env.ARENA_CHANNEL_ID)
+  return await channel.send({
+    content: `# The public phase of the tournament has ended!\n`
+      + 'From now on only the top 8 fighters remain in the arena and will battle each other in outstanding fights!\n'
+      + 'It was a pleasure to watch some bitter fights play out, but all good things must come to an end.\n'
+      + 'If you were in the arena, good things might come your way soon. Don\'t fret, the final games will be coming up very soon!'
   });
 }
 
