@@ -5,6 +5,7 @@ const handleFightAccept = require('./fight/fight-accept')
 const fightOverview = require('./fight/fight-overview')
 const fightRevoke = require('./fight/fight-revoke')
 const showLeaderboard = require('./fight/show-leaderboard')
+const config = require("../config");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -55,12 +56,24 @@ module.exports = {
     }
 
     const subcommand = interaction.options.getSubcommand();
-
+    const isTournamentRunning = config.tournament.started;
     if (subcommand === 'invite') {
+      if (!isTournamentRunning) {
+        await interaction.editReply('The tournament is not running anymore, the invite was not sent out!')
+        return;
+      }
       await handleInvite(interaction, wallets)
     } else if (subcommand === 'accept') {
+      if (!isTournamentRunning) {
+        await interaction.editReply('The tournament is not running anymore, the invite was not accepted!')
+        return;
+      }
       await handleFightAccept(interaction)
     } else if (subcommand === 'overview') {
+      if (!isTournamentRunning) {
+        await interaction.editReply('The tournament is not running anymore!')
+        return;
+      }
       await fightOverview(interaction)
     } else if (subcommand === 'revoke') {
       await fightRevoke(interaction)

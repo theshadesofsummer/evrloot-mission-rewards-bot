@@ -2,9 +2,6 @@ const {SlashCommandBuilder} = require("discord.js");
 const {createNewFight, addFightingSoul, getFightByFightId} = require("../evrloot-db");
 const handleFight = require('./fight/handle-fight')
 const config = require("../config");
-const handleInvite = require("./fight/handle-invite");
-const handleFightAccept = require("./fight/fight-accept");
-const fightOverview = require("./fight/fight-overview");
 const {postTournamentStart, postTournamentStop} = require("../discord-client");
 
 module.exports = {
