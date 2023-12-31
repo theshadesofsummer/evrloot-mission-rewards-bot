@@ -48,7 +48,7 @@ module.exports = {
     const fightId = newFight.insertedId
 
     await addFightingSoul(fightId, attackerSoulId, true);
-    await addFightingSoul(fightId, attackerSoulId, defenderSoulId);
+    await addFightingSoul(fightId, defenderSoulId, false);
 
     await interaction.editReply({ content: 'initialized fight; starting battle!', ephemeral: true });
 
