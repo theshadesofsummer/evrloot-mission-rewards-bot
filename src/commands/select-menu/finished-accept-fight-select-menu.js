@@ -22,6 +22,6 @@ module.exports = {
       content: `Thanks, the fight will happen now and the results will be published in <#${process.env.ARENA_CHANNEL_ID}>`
     })
 
-    await handleFight(interaction, fightId)
+    await handleFight(fightId)
   },
 }

@@ -1,5 +1,5 @@
 const {SlashCommandBuilder} = require("discord.js");
-const {createNewFight, addFightingSoul} = require("../evrloot-db");
+const {createNewFight, addFightingSoul, getFightByFightId} = require("../evrloot-db");
 const handleFight = require('./fight/handle-fight')
 
 module.exports = {
@@ -52,7 +52,10 @@ module.exports = {
 
     await interaction.editReply({ content: 'initialized fight; starting battle!', ephemeral: true });
 
-    await handleFight(interaction, fightId)
+    const fightObj = await getFightByFightId(fightId.toString())
+    console.log(attackerSoulId, defenderSoulId, fightObj)
+
+    await handleFight(fightId.toString())
 
     await interaction.editReply({ content: 'fight finished!', ephemeral: true });
   },

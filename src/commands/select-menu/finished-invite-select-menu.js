@@ -1,5 +1,4 @@
 const {addFightingSoul, getOutstandingInvitationWithSoul, getSoulCooldown} = require("../../evrloot-db");
-const handleFight = require('../fight/handle-fight')
 const {isSoulAvailable} = require("../../helpers/fighting-soul-helpers");
 const {postFightAnnouncement} = require("../../discord-client");
 

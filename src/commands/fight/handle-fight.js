@@ -7,7 +7,7 @@ const createFighterEmbed = require('../../embeds/fighter-embed')
 
 const ONE_HOUR = 3600;
 
-module.exports = async function (interaction, fightId) {
+module.exports = async function (fightId) {
   const fightInfos = await getFightByFightId(fightId);
 
   const fightResult = await startFight(fightInfos.soulA, fightInfos.soulB);
