@@ -52,7 +52,6 @@ function getStatFormat(stat, goodValue) {
 }
 
 function formatWeapon(weapon) {
-  console.log('weapon', weapon)
   if (!weapon) return '-';
 
   let weaponDisplay = `*${weapon.name}* (${weapon.properties['Rarity'].value})\n`
