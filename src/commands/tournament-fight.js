@@ -32,8 +32,10 @@ module.exports = {
     })
 
     if (!isUserAllowed(interaction.user.id)) {
-      await interaction.reply({ content: 'You are not allowed to use this command!', ephemeral: true });
+      await interaction.editReply({ content: 'You are not allowed to use this command!', ephemeral: true });
       return;
+    } else {
+      await interaction.editReply({ content: 'Authorized, preparing fight object!', ephemeral: true });
     }
 
     const attackerDiscordId = interaction.options.getUser('attacker').id;
@@ -43,10 +45,15 @@ module.exports = {
     const defenderSoulId = 'EVR-SOULS-' + interaction.options.getInteger('defender-soul-id');
 
     const newFight = await createNewFight(attackerDiscordId, defenderDiscordId);
+    console.log('newFight', newFight)
     await addFightingSoul(newFight._id, attackerSoulId, true);
     await addFightingSoul(newFight._id, attackerSoulId, defenderSoulId);
 
+    await interaction.editReply({ content: 'initialized fight; starting battle!', ephemeral: true });
+
     await handleFight(interaction, newFight._id)
+
+    await interaction.editReply({ content: 'fight finished!', ephemeral: true });
   },
 };
 
