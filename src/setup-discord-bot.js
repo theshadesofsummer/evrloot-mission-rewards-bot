@@ -10,6 +10,7 @@ const finishedInviteSelectMenu = require("./commands/select-menu/finished-invite
 const finishedAcceptFightSelectMenu = require("./commands/select-menu/finished-accept-fight-select-menu");
 const selectedOpponentSelectMenu = require("./commands/select-menu/after-select-opponent")
 const updateUsernameCommand = require('./commands/update-username')
+const tournamentCommand = require('./commands/tournament-fight')
 
 module.exports = {
   setupDiscordBot,
@@ -19,7 +20,8 @@ const commands = [
   connectedWalletsCommand,
   walletSettingsCommand,
   soulInfoCommand,
-  fightCommand, // deactivated for mission launch
+  fightCommand,
+  tournamentCommand,
   updateUsernameCommand
 ]
 
