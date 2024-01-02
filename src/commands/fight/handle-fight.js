@@ -75,24 +75,20 @@ function getWinnerPointsFor(soul) {
 
   let epicCounter = 0;
 
-  const mainHand = soul.mainHandWeapon;
-  if (mainHand) {
-    const rarity = mainHand.properties["Rarity"].value;
-    if (rarity === 'Legendary') winningPoints -= 0.2;
-    if (rarity === 'Epic') epicCounter += 1
-  }
+  const soulChildren = soul.nft.children;
 
-  const offHand = soul.offHandWeapon;
-  if (offHand) {
-    const rarity = offHand.properties["Rarity"].value;
-    if (rarity === 'Legendary') winningPoints -= 0.2;
-    if (rarity === 'Epic') epicCounter += 1
+  for (const child of soulChildren) {
+    const childRarity = child.retrievedMetadata.properties["Rarity"].value
+    if (childRarity === 'Legendary') winningPoints -= 0.2;
+    if (childRarity === 'Epic') epicCounter += 1
   }
 
   let epicReduction = epicCounter / 2;
   if (epicReduction >= 1) {
     winningPoints = winningPoints - (epicReduction * 0.2)
   }
+
+  if (winningPoints < 0) winningPoints = 0;
 
   return winningPoints;
 }

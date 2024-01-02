@@ -54,13 +54,15 @@ function getFightResult(fight, winPoints) {
     result += `*Winner*: <@${fight.teamA.discordId}>'s soul ${fight.teamA.metadata.name} got **${winPoints} Points** on the Leaderboard!\n`
     result += '*Combat Rounds*: ' + fight.combatRounds.length + '\n\n'
     result += `<@${fight.teamA.discordId}>'s soul got a cooldown for 6h\n`
-    result += `<@${fight.teamB.discordId}>'s soul got a cooldown for 10h`
+    result += `<@${fight.teamB.discordId}>'s soul got a cooldown for 10h\n\n`
   } else {
     result += `*Winner*: <@${fight.teamB.discordId}>'s soul ${fight.teamB.metadata.name} got **${winPoints} Points** on the Leaderboard!\n`
     result += '*Combat Rounds*: ' + fight.combatRounds.length + '\n\n'
     result += `<@${fight.teamB.discordId}>'s soul got a cooldown for 6h\n`
-    result += `<@${fight.teamA.discordId}>'s soul got a cooldown for 10h`
+    result += `<@${fight.teamA.discordId}>'s soul got a cooldown for 10h\n\n`
   }
+
+  result += `*Note: Win equals 2 Points. 0.2 Points will be deducted for each legendary item, another 0.2 Points for every 2 epic items.*`
 
   return result
 }
