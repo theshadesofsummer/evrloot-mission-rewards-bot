@@ -1,7 +1,6 @@
 
 
 module.exports = function createPersonalStandingsEmbed(ownSoulsWithIndex) {
-  console.log(ownSoulsWithIndex)
   return {
     color: 0xae1917,
     title: `⚔️ Personal souls on the leaderboard (must have won at least one game) ⚔️`,
