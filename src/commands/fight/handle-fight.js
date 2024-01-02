@@ -94,8 +94,7 @@ function getWinnerPointsFor(soul) {
 }
 async function saveWinnerToLeaderboard(fight, winPoints) {
   const winner = fight.winner;
-  console.log(fight.teamA)
-  console.log(fight.teamB)
+
   if (winner === 'Team A') {
     await updateWinnerOnLeaderboard(fight.teamA.id, fight.teamA.metadata.name, winPoints)
   } else if (winner === 'Team B') {

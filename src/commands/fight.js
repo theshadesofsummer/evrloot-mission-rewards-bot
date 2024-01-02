@@ -5,6 +5,7 @@ const handleFightAccept = require('./fight/fight-accept')
 const fightOverview = require('./fight/fight-overview')
 const fightRevoke = require('./fight/fight-revoke')
 const showLeaderboard = require('./fight/show-leaderboard')
+const showPersonalStandings = require('./fight/show-personal-standings')
 const config = require("../config");
 
 module.exports = {
@@ -40,6 +41,10 @@ module.exports = {
     .addSubcommand(subcommand =>
       subcommand.setName('leaderboard')
         .setDescription('Check who has the highest rating among them all!')
+    )
+    .addSubcommand(subcommand =>
+      subcommand.setName('personal-standings')
+        .setDescription('See how your souls perform in the tournament!')
     ),
   async execute(interaction) {
     await interaction.deferReply({
@@ -79,6 +84,8 @@ module.exports = {
       await fightRevoke(interaction)
     } else if (subcommand === 'leaderboard') {
       await showLeaderboard(interaction)
+    } else if (subcommand === 'personal-standings') {
+      await showPersonalStandings(interaction, wallets)
     }
   },
 };

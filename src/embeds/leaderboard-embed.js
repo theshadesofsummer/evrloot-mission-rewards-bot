@@ -3,7 +3,7 @@
 module.exports = function createLeaderboardEmbed(topTenEntries) {
   return {
     color: 0xae1917,
-    title: `⚔️ Leaderboard on total fight wins ⚔️`,
+    title: `⚔️ Leaderboard on total winning points ⚔️`,
     fields: [
       {
         name: 'The best warriors in Telcarna:',
