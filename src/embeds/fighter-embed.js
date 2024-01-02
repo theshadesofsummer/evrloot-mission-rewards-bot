@@ -111,10 +111,10 @@ function findSlot(childNfts, slotName) {
 }
 
 function writeArmorStats(childNft) {
-  return `*${childNft.retrievedMetadata.properties["Slot"].value}*: (${childNft.retrievedMetadata.properties["Rarity"].value}) ${childNft.retrievedMetadata.name} +${childNft.retrievedMetadata.properties["Armor"].value}🛡️`
+  return `*${childNft.retrievedMetadata.properties["Slot"].value}*: (${childNft.retrievedMetadata.properties["Rarity"].value}) ${childNft.retrievedMetadata.name} +${childNft.retrievedMetadata.properties["Armor"].value}🛡️\n`
 }
 
 function writeNormalChildNft(neckNft) {
-  return `*${neckNft.retrievedMetadata.properties["Slot"].value}*: (${neckNft.retrievedMetadata.properties["Rarity"].value}) ${neckNft.retrievedMetadata.name}`
+  return `*${neckNft.retrievedMetadata.properties["Slot"].value}*: (${neckNft.retrievedMetadata.properties["Rarity"].value}) ${neckNft.retrievedMetadata.name}\n`
 }
 
