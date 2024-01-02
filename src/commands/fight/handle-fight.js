@@ -189,11 +189,10 @@ function formatAttack(attack, attackerId, defenderId) {
       default:
         attackSummary = `[MISSING attack.hand: ${attack.hand}] `
     }
+
+    attackSummary += attack.miss ? 'but misses.' : 'successfully.';
+    attackSummary += '\n'
   }
-
-
-  attackSummary += attack.miss ? 'but misses.' : 'successfully.';
-  attackSummary += '\n'
 
   if (attack["stats"].lifestealHeal && attack["stats"].lifestealPercent) {
     attackSummary += `${attackerId} heals ${attack["stats"].lifestealHeal}❤️ with ${attack["stats"].lifestealPercent}% Lifesteal\n`
