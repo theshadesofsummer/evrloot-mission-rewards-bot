@@ -155,26 +155,49 @@ function summarizeAction(action, idxOfBattleActions) {
 }
 
 function formatAttack(attack, attackerId, defenderId) {
-  let attackSummary = '⚔️ ';
-  switch (attack.hand) {
-    case 'Main':
-      attackSummary += `${attackerId} tries to attack ${defenderId} with main hand for ${attack.damage} damage `
-      break;
-    case 'Off':
-      attackSummary += `${attackerId} tries to attack ${defenderId} with off hand for ${attack.damage} damage `
-      break;
-    case 'Both':
-      attackSummary += `${attackerId} tries to attack ${defenderId} with both hands for ${attack.damage} damage `
-      break;
-    case 'None':
-      attackSummary += `${attackerId} tries to attack ${defenderId} with no hand for ${attack.damage} damage `
-      break;
-    default:
-      attackSummary = `[MISSING attack.hand: ${attack.hand}] `
+  let attackSummary = '';
+
+  if (attack.special) {
+    switch (attack.special) {
+      case 'Ranger_Guarenteed_Critical':
+        attackSummary += `✨ The ranger ${attackerId} has a guaranteed critical Hit!\n`
+        break;
+      case 'Alchemist_Bomb':
+        attackSummary += `✨ The alchemist ${attackerId} uses his bomb which deals ${attack.damage} AOE damage!\n`
+        break;
+      case 'Alchemist_Counter_Attack':
+        attackSummary += `✨ The alchemist ${attackerId} counter attacks with ${attack["stats"].counterAttackDamage} damage!\n`
+        break;
+    }
   }
+
+  if (!attack.aoe && !(attack.special === `Alchemist_Counter_Attack`)) {
+    attackSummary += '⚔️ ';
+    switch (attack.hand) {
+      case 'Main':
+        attackSummary += `${attackerId} tries to attack ${defenderId} with main hand for ${attack.damage} damage `
+        break;
+      case 'Off':
+        attackSummary += `${attackerId} tries to attack ${defenderId} with off hand for ${attack.damage} damage `
+        break;
+      case 'Both':
+        attackSummary += `${attackerId} tries to attack ${defenderId} with both hands for ${attack.damage} damage `
+        break;
+      case 'None':
+        attackSummary += `${attackerId} tries to attack ${defenderId} with no hand for ${attack.damage} damage `
+        break;
+      default:
+        attackSummary = `[MISSING attack.hand: ${attack.hand}] `
+    }
+  }
+
 
   attackSummary += attack.miss ? 'but misses.' : 'successfully.';
   attackSummary += '\n'
+
+  if (attack["stats"].lifestealHeal && attack["stats"].lifestealPercent) {
+    attackSummary += `${attackerId} heals ${attack["stats"].lifestealHeal}❤️ with ${attack["stats"].lifestealPercent}% Lifesteal\n`
+  }
 
   return attackSummary;
 }
