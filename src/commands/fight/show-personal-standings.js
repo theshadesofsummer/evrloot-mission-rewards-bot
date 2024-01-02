@@ -1,6 +1,6 @@
 const {getLeaderboardEntries} = require("../../evrloot-db");
 const {getOnlySouls} = require("../../evrloot-api");
-const createPersonalStandingsEmbed = require("../../embeds/leaderboard-embed");
+const createPersonalStandingsEmbed = require("../../embeds/personal-standings-embed");
 
 module.exports = async function (interaction, wallets) {
   const allAccountsWithSouls = wallets.map(getOnlySouls)
