@@ -70,14 +70,16 @@ function calculateWinnerPoints(fight) {
   }
 }
 
+const importantSlots = ["Head", "Body", "Feet", "Main Hand", "Off Hand"]
 function getWinnerPointsFor(soul) {
   let winningPoints = 2.0; //leg = -0.2; 2*epic = -0.2
 
   let epicCounter = 0;
 
-  const soulChildren = soul.nft.children;
+  const importantSoulChildren = soul.nft.children
+    .filter(childNft => importantSlots.includes(childNft.retrievedMetadata.properties["Slot"].value));
 
-  for (const child of soulChildren) {
+  for (const child of importantSoulChildren) {
     const childRarity = child.retrievedMetadata.properties["Rarity"].value
     if (childRarity === 'Legendary') winningPoints -= 0.2;
     if (childRarity === 'Epic') epicCounter += 1
@@ -87,8 +89,6 @@ function getWinnerPointsFor(soul) {
   if (epicReduction >= 1) {
     winningPoints = winningPoints - (epicReduction * 0.2)
   }
-
-  if (winningPoints < 0) winningPoints = 0;
 
   return winningPoints;
 }
