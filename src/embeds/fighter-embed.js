@@ -9,7 +9,7 @@ module.exports = async function createFighterEmbed(soul) {
       iconURL: user.avatarURL(),
       name: user.globalName
     },
-    title: `# ${findClassEmote(soul.metadata.properties["Soul Class"].value)} **${soul.metadata.name}**`,
+    title: `${findClassEmote(soul.metadata.properties["Soul Class"].value)} **${soul.metadata.name}**`,
     thumbnail: {
       url: soul.metadata.image
     },
