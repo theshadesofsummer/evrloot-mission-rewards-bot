@@ -55,6 +55,7 @@ async function setupDiscordBot() {
 
     if (interaction.isStringSelectMenu()) {
       try {
+        console.log('>>> string select menu', interaction.customId, interaction.values[0], interaction.user.id)
         if (interaction.customId === 'choose-soul-menu')
           await soulInfoSelectMenu.execute(interaction)
         else if (interaction.customId === 'choose-fishing-board-menu') {
