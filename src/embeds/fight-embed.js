@@ -1,3 +1,4 @@
+const {findClassEmote} = require("../helpers/emotes");
 
 module.exports = function createFightEmbed(fight, winPoints) {
   return {
@@ -42,7 +43,8 @@ function getFinalState(finalTeamMembers) {
     .join('\n')
 }
 function stateOfSoul(soulState, index) {
-  return `[${index+1}] ${Math.round(Math.max(soulState.hp, 0) * 10) / 10}❤️ ` +
+  return `${findClassEmote(soulState.metadata.properties["Soul Class"].value)}**${soul.metadata.name}**\n` +
+    `${Math.round(Math.max(soulState.hp, 0) * 10) / 10}❤️ ` +
     `${Math.round(Math.max(soulState.armor, 0) * 10) / 10}🛡️ ` +
     `${Math.round(Math.max(soulState.initiative, 0) * 10) / 10}⚡ `
 }

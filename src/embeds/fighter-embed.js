@@ -1,4 +1,5 @@
 const {getUserByClientId} = require("../discord-client");
+const {findClassEmote} = require("../helpers/emotes");
 module.exports = async function createFighterEmbed(soul) {
   const user = await getUserByClientId(soul.discordId)
 
@@ -8,7 +9,7 @@ module.exports = async function createFighterEmbed(soul) {
       iconURL: user.avatarURL(),
       name: user.globalName
     },
-    title: `**${soul.metadata.name}**`,
+    title: `${findClassEmote(soul.metadata.properties["Soul Class"].value)}**${soul.metadata.name}**`,
     thumbnail: {
       url: soul.metadata.image
     },
