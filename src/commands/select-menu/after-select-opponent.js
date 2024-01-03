@@ -7,6 +7,9 @@ const {mapStatusToSoul, soulSorterByStatus} = require("../../helpers/fighting-so
 
 module.exports = {
   async execute(interaction) {
+    interaction.deferReply({
+      ephemeral: true
+    })
     const fighterA = interaction.values[0];
     const fighterB = interaction.user.id;
 
