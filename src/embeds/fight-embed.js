@@ -50,14 +50,16 @@ function stateOfSoul(soulState, index) {
 function getFightResult(fight, winPoints) {
   let result = '';
 
+  const roundedWinPoints = Math.round(winPoints * 100) / 100
+
   const winnerTeam = fight.winner;
   if (winnerTeam === 'Team A') {
-    result += `*Winner*: <@${fight.teamA.discordId}>'s soul ${fight.teamA.metadata.name} got **${winPoints} Points** on the Leaderboard!\n`
+    result += `*Winner*: <@${fight.teamA.discordId}>'s soul ${fight.teamA.metadata.name} got **${roundedWinPoints} Points** on the Leaderboard!\n`
     result += '*Combat Rounds*: ' + fight.combatRounds.length + '\n\n'
     result += `<@${fight.teamA.discordId}>'s soul got a cooldown for 6h\n`
     result += `<@${fight.teamB.discordId}>'s soul got a cooldown for 10h\n\n`
   } else {
-    result += `*Winner*: <@${fight.teamB.discordId}>'s soul ${fight.teamB.metadata.name} got **${winPoints} Points** on the Leaderboard!\n`
+    result += `*Winner*: <@${fight.teamB.discordId}>'s soul ${fight.teamB.metadata.name} got **${roundedWinPoints} Points** on the Leaderboard!\n`
     result += '*Combat Rounds*: ' + fight.combatRounds.length + '\n\n'
     result += `<@${fight.teamB.discordId}>'s soul got a cooldown for 6h\n`
     result += `<@${fight.teamA.discordId}>'s soul got a cooldown for 10h\n\n`
