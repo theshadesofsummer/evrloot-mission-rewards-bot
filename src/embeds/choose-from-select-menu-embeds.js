@@ -1,7 +1,7 @@
 const {findClassEmote} = require("../helpers/emotes.js");
 const {findValueForAttribute} = require("../helpers/attribute-finder");
 
-const PAGE_SIZE = 5;
+const PAGE_SIZE = 10;
 
 module.exports = {
     createChooseSoulEmbeds,
@@ -81,7 +81,6 @@ function makeDescriptionForSoulFights(soulList, page) {
       .slice(firstElementIndex, firstElementIndex + PAGE_SIZE)
 
     slicedList.forEach((soul, idx) => {
-      console.log(soul.retrievedMetadata, soul.metadata)
         const soulClass = findValueForAttribute(soul.retrievedMetadata.attributes, 'Soul Class')
         const status = soul.status;
         if (status === 'readyForFight')
