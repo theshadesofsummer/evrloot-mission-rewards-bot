@@ -112,7 +112,7 @@ function findSlot(childNfts, slotName) {
 }
 
 function writeArmorStats(childNft) {
-  let text = writeNormalChildNft(childNft)`*${childNft.retrievedMetadata.properties["Slot"].value}*: (${childNft.retrievedMetadata.properties["Rarity"].value}) ${childNft.retrievedMetadata.name} +${childNft.retrievedMetadata.properties["Armor"].value}🛡️\n`
+  let text = writeNormalChildNft(childNft)
   if (childNft.retrievedMetadata.properties["Armor"]) text += ` +${childNft.retrievedMetadata.properties["Armor"].value}🛡️\n`
   return text;
 }
