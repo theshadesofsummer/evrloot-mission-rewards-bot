@@ -12,12 +12,12 @@ module.exports = function createOpenFightsEmbed(receivedInvitations, sendInvitat
         inline: true
       },
       {
-        name: 'Send Invitations (without a soul):',
+        name: 'Sent Invitations (without a soul):',
         value: listSendInvitationsWithoutSoul(sendInvitationsWithoutSoul, highestLength),
         inline: true
       },
       {
-        name: 'Send Invitations (with a soul):',
+        name: 'Sent Invitations (with a soul):',
         value: listSendInvitationsWithSoul(sendInvitationsWithSoul, highestLength),
         inline: true
       }
