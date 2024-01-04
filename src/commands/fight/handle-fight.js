@@ -171,6 +171,8 @@ function formatAttack(attack, attackerId, defenderId) {
   }
 
   if (!attack.aoe && !(attack.special === `Alchemist_Counter_Attack`)) {
+    if (attack.critical) attackSummary += `💥 ${attackerId} lands a critical hit, the damage will be multiplied by ${attack["stats"].criticalMultiplier}\n`
+
     attackSummary += '⚔️ ';
     switch (attack.hand) {
       case 'Main':
@@ -191,6 +193,8 @@ function formatAttack(attack, attackerId, defenderId) {
 
     attackSummary += attack.miss ? 'but misses.' : 'successfully.';
     attackSummary += '\n'
+
+    if (attack.dodge) attackSummary += `<:ability_dodge:1192521482530734201> ${defenderId} dodges the attack\n`
   }
 
   if (attack["stats"].lifestealHeal && attack["stats"].lifestealPercent) {
