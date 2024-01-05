@@ -90,7 +90,7 @@ function getWinnerPointsFor(soul) {
 
   let epicReduction = epicCounter / 2;
   if (epicReduction >= 1) {
-    winningPoints = winningPoints - (epicReduction * 0.2)
+    winningPoints = winningPoints - (Math.floor(epicReduction) * 0.2)
   }
 
   return winningPoints;
