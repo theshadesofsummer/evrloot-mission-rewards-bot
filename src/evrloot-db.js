@@ -16,6 +16,7 @@ module.exports = {
   getOpenInvitationsToYou,
   getOpenInvitationsFromYou,
   deleteFight,
+  countPlayerCombination,
   addSoulCooldown,
   getSoulCooldown,
   getLeaderboardEntries,
@@ -372,6 +373,28 @@ async function updateWinnerOnLeaderboard(soulId, soulName, winPoints){
     await client.close();
   }
 }
+
+async function countPlayerCombination(playerA, playerB){
+  const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+  try {
+    const collection = client.db("evrloot").collection("fightplayercombinations");
+
+    const winnerDoc = await collection.findOne({playerA, playerB});
+
+    if (!winnerDoc) {
+      console.log('[DB] creating new combination entry for', playerA, 'and', playerB)
+      await collection.insertOne({playerA, playerB, amount: 1});
+    } else {
+      console.log('[DB] updating combination entry for', playerA, 'and', playerB, 'to amount', winnerDoc.amount + 1)
+      await collection.updateOne({_id: winnerDoc._id}, { $set: {amount: winnerDoc.amount + 1}})
+    }
+  } catch (error) {
+    console.error('[DB] Error adding the combination for', playerA, 'and', playerB, error);
+  } finally {
+    await client.close();
+  }
+}
+
 
 async function addFightParticipants(discordId){
   const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });

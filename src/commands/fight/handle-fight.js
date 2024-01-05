@@ -1,4 +1,6 @@
-const {getFightByFightId, deleteFight, addSoulCooldown, updateWinnerOnLeaderboard, addFightParticipants} = require("../../evrloot-db");
+const {getFightByFightId, deleteFight, addSoulCooldown, updateWinnerOnLeaderboard, addFightParticipants,
+  countPlayerCombination
+} = require("../../evrloot-db");
 const {startFight} = require("../../evrloot-api");
 const createFightEmbed = require('../../embeds/fight-embed')
 const {postFightResult, mapClientIdToName} = require("../../discord-client");
@@ -18,6 +20,7 @@ module.exports = async function (fightId) {
   const winnerPoints = calculateWinnerPoints(fight);
   await saveSoulCooldowns(fight);
   await saveWinnerToLeaderboard(fight, winnerPoints);
+  await countPlayerCombination(fightInfos.fighterA, fightInfos.fighterB)
 
   await addFightParticipants(fight.teamA.discordId);
   await addFightParticipants(fight.teamB.discordId);
