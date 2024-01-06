@@ -58,7 +58,7 @@ function listNames(topTenEntries) {
 
   let topListMessage = '';
   topTenEntries.forEach((entry, index) => {
-    topListMessage += `**${entry.soulName}**  (${entry.soulId})`
+    topListMessage += `**${entry.soulName}**  (${entry.soulId})\n`
   })
   return topListMessage
 }
