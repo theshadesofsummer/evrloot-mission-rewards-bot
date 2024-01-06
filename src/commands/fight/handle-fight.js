@@ -12,6 +12,8 @@ const ONE_HOUR = 3600;
 module.exports = async function (fightId) {
   const fightInfos = await getFightByFightId(fightId);
 
+  console.log('>>> fightInfos:', fightInfos)
+
   const fightResult = await startFight(fightInfos.soulA, fightInfos.soulB);
 
   await deleteFight(fightId);
