@@ -6,22 +6,58 @@ module.exports = function createPersonalStandingsEmbed(ownSoulsWithIndex) {
     title: `⚔️ Personal souls on the leaderboard (must have won at least one game) ⚔️`,
     fields: [
       {
-        name: 'Your warriors:',
-        value: listEntries(ownSoulsWithIndex)
-      }
+        name: 'Place:',
+        value: listIndices(ownSoulsWithIndex),
+        inline: true
+      },
+      {
+        name: 'Warriors:',
+        value: listNames(ownSoulsWithIndex),
+        inline: true
+      },
+      {
+        name: 'Points',
+        value: listPoints(ownSoulsWithIndex),
+        inline: true
+      },
     ],
     timestamp: new Date().toISOString(),
   };
 }
 
-function listEntries(ownSoulsWithIndex) {
+function listIndices(ownSoulsWithIndex) {
   if (ownSoulsWithIndex.length === 0) {
-    return 'None of your souls have won yet, you may need to set your foot in the arena with your mightiest warrior!'
+    return '-'
   }
 
   let result = '';
   ownSoulsWithIndex.forEach(soulWithIndex => {
-    result += `${soulWithIndex.index + 1}: **${soulWithIndex.entry.soulName}**: ${soulWithIndex.entry.amount} 🏆 (${soulWithIndex.entry.soulId})\n`
+    result += `${soulWithIndex.index + 1}:\n`
   })
+  return result
+}
+
+function listNames(ownSoulsWithIndex) {
+  if (ownSoulsWithIndex.length === 0) {
+    return '-'
+  }
+
+  let result = '';
+  ownSoulsWithIndex.forEach(soulWithIndex => {
+    result += `**${soulWithIndex.entry.soulName}** (${soulWithIndex.entry.soulId})\n`
+  })
+  return result
+}
+
+function listPoints(ownSoulsWithIndex) {
+  if (ownSoulsWithIndex.length === 0) {
+    return '-'
+  }
+
+  let result = '';
+  ownSoulsWithIndex.forEach(soulWithIndex => {
+    result += `${soulWithIndex.entry.amount} 🏆\n`
+  })
+
   return result
 }
