@@ -9,25 +9,27 @@ module.exports = function createLeaderboardEmbed(topTenEntries, isForMobile) {
     fields: isForMobile
       ? [
         {
+          name: 'The best warriors in Telcarna:',
+          value: listTopEntries(topTenEntries)
+        }
+      ]
+      : [
+        {
           name: 'Place:',
           value: listIndices(topTenEntries),
           inline: true
         },
-        {
-          name: 'Warriors:',
-          value: listNames(topTenEntries),
-          inline: true
-        },
-        {
-          name: 'Points',
-          value: listPoints(topTenEntries),
-          inline: true
-        }
-      ]
-      : {
-        name: 'The best warriors in Telcarna:',
-        value: listTopEntries(topTenEntries)
-      },
+          {
+            name: 'Warriors:',
+            value: listNames(topTenEntries),
+            inline: true
+          },
+          {
+            name: 'Points',
+            value: listPoints(topTenEntries),
+            inline: true
+          }
+        ],
     timestamp: new Date().toISOString(),
   };
 }
