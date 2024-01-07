@@ -6,6 +6,7 @@ const fightOverview = require('./fight/fight-overview')
 const fightRevoke = require('./fight/fight-revoke')
 const showLeaderboard = require('./fight/show-leaderboard')
 const showPersonalStandings = require('./fight/show-personal-standings')
+//const handleFightAnyone = require('./fight/fight-anyone')
 const config = require("../config");
 
 module.exports = {
@@ -45,6 +46,13 @@ module.exports = {
     .addSubcommand(subcommand =>
       subcommand.setName('personal-standings')
         .setDescription('See how your souls perform in the tournament!')
+        .addBooleanOption(option =>
+          option.setName('mobile')
+            .setDescription('Mobile Compact version of leaderboard'))
+    // )
+    // .addSubcommand(subcommand =>
+    //   subcommand.setName('anyone')
+    //     .setDescription('Fight against anyone available!')
     ),
   async execute(interaction) {
     await interaction.deferReply({
@@ -86,6 +94,8 @@ module.exports = {
       await showLeaderboard(interaction)
     } else if (subcommand === 'personal-standings') {
       await showPersonalStandings(interaction, wallets)
+    // } else if (subcommand === 'anyone') {
+    //   await handleFightAnyone(interaction, wallets)
     }
   },
 };
