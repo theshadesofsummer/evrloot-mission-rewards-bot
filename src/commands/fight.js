@@ -42,15 +42,14 @@ module.exports = {
     .addSubcommand(subcommand =>
       subcommand.setName('leaderboard')
         .setDescription('Check who has the highest rating among them all!')
+        .addBooleanOption(option =>
+          option.setName('mobile')
+            .setDescription('Mobile Compact version of leaderboard')
+        )
     )
     .addSubcommand(subcommand =>
       subcommand.setName('personal-standings')
         .setDescription('See how your souls perform in the tournament!')
-        .addBooleanOption(option =>
-          option.setName('mobile')
-            .setDescription('Mobile Compact version of leaderboard')
-            .setRequired(true)
-        )
     // )
     // .addSubcommand(subcommand =>
     //   subcommand.setName('anyone')
