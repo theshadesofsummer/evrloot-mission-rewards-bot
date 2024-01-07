@@ -48,7 +48,9 @@ module.exports = {
         .setDescription('See how your souls perform in the tournament!')
         .addBooleanOption(option =>
           option.setName('mobile')
-            .setDescription('Mobile Compact version of leaderboard'))
+            .setDescription('Mobile Compact version of leaderboard')
+            .setRequired(true)
+        )
     // )
     // .addSubcommand(subcommand =>
     //   subcommand.setName('anyone')
