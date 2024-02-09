@@ -1,7 +1,6 @@
 
 
 module.exports = function createLeaderboardEmbed(topTenEntries, isForMobile) {
-  console.log('isForMobile', isForMobile)
   return {
     color: 0xae1917,
     title: `⚔️ Leaderboard on total winning points ⚔️`,

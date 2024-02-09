@@ -11,6 +11,7 @@ const finishedAcceptFightSelectMenu = require("./commands/select-menu/finished-a
 const selectedOpponentSelectMenu = require("./commands/select-menu/after-select-opponent")
 const updateUsernameCommand = require('./commands/update-username')
 const tournamentCommand = require('./commands/tournament-fight')
+const claimableSoulsCommand = require('./commands/claimable-souls')
 
 module.exports = {
   setupDiscordBot,
@@ -22,7 +23,8 @@ const commands = [
   soulInfoCommand,
   fightCommand,
   tournamentCommand,
-  updateUsernameCommand
+  updateUsernameCommand,
+  claimableSoulsCommand
 ]
 
 async function setupDiscordBot() {
