@@ -4,9 +4,7 @@ const {findValueForAttribute} = require("../helpers/attribute-finder");
 module.exports = async function createSoulMissionStatusEmbed(userId, soulList) {
   const user = await getUserByClientId(userId)
   const soulLines = formatAll(soulList)
-  console.log(soulLines)
   const fieldsBelowCharLimit = bringSoulLinesIntoChunks(soulLines)
-  console.log(fieldsBelowCharLimit)
 
   return {
     color: 0xae1917,
