@@ -3,6 +3,8 @@ const {findClassEmote} = require("../helpers/emotes");
 const {findValueForAttribute} = require("../helpers/attribute-finder");
 module.exports = async function createSoulMissionStatusEmbed(userId, soulList) {
   const user = await getUserByClientId(userId)
+  const soulLines = formatAll(soulList)
+  const fieldsBelowCharLimit = bringSoulLinesIntoChunks(soulLines)
 
   return {
     color: 0xae1917,
@@ -11,12 +13,7 @@ module.exports = async function createSoulMissionStatusEmbed(userId, soulList) {
       name: user.globalName
     },
     title: `Claimable Souls: ${getClaimableSoulsNumber(soulList)}`,
-    fields: [
-      {
-        name: 'Current Mission Status:',
-        value: formatAll(soulList)
-      }
-    ],
+    fields: formatFieldsArray(fieldsBelowCharLimit),
   };
 }
 
@@ -28,26 +25,56 @@ function getClaimableSoulsNumber(souls) {
 }
 
 function formatAll(souls) {
-  let result = '';
+  let result = [];
 
   souls.forEach(soul => {
+    let soulString = ''
     const soulClassName = findValueForAttribute(soul.retrievedMetadata.attributes, "Soul Class")
 
     const endTime = new Date(soul.lastPlayerMission.endTime)
 
 
-    result += `- ${findClassEmote(soulClassName)} **${soul.retrievedMetadata.name}**: *${soul.lastPlayerMission.mission.action}* `
+    soulString += `- ${findClassEmote(soulClassName)} **${soul.retrievedMetadata.name}**: *${soul.lastPlayerMission.mission.action}* `
     if (soul.lastPlayerMission.reachedEndTime) {
       if (soul.lastPlayerMission.claimedTime) {
         const claimedTime =  new Date(soul.lastPlayerMission.claimedTime)
-        result += `💰 (claimed <t:${claimedTime.getTime() / 1000}:R>)\n`
+        soulString += `💰 (claimed <t:${claimedTime.getTime() / 1000}:R>)\n`
       } else {
-        result += `✅ (ended <t:${endTime.getTime() / 1000}:R>)\n`
+        soulString += `✅ (ended <t:${endTime.getTime() / 1000}:R>)\n`
       }
     } else {
-      result += `⌛ claimable <t:${endTime.getTime() / 1000}:f> (<t:${endTime.getTime() / 1000}:R>)\n`
+      soulString += `⌛ claimable <t:${endTime.getTime() / 1000}:f> (<t:${endTime.getTime() / 1000}:R>)\n`
     }
+
+    result.push(soulString)
   })
 
   return result
+}
+
+function bringSoulLinesIntoChunks(soulLines) {
+  const chunks = []
+
+  let i = 0
+  let concatStringForOneChunk = ''
+
+  while (i < soulLines.length) {
+    const projectedNewLength = concatStringForOneChunk.length + soulLines[i].length
+    if (projectedNewLength > 1024) {
+      chunks.push(concatStringForOneChunk)
+      concatStringForOneChunk = ''
+    } else {
+      concatStringForOneChunk += soulLines[i]
+      i++;
+    }
+  }
+
+  return chunks
+}
+function formatFieldsArray(fieldsBelowCharLimit) {
+  return fieldsBelowCharLimit.map((chunk, idx) => ({
+    name: `Current Mission Status: (${idx+1}/${fieldsBelowCharLimit.length})`,
+    value: chunk
+  }))
+
 }
