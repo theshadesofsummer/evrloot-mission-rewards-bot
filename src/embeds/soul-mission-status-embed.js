@@ -33,17 +33,28 @@ function formatAll(souls) {
 
     const endTime = new Date(soul.lastPlayerMission.endTime)
 
+    if (soul.lastPlayerMission.reachedEndTime) {
+      if (soul.lastPlayerMission.claimedTime) {
+        const claimedTime =  new Date(soul.lastPlayerMission.claimedTime)
+        soulString += `💰 `
+      } else {
+        soulString += `✅ `
+      }
+    } else {
+      soulString += `⌛ `
+    }
+
 
     soulString += `- ${findClassEmote(soulClassName)} **${soul.retrievedMetadata.name}**: *${soul.lastPlayerMission.mission.action}* `
     if (soul.lastPlayerMission.reachedEndTime) {
       if (soul.lastPlayerMission.claimedTime) {
         const claimedTime =  new Date(soul.lastPlayerMission.claimedTime)
-        soulString += `💰 (claimed <t:${claimedTime.getTime() / 1000}:R>)\n`
+        soulString += `(claimed <t:${claimedTime.getTime() / 1000}:R>)\n`
       } else {
-        soulString += `✅ (ended <t:${endTime.getTime() / 1000}:R>)\n`
+        soulString += `(ended <t:${endTime.getTime() / 1000}:R>)\n`
       }
     } else {
-      soulString += `⌛ claimable <t:${endTime.getTime() / 1000}:f> (<t:${endTime.getTime() / 1000}:R>)\n`
+      soulString += `claimable <t:${endTime.getTime() / 1000}:f> (<t:${endTime.getTime() / 1000}:R>)\n`
     }
 
     result.push(soulString)
