@@ -4,7 +4,9 @@ const {findValueForAttribute} = require("../helpers/attribute-finder");
 module.exports = async function createSoulMissionStatusEmbed(userId, soulList) {
   const user = await getUserByClientId(userId)
   const soulLines = formatAll(soulList)
+  console.log(soulLines)
   const fieldsBelowCharLimit = bringSoulLinesIntoChunks(soulLines)
+  console.log(fieldsBelowCharLimit)
 
   return {
     color: 0xae1917,
@@ -28,14 +30,13 @@ function formatAll(souls) {
   let result = [];
 
   souls.forEach(soul => {
-    let soulString = ''
+    let soulString = '- '
     const soulClassName = findValueForAttribute(soul.retrievedMetadata.attributes, "Soul Class")
 
     const endTime = new Date(soul.lastPlayerMission.endTime)
 
     if (soul.lastPlayerMission.reachedEndTime) {
       if (soul.lastPlayerMission.claimedTime) {
-        const claimedTime =  new Date(soul.lastPlayerMission.claimedTime)
         soulString += `💰 `
       } else {
         soulString += `✅ `
@@ -45,7 +46,7 @@ function formatAll(souls) {
     }
 
 
-    soulString += `- ${findClassEmote(soulClassName)} **${soul.retrievedMetadata.name}**: *${soul.lastPlayerMission.mission.action}* `
+    soulString += `${findClassEmote(soulClassName)} **${soul.retrievedMetadata.name}**: *${soul.lastPlayerMission.mission.action}* `
     if (soul.lastPlayerMission.reachedEndTime) {
       if (soul.lastPlayerMission.claimedTime) {
         const claimedTime =  new Date(soul.lastPlayerMission.claimedTime)
@@ -79,6 +80,7 @@ function bringSoulLinesIntoChunks(soulLines) {
       i++;
     }
   }
+  chunks.push(concatStringForOneChunk)
 
   return chunks
 }
