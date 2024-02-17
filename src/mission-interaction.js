@@ -67,7 +67,7 @@ async function fetchMissionReward(eventInput) {
 
   const crabRewards = rewardsForEmbed.filter(hasCrabItems)
   for (const pinkNftReward of crabRewards) {
-    await postEmbed(createPinkMissionRewardEmbed(pinkNftReward, accountEntry));
+    await postEmbed(createPinkMissionRewardEmbed(pinkNftReward ));
   }
 
 
