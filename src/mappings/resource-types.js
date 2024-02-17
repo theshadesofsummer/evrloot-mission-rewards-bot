@@ -269,4 +269,72 @@ module.exports = { // resourceMappings.ts
     name: 'Evrloot Soul Redeemer',
     emoteId: '<:soul_redeemer:1168600791918071868>'
   },
+
+  // PINK
+  SMALL_CRAB_S: {
+    id: 600,
+    tokenUri: 'ipfs://QmNRSUAAHooszmuHKcQJiTUwD8PuFf9t95374GcPEBdfdm/small_crab_s.json',
+    name: 'Small Crab (S)',
+    emoteId: '<:small_crab:1208445317268115476>'
+  },
+  SMALL_CRAB_M: {
+    id: 601,
+    tokenUri: 'ipfs://QmNRSUAAHooszmuHKcQJiTUwD8PuFf9t95374GcPEBdfdm/small_crab_m.json',
+    name: 'Small Crab (M)',
+    emoteId: '<:small_crab:1208445317268115476>'
+  },
+  SMALL_CRAB_L: {
+    id: 602,
+    tokenUri: 'ipfs://QmNRSUAAHooszmuHKcQJiTUwD8PuFf9t95374GcPEBdfdm/small_crab_l.json',
+    name: 'Small Crab (L)',
+    emoteId: '<:small_crab:1208445317268115476>'
+  },
+  BIG_CRAB_L: {
+    id: 603,
+    tokenUri: 'ipfs://QmNRSUAAHooszmuHKcQJiTUwD8PuFf9t95374GcPEBdfdm/giant_crab_l.json',
+    name: 'Giant Pink Crab (L)',
+    emoteId: '<:giant_crab:1208445315338870804> '
+  },
+  BIG_CRAB_XL: {
+    id: 604,
+    tokenUri: 'ipfs://QmNRSUAAHooszmuHKcQJiTUwD8PuFf9t95374GcPEBdfdm/giant_crab_xl.json',
+    name: 'Giant Pink Crab (XL)',
+    emoteId: '<:giant_crab:1208445315338870804> '
+  },
+  BIG_CRAB_XXL: {
+    id: 605,
+    tokenUri: 'ipfs://QmVJ4NR1dX9KPTfDQy7Q4J9bjyKsWxxmWaNLnPiQiRAfCg',
+    name: 'Giant Pink Crab (XXL)',
+    emoteId: '<:giant_crab:1208445315338870804> '
+  },
+  CRAB_TRAP: {
+    id: 606,
+    tokenUri: 'ipfs://QmNRSUAAHooszmuHKcQJiTUwD8PuFf9t95374GcPEBdfdm/crab_trap.json',
+    name: 'Old Wooden Crab Trap',
+    emoteId: '<:crab_trap:1208445313556414555>'
+  },
+  BIG_CRAB_XXXL: {
+    id: 607,
+    tokenUri: 'ipfs://Qma3XErKDMXhDbo3AfQPbjGHMEQD4jxZShErzDVhYW5YZM/giant-crab-xxxl.json',
+    name: 'Giant Pink Crab (XXXL)',
+    emoteId: '<:giant_crab:1208445315338870804> '
+  },
+  BIG_CRAB_M: {
+    id: 608,
+    tokenUri: 'ipfs://Qma3XErKDMXhDbo3AfQPbjGHMEQD4jxZShErzDVhYW5YZM/giant-crab-m.json',
+    name: 'Giant Pink Crab (M)',
+    emoteId: '<:giant_crab:1208445315338870804> '
+  },
+  SMALL_CRAB_VS: {
+    id: 609,
+    tokenUri: 'ipfs://Qma3XErKDMXhDbo3AfQPbjGHMEQD4jxZShErzDVhYW5YZM/small-crab-vs.json',
+    name: 'Small Crab (XS)',
+    emoteId: '<:small_crab:1208445317268115476>'
+  },
+  SMALL_CRAB_XL: {
+    id: 610,
+    tokenUri: 'ipfs://Qma3XErKDMXhDbo3AfQPbjGHMEQD4jxZShErzDVhYW5YZM/small-crab-xl.json ',
+    name: 'Small Crab (XL)',
+    emoteId: '<:small_crab:1208445317268115476>'
+  },
 };
