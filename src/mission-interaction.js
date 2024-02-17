@@ -1,4 +1,5 @@
 const createMissionRewardEmbed = require('./embeds/mission-reward-embed.js')
+const createPinkMissionRewardEmbed = require('./embeds/pink-mission-reward-embed')
 const resourceRewards = require('./mappings/resource-types.js');
 const { getFromIpfs } = require('./evrloot-api.js')
 const config = require('./config.js')
@@ -61,16 +62,23 @@ async function fetchMissionReward(eventInput) {
 
   }
 
+  const from = await getAccountFromTx(eventInput.transactionHash)
+  let accountEntry = await getAccountByWallet(from.toLowerCase())
+
+  if (hasCrabItems(rewardsForEmbed)) {
+    for (const pinkNftReward of rewardsForEmbed) {
+      await postEmbed(createPinkMissionRewardEmbed(pinkNftReward, accountEntry));
+    }
+    return;
+  }
+
   const filteredNftRewards = rewardsForEmbed.filter(containsShowableRarity);
 
   if (filteredNftRewards.length <= 0) {
     return;
   }
 
-
-
-  const from = await getAccountFromTx(eventInput.transactionHash)
-  let accountEntry = await getAccountByWallet(from.toLowerCase())
+  // old location for account fetching
 
   const estraTokenId = Number.parseInt(eventInput.returnValues.tokenId);
   const soulId = await fetchSoulIdFromSquid(estraTokenId);
@@ -148,4 +156,8 @@ function containsShowableRarity(nftRewardWithMetadata) {
   const rarity = rarityMetadata.value;
 
   return config.showItems.includes(rarity)
+}
+
+function hasCrabItems(rewards) {
+  return rewards.some(reward => reward.retrievedMetadata.name.includes('Crab'))
 }
