@@ -161,5 +161,5 @@ function containsShowableRarity(nftRewardWithMetadata) {
 }
 
 function hasCrabItems(reward) {
-  return reward.retrievedMetadata.name.includes('Small Crab') || reward.retrievedMetadata.name.includes('Big Crab')
+  return reward.retrievedMetadata.name.includes('Small Crab') || reward.retrievedMetadata.name.includes('Giant Pink Crab')
 }
