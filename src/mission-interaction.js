@@ -67,7 +67,7 @@ async function fetchMissionReward(eventInput) {
 
   const crabRewards = rewardsForEmbed.filter(hasCrabItems)
   for (const pinkNftReward of crabRewards) {
-    await postEmbed(createPinkMissionRewardEmbed(pinkNftReward ));
+    await postEmbed(createPinkMissionRewardEmbed(pinkNftReward));
   }
 
 
@@ -119,7 +119,8 @@ async function getResourceRewardInfos(resourceReward) {
       amount,
       metadata: metadataUri,
       retrievedMetadata: retrievedMetadata,
-      emoteId: resourceType.emoteId
+      emoteId: resourceType.emoteId,
+      pinkExclusiveName: resourceType.name,
     };
   }
 
@@ -160,5 +161,5 @@ function containsShowableRarity(nftRewardWithMetadata) {
 }
 
 function hasCrabItems(reward) {
-  return reward.retrievedMetadata.name.includes('Crab')
+  return reward.retrievedMetadata.name.includes('Small Crab') || reward.retrievedMetadata.name.includes('Big Crab')
 }

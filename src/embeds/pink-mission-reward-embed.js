@@ -7,7 +7,7 @@ module.exports = function createPinkMissionRewardEmbed(reward) {
       name: 'New Pink Mission Reward!',
       icon_url: 'https://pbs.twimg.com/profile_images/1726609813444976640/FUtE2nBJ_400x400.jpg',
     },
-    description: `${reward.amount} ${reward.retrievedMetadata.name} were fished out of the water!`,
+    description: `${reward.amount} ${reward.pinkExclusiveName} fished out of the water!`,
     thumbnail: {
       url: getCorrectImageUrl(reward.retrievedMetadata.mediaUri)
     },
