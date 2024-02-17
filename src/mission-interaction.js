@@ -62,17 +62,19 @@ async function fetchMissionReward(eventInput) {
 
   }
 
-  const from = await getAccountFromTx(eventInput.transactionHash)
-  let accountEntry = await getAccountByWallet(from.toLowerCase())
+  // const from = await getAccountFromTx(eventInput.transactionHash)
+  // let accountEntry = await getAccountByWallet(from.toLowerCase())
 
+  const crabRewards = rewardsForEmbed.filter(hasCrabItems)
   if (hasCrabItems(rewardsForEmbed)) {
-    for (const pinkNftReward of rewardsForEmbed) {
+    for (const pinkNftReward of crabRewards) {
       await postEmbed(createPinkMissionRewardEmbed(pinkNftReward, accountEntry));
     }
-    return;
   }
 
-  const filteredNftRewards = rewardsForEmbed.filter(containsShowableRarity);
+  const filteredNftRewards = rewardsForEmbed
+    .filter(containsShowableRarity)
+    .filter(reward => !hasCrabItems(reward));
 
   if (filteredNftRewards.length <= 0) {
     return;
@@ -96,7 +98,7 @@ async function fetchMissionReward(eventInput) {
   // console.log('image post fetch')
 
   for (const filteredNftReward of filteredNftRewards) {
-    await postEmbed(createMissionRewardEmbed(soulMetadata, accountEntry, filteredNftReward));
+    await postEmbed(createMissionRewardEmbed(soulMetadata, filteredNftReward));
   }
   console.log('[RWD]', 'finished mission rewards')
 }
