@@ -66,11 +66,10 @@ async function fetchMissionReward(eventInput) {
   // let accountEntry = await getAccountByWallet(from.toLowerCase())
 
   const crabRewards = rewardsForEmbed.filter(hasCrabItems)
-  if (hasCrabItems(rewardsForEmbed)) {
-    for (const pinkNftReward of crabRewards) {
-      await postEmbed(createPinkMissionRewardEmbed(pinkNftReward, accountEntry));
-    }
+  for (const pinkNftReward of crabRewards) {
+    await postEmbed(createPinkMissionRewardEmbed(pinkNftReward, accountEntry));
   }
+
 
   const filteredNftRewards = rewardsForEmbed
     .filter(containsShowableRarity)
@@ -160,6 +159,6 @@ function containsShowableRarity(nftRewardWithMetadata) {
   return config.showItems.includes(rarity)
 }
 
-function hasCrabItems(rewards) {
-  return rewards.some(reward => reward.retrievedMetadata.name.includes('Crab'))
+function hasCrabItems(reward) {
+  return reward.retrievedMetadata.name.includes('Crab')
 }
