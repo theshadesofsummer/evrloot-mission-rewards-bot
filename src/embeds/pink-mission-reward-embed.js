@@ -5,7 +5,7 @@ module.exports = function createPinkMissionRewardEmbed(reward) {
     color: 0xff009c,
     author: {
       name: 'New Pink Mission Reward!',
-      icon_url: 'https://dotispink.xyz/assets/pink-logo-6091295c.svg',
+      icon_url: 'https://pbs.twimg.com/profile_images/1726609813444976640/FUtE2nBJ_400x400.jpg',
     },
     description: `${reward.amount} ${reward.retrievedMetadata.name} were fished out of the water!`,
     thumbnail: {
