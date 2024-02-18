@@ -13,7 +13,7 @@ module.exports = function generateSummary() {
         .sort(raritySorter)
 
     const sortedStatsWithRarityWithoutCrab = sortedStatsWithRarity
-      .filter(entry => isCrabItem(entry))
+      .filter(entry => !isCrabItem(entry))
 
     let summary = '```ansi\n' +
         `Missions claimed: \u001b[4;36m${missionCounter}\u001b[0m\n\n` +
@@ -34,10 +34,11 @@ module.exports = function generateSummary() {
 
     const sortedStatsWithRarityWithCrab =
       sortedStatsWithRarity.filter(isCrabItem)
-    summary += `\n\u001b[1;PINK REWARDS:\n`
+    summary += `\n\u001b[1;36mPINK REWARDS:\n`
 
     for (const [itemName, value] of sortedStatsWithRarityWithCrab) {
-        summary += `\u001b[1;36m${itemName}\u001b[0m: ${value.amount}\n`
+        const rarityColor = getColorRarity(value.rarity)
+        summary += `${rarityColor}${itemName}\u001b[0m: ${value.amount}\n`
     }
     summary += '```'
     
