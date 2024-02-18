@@ -47,7 +47,12 @@ function resetStats() {
 }
 
 function addToStats(reward) {
-    const name = reward.retrievedMetadata.name;
+    let name = ''
+    if (reward.pinkExclusiveName) {
+        name = reward.pinkExclusiveName
+    } else {
+        name = reward.retrievedMetadata.name
+    }
     if (stats.has(name)) {
         const statEntry = stats.get(name);
         statEntry.amount += reward.amount;
