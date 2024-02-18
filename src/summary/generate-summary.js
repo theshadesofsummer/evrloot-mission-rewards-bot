@@ -34,7 +34,7 @@ module.exports = function generateSummary() {
 
     const sortedStatsWithRarityWithCrab =
       sortedStatsWithRarity.filter(isCrabItem)
-    summary += `\n\u001b[1;36mPINK REWARDS:\n`
+    summary += `\n\u001b[1;35mPink Rewards:\n`
 
     for (const [itemName, value] of sortedStatsWithRarityWithCrab) {
         const rarityColor = getColorRarity(value.rarity)
