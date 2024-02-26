@@ -1,0 +1,204 @@
+{
+  "daysRevealed": [
+  ],
+  "potions": [
+    {
+      "availableOnDay": 1,
+      "name": "Minor Health Potion",
+      "description": "Like a comforting pat on the back.",
+      "effect": "Heal 25% of your total HP.",
+      "ingredients": [
+        [
+          "Sandy Oasis Water",
+          1
+        ],
+        [
+          "Glade Grass",
+          2
+        ]
+      ],
+      "discoveredBy": null
+    },
+    {
+      "availableOnDay": 1,
+      "name": "Health Potion",
+      "description": "Your boo-boos' worst nightmare.",
+      "effect": "Heal 30% of your total HP.",
+      "ingredients": [
+        [
+          "Soft Palmwood",
+          2
+        ],
+        [
+          "Sandy Oasis Water",
+          2
+        ],
+        [
+          "Glade Grass",
+          4
+        ]
+      ],
+      "discoveredBy": "459760677935120384"
+    },
+    {
+      "availableOnDay": 1,
+      "name": "Major Health Potion",
+      "description": "One gulp away from feeling like a superhero.",
+      "effect": "Heal 35% of your total HP.",
+      "ingredients": [
+        [
+          "Soft Palmwood",
+          4
+        ],
+        [
+          "Sandy Oasis Water",
+          4
+        ],
+        [
+          "Glade Grass",
+          8
+        ]
+      ],
+      "discoveredBy": null
+    },
+    {
+      "availableOnDay": 2,
+      "name": "Minor Fortifying Potion",
+      "description": "Puts a little extra iron in your spine.",
+      "effect": "Increase your armor by 10% during next combat.",
+      "ingredients": [
+        [
+          "Sandy Oasis Water",
+          1
+        ],
+        [
+          "Cactus Leaf",
+          1
+        ]
+      ],
+      "discoveredBy": null
+    },
+    {
+      "availableOnDay": 2,
+      "name": "Fortifying Potion",
+      "description": "Feel as sturdy as a castle wall.",
+      "effect": "Increase your armor by 15% during next combat.",
+      "ingredients": [
+        [
+          "Sandy Oasis Water",
+          2
+        ],
+        [
+          "Soft Palmwood",
+          2
+        ],
+        [
+          "Cactus Leaf",
+          2
+        ]
+      ],
+      "discoveredBy": null
+    },
+    {
+      "availableOnDay": 2,
+      "name": "Major Fortifying Potion",
+      "description": "Now with extra ‘clang’ when hit.",
+      "effect": "Increase your armor by 20% during next combat.",
+      "ingredients": [
+        [
+          "Sandy Oasis Water",
+          4
+        ],
+        [
+          "Soft Palmwood",
+          4
+        ],
+        [
+          "Cactus Leaf",
+          4
+        ]
+      ],
+      "discoveredBy": null
+    },
+    {
+      "availableOnDay": 3,
+      "name": "Minor Striking Potion",
+      "description": "For that extra pep in your punch.",
+      "effect": "Increase your damages by 10% during next combat.",
+      "ingredients": [
+        [
+          "Sandy Oasis Water",
+          1
+        ],
+        [
+          "Dry Sand Herb",
+          1
+        ]
+      ],
+      "discoveredBy": null
+    },
+    {
+      "availableOnDay": 3,
+      "name": "Striking Potion",
+      "description": "Now your sword thinks it's a dragon slayer.",
+      "effect": "Increase your damages by 15% during next combat.",
+      "ingredients": [
+        [
+          "Sandy Oasis Water",
+          2
+        ],
+        [
+          "Soft Palmwood",
+          2
+        ],
+        [
+          "Dry Sand Herb",
+          2
+        ]
+      ],
+      "discoveredBy": null
+    },
+    {
+      "availableOnDay": 3,
+      "name": "Major Striking Potion",
+      "description": "Turns a tap into a typhoon.",
+      "effect": "Increase your damages by 20% during next combat.",
+      "ingredients": [
+        [
+          "Sandy Oasis Water",
+          4
+        ],
+        [
+          "Soft Palmwood",
+          4
+        ],
+        [
+          "Dry Sand Herb",
+          4
+        ]
+      ],
+      "discoveredBy": null
+    },
+    {
+      "availableOnDay": 3,
+      "name": "Major Striking Potion",
+      "description": "Turns a tap into a typhoon.",
+      "effect": "Increase your damages by 20% during next combat.",
+      "ingredients": [
+        [
+          "Sandy Oasis Water",
+          4
+        ],
+        [
+          "Soft Palmwood",
+          4
+        ],
+        [
+          "Dry Sand Herb",
+          4
+        ]
+      ],
+      "discoveredBy": null
+    }
+  ]
+}

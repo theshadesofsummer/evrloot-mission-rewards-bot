@@ -13,6 +13,8 @@ module.exports = {
   postFightAnnouncement,
   postTournamentStart,
   postTournamentStop,
+  postResourceReveal,
+  postPotionReveal,
   sendVerificationDm,
   mapClientIdToName,
   getUserByClientId
@@ -68,6 +70,18 @@ async function postTournamentStop() {
 async function postFightResult(embed) {
   console.log('[BOT] publish fight result')
   const channel = await getChannel(client, process.env.ARENA_CHANNEL_ID)
+  return await channel.send({embeds: [embed]});
+}
+
+async function postResourceReveal(embed, file) {
+  console.log('[BOT] publish resource reveal')
+  const channel = await getChannel(client, process.env.REVEAL_CHANNEL_ID)
+  return await channel.send({embeds: [embed], files: [file]});
+}
+
+async function postPotionReveal(embed) {
+  console.log('[BOT] publish potion reveal')
+  const channel = await getChannel(client, process.env.REVEAL_CHANNEL_ID)
   return await channel.send({embeds: [embed]});
 }
 

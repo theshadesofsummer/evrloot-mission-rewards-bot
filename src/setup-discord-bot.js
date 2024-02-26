@@ -12,6 +12,9 @@ const selectedOpponentSelectMenu = require("./commands/select-menu/after-select-
 const updateUsernameCommand = require('./commands/update-username')
 const tournamentCommand = require('./commands/tournament-fight')
 const claimableSoulsCommand = require('./commands/claimable-souls')
+const revealCommand = require('./commands/reveal')
+const guessPotionCommand = require('./commands/guess-potion')
+const recipeBookCommand = require('./commands/recipe-book')
 
 module.exports = {
   setupDiscordBot,
@@ -24,7 +27,10 @@ const commands = [
   fightCommand,
   tournamentCommand,
   updateUsernameCommand,
-  claimableSoulsCommand
+  claimableSoulsCommand,
+  revealCommand,
+  guessPotionCommand,
+  recipeBookCommand
 ]
 
 async function setupDiscordBot() {

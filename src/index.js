@@ -6,11 +6,13 @@ const cron = require('node-cron');
 const {MongoClient} = require("mongodb");
 const {publishSummary, sendVerificationDm} = require("./discord-client");
 const {initStats} = require("./summary/daily-stats");
+const {loadRevealStatus, getRevealStatus, saveRevealStatus} = require("./reveal-status");
 
 setupDiscordBot().then(() => {
     setupMissionRewardListener()
     setupMongoDbConnection()
     initStats()
+    loadRevealStatus()
 
     cron.schedule('0 0 * * *', () => {
         publishSummary();
@@ -58,7 +60,7 @@ function setupMissionRewardListener() {
         console.log('connected to mission reward event')
       })
       .on('data', function (event) {
-        fetchMissionReward(event)
+        //fetchMissionReward(event)
       })
       .on('error', function (error, receipt) {
         console.log('Error:', error, receipt);
