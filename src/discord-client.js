@@ -79,10 +79,10 @@ async function postResourceReveal(embed, file) {
   return await channel.send({embeds: [embed], files: [file]});
 }
 
-async function postPotionReveal(embed) {
+async function postPotionReveal(embed, file) {
   console.log('[BOT] publish potion reveal')
   const channel = await getChannel(client, process.env.REVEAL_CHANNEL_ID)
-  return await channel.send({embeds: [embed]});
+  return await channel.send({embeds: [embed], files: [file]});
 }
 
 async function sendVerificationDm(discordName, wallet) {

@@ -28,7 +28,13 @@ function addRevealDay(day) {
 
 function addDiscoveredUser(recipeName, userId) {
   console.log('[REVEAL]', 'try to add userId', userId, 'to recipe', recipeName)
-  const recipe = revealStatus.recipes.find(recipe => recipe.name.localeCompare(recipeName) === 0)
-  recipe.discoveredBy = userId;
+  const potion = revealStatus.potions.find(recipe => recipe.name.localeCompare(recipeName) === 0)
+  if (potion) {
+    potion.discoveredBy = userId;
+  }
+  const tincture = revealStatus.tinctures.find(recipe => recipe.name.localeCompare(recipeName) === 0)
+  if (tincture) {
+    tincture.discoveredBy = userId;
+  }
   saveRevealStatus();
 }

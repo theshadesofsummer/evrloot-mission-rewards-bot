@@ -2,8 +2,8 @@
 module.exports = function createResourceRewardEmbed(day, newResource) {
   return {
     color: 0xae1917,
-    title: `Resource Reveal Day #${day}!`,
-    description: `Time to showcase one of the new resources. Try to find the new possible crafting recipes with \`/guess-potion\`!`,
+    title: `Resource Reveal #${day}!`,
+    description: `Time to showcase one of the new resources. Try to find the new possible crafting recipes with \`/guess-potion\` and \`/guess-tincture\`!`,
     fields: [
       {
         name: 'Name',

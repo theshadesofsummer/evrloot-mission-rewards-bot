@@ -15,7 +15,21 @@ module.exports = function createRevealRecipeEmbed(availableRecipesAmount, discov
 function formatRecipes(recipes) {
   return recipes
     .map(recipe => ({
-      name: recipe.name,
-      value: `*${recipe.effect}*\nDiscovered by <@${recipe.discoveredBy}>`
+      name: `${recipe.name} ${recipe.emote}`,
+      value: formatRecipeInfo(recipe)
     }))
+}
+
+function formatRecipeInfo(recipe) {
+  let result = '';
+  result += `*${recipe.effect}*\n`
+  result += `${formatIngredients(recipe.ingredients)}\n`
+  result += `Discovered by <@${recipe.discoveredBy}>`
+  return result;
+}
+
+function formatIngredients(ingredients) {
+  return ingredients
+    .map(ingredient => `${ingredient[1]}x ${ingredient[0]}`)
+    .join(', ')
 }

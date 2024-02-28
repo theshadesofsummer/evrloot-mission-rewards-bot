@@ -26,5 +26,7 @@ module.exports = {
 
 function getDiscoveredRecipes(recipeStatus) {
   const daysRevealed = recipeStatus.daysRevealed
-  return recipeStatus.recipes.filter(recipe => daysRevealed.includes(recipe.availableOnDay))
+  const potions = recipeStatus.potions.filter(recipe => daysRevealed.includes(recipe.availableOnDay))
+  const tinctures = recipeStatus.tinctures.filter(recipe => daysRevealed.includes(recipe.availableOnDay))
+  return [...potions, ...tinctures]
 }

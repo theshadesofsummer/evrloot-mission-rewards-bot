@@ -6,8 +6,8 @@ module.exports = function createRevealPotionEmbed(recipe, user) {
       iconURL: user.avatarURL(),
       name: user.globalName
     },
-    title: `New Potion Reveal!`,
-    description: `${user.globalName} has found a new potion! Check all recipes with \`/recipe-book\``,
+    title: `New Recipe Reveal!`,
+    description: `${user.globalName} has found a new recipe! Check all recipes with \`/recipe-book\``,
     fields: [
       {
         name: 'Name',
@@ -30,6 +30,9 @@ module.exports = function createRevealPotionEmbed(recipe, user) {
         inline: true
       }
     ],
+    image: {
+      url: `attachment://${recipe.imageName}`
+    },
     timestamp: new Date().toISOString(),
   };
 }

@@ -1,4 +1,4 @@
-const {SlashCommandBuilder} = require("discord.js");
+const {SlashCommandBuilder, AttachmentBuilder} = require("discord.js");
 const config = require("../config");
 const {getRevealStatus, addDiscoveredUser} = require("../reveal-status");
 const createRevealPotionEmbed = require('../embeds/potion-reveal-embed')
@@ -7,14 +7,15 @@ const {postPotionReveal} = require("../discord-client");
 const choices = [
   { name: 'Sandy Oasis Water', value: 'Sandy Oasis Water' },
   { name: 'Soft Palmwood', value: 'Soft Palmwood' },
-  { name: 'Glade Grass', value: 'Glade Grass' },
-  // { name: 'New Resource #2', value: 'Cactus Leaf' },
-  // { name: 'New Resource #3', value: 'Dry Sand Herb' },
+  { name: 'New Resource #1', value: 'Glade Grass' },
+  { name: 'New Resource #2', value: 'Cactus Leaf' },
+  { name: 'New Resource #3', value: 'Dry Sand Herb' },
   // { name: 'New Resource #4', value: 'Mirage Sprout' },
   // { name: 'New Resource #5', value: 'Deep Root' }
 ]
 
 module.exports = {
+  cooldown: 60,
   data: new SlashCommandBuilder()
     .setName('guess-potion')
     .setDescription('Try to guess one of the new potion recipes including the new crafting resources!')
@@ -119,7 +120,10 @@ module.exports = {
         })
         addDiscoveredUser(matchingPotion.name, interaction.user.id)
         const revealRecipeEmbed = createRevealPotionEmbed(matchingPotion, interaction.user)
-        await postPotionReveal(revealRecipeEmbed)
+        const attachments = new AttachmentBuilder()
+          .setFile('static/' + matchingPotion.imageName)
+          .setName(matchingPotion.imageName)
+        await postPotionReveal(revealRecipeEmbed, attachments)
       }
     }
   }
@@ -130,7 +134,7 @@ const isUserAllowed = userId =>
 
 function getAvailablePotions(recipeStatus) {
   const daysRevealed = recipeStatus.daysRevealed
-  return recipeStatus.recipes.filter(recipe => daysRevealed.includes(recipe.availableOnDay))
+  return recipeStatus.potions.filter(recipe => daysRevealed.includes(recipe.availableOnDay))
 }
 
 function resourceNamesDoubled(rssName1, rssName2, rssName3) {

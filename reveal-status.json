@@ -17,7 +17,9 @@
           2
         ]
       ],
-      "discoveredBy": null
+      "discoveredBy": null,
+      "imageName": "minor_health_potion.png",
+      "emote": "<:minor_health_potion:1212420274838970428>"
     },
     {
       "availableOnDay": 1,
@@ -38,7 +40,9 @@
           4
         ]
       ],
-      "discoveredBy": "459760677935120384"
+      "discoveredBy": null,
+      "imageName": "health_potion.png",
+      "emote": "<:health_potion:1212420261979099226>"
     },
     {
       "availableOnDay": 1,
@@ -59,7 +63,9 @@
           8
         ]
       ],
-      "discoveredBy": null
+      "discoveredBy": null,
+      "imageName": "major_health_potion.png",
+      "emote": "<:major_health_potion:1212420542947139634>"
     },
     {
       "availableOnDay": 2,
@@ -76,7 +82,9 @@
           1
         ]
       ],
-      "discoveredBy": null
+      "discoveredBy": null,
+      "imageName": "minor_fortifying_potion.png",
+      "emote": "<:minor_fortifying_potion:1212420272792014858>"
     },
     {
       "availableOnDay": 2,
@@ -97,7 +105,9 @@
           2
         ]
       ],
-      "discoveredBy": null
+      "discoveredBy": null,
+      "imageName": "fortifying_potion.png",
+      "emote": "<:fortifying_potion:1212420259940929538>"
     },
     {
       "availableOnDay": 2,
@@ -118,7 +128,9 @@
           4
         ]
       ],
-      "discoveredBy": null
+      "discoveredBy": null,
+      "imageName": "major_fortifying_potion.png",
+      "emote": "<:major_fortifying_potion:1212420265426948166>"
     },
     {
       "availableOnDay": 3,
@@ -135,7 +147,9 @@
           1
         ]
       ],
-      "discoveredBy": null
+      "discoveredBy": null,
+      "imageName": "minor_striking_potion.png",
+      "emote": "<:minor_striking_potion:1212420277380583454>"
     },
     {
       "availableOnDay": 3,
@@ -156,7 +170,9 @@
           2
         ]
       ],
-      "discoveredBy": null
+      "discoveredBy": null,
+      "imageName": "striking_potion.png",
+      "emote": "<:striking_potion:1212420280836694106>"
     },
     {
       "availableOnDay": 3,
@@ -177,28 +193,241 @@
           4
         ]
       ],
-      "discoveredBy": null
-    },
+      "discoveredBy": null,
+      "imageName": "major_striking_potion.png",
+      "emote": "<:major_striking_potion:1212420541416476802>"
+    }
+  ],
+  "tinctures": [
     {
-      "availableOnDay": 3,
-      "name": "Major Striking Potion",
-      "description": "Turns a tap into a typhoon.",
-      "effect": "Increase your damages by 20% during next combat.",
+      "availableOnDay": 4,
+      "name": "Tincture of Strength",
+      "description": "Makes carrying groceries feel like lifting feathers.",
+      "effect": "Increase your Strength by 3 points for the whole expedition.",
       "ingredients": [
         [
           "Sandy Oasis Water",
-          4
+          2
         ],
         [
           "Soft Palmwood",
-          4
+          2
         ],
         [
-          "Dry Sand Herb",
-          4
+          "Mirage Sprout",
+          1
         ]
       ],
-      "discoveredBy": null
+      "discoveredBy": null,
+      "imageName": "tincture_of_strength.png",
+      "emote": "<:tincture_of_strenght:1212449639677173841>"
+    },
+    {
+      "availableOnDay": 4,
+      "name": "Tincture of Dexterity",
+      "description": "You'll be catching flies with chopsticks in no time.",
+      "effect": "Increase your Dexterity by 3 points for the whole expedition.",
+      "ingredients": [
+        [
+          "Sandy Oasis Water",
+          2
+        ],
+        [
+          "Soft Palmwood",
+          2
+        ],
+        [
+          "Mirage Sprout",
+          1
+        ]
+      ],
+      "discoveredBy": null,
+      "imageName": "tincture_of_dexterity.png",
+      "emote": "<:tincture_of_dexterity:1212449627266097172>"
+    },
+    {
+      "availableOnDay": 4,
+      "name": "Tincture of Intelligence",
+      "description": "Makes you think you're smarter than a wizard.",
+      "effect": "Increase your Intelligence by 3 points for the whole expedition.",
+      "ingredients": [
+        [
+          "Sandy Oasis Water",
+          2
+        ],
+        [
+          "Soft Palmwood",
+          2
+        ],
+        [
+          "Mirage Sprout",
+          1
+        ]
+      ],
+      "discoveredBy": null,
+      "imageName": "tincture_of_intelligence.png",
+      "emote": "<:tincture_of_intelligence:1212449632484069406>"
+    },
+    {
+      "availableOnDay": 4,
+      "name": "Tincture of Wisdom",
+      "description": "Suddenly, every riddle seems like child's play.",
+      "effect": "Increase your Wisdom by 3 points for the whole expedition.",
+      "ingredients": [
+        [
+          "Sandy Oasis Water",
+          2
+        ],
+        [
+          "Soft Palmwood",
+          2
+        ],
+        [
+          "Mirage Sprout",
+          1
+        ]
+      ],
+      "discoveredBy": null,
+      "imageName": "tincture_of_wisdom.png",
+      "emote": "<:tincture_of_wisdom:1212449643858763877>"
+    },
+    {
+      "availableOnDay": 4,
+      "name": "Tincture of Fortitude",
+      "description": "Tough as nails, hopefully not as rusty.",
+      "effect": "Increase your Fortitude by 3 points for the whole expedition.",
+      "ingredients": [
+        [
+          "Sandy Oasis Water",
+          2
+        ],
+        [
+          "Soft Palmwood",
+          2
+        ],
+        [
+          "Mirage Sprout",
+          1
+        ]
+      ],
+      "discoveredBy": null,
+      "imageName": "tincture_of_fortitude.png",
+      "emote": "<:tincture_of_fortitude:1212449630504095784>"
+    },
+    {
+      "availableOnDay": 5,
+      "name": "Tincture of Reckless Might",
+      "description": "Might make you the strongest, but not the smartest.",
+      "effect": "Increase your Strength by 7 points and decrease your Fortitude of 3 points for the whole expedition.",
+      "ingredients": [
+        [
+          "Sandy Oasis Water",
+          2
+        ],
+        [
+          "Soft Palmwood",
+          2
+        ],
+        [
+          "Deeproot",
+          1
+        ]
+      ],
+      "discoveredBy": null,
+      "imageName": "tincture_of_reckless_might.png",
+      "emote": "<:tincture_of_reckless_might:1212449634916634715>"
+    },
+    {
+      "availableOnDay": 5,
+      "name": "Tincture of Agile Risk",
+      "description": "You could thread a needle in a hurricane.",
+      "effect": "Increase your Dexterity by 7 points and decrease your Fortitude of 3 points for the whole expedition.",
+      "ingredients": [
+        [
+          "Sandy Oasis Water",
+          2
+        ],
+        [
+          "Soft Palmwood",
+          2
+        ],
+        [
+          "Deeproot",
+          1
+        ]
+      ],
+      "discoveredBy": null,
+      "imageName": "tincture_of_agile_risk.png",
+      "emote": "<:tincture_of_agile_risk:1212449624921743370>"
+    },
+    {
+      "availableOnDay": 5,
+      "name": "Tincture of Focused Folly",
+      "description": "Brain bigger, common sense smaller.",
+      "effect": "Increase your Intelligence by 7 points and decrease your Fortitude of 3 points for the whole expedition.",
+      "ingredients": [
+        [
+          "Sandy Oasis Water",
+          2
+        ],
+        [
+          "Soft Palmwood",
+          2
+        ],
+        [
+          "Deeproot",
+          1
+        ]
+      ],
+      "discoveredBy": null,
+      "imageName": "tincture_of_focused_folly.png",
+      "emote": "<:tincture_of_focused_folly:1212449628855730236>"
+    },
+    {
+      "availableOnDay": 5,
+      "name": "Tincture of Sage's Sacrifice",
+      "description": "Feel centuries wiser, but still can't find your keys.",
+      "effect": "Increase your Wisdom by 7 points and decrease your Fortitude of 3 points for the whole expedition.",
+      "ingredients": [
+        [
+          "Sandy Oasis Water",
+          2
+        ],
+        [
+          "Soft Palmwood",
+          2
+        ],
+        [
+          "Deeproot",
+          1
+        ]
+      ],
+      "discoveredBy": null,
+      "imageName": "tincture_of_sages_sacrifice.png",
+      "emote": "<:tincture_of_sages_sacrifice:1212449637433090138>"
+    },
+    {
+      "availableOnDay": 5,
+      "name": "Tincture of the Titan's Gamble",
+      "description": "Feel invincible, but maybe don't test that theory.",
+      "effect": "Increase your Fortitude by 12 points and decrease your Strenght, Dexterity, Intelligence and Wisdom by 3 points for the whole expedition.",
+      "ingredients": [
+        [
+          "Sandy Oasis Water",
+          2
+        ],
+        [
+          "Soft Palmwood",
+          2
+        ],
+        [
+          "Deeproot",
+          1
+        ]
+      ],
+      "discoveredBy": null,
+      "imageName": "tincture_of_the_titans_gamble.png",
+      "emote": "<:tincture_of_the_titans_gamble:1212449642089021551>"
     }
   ]
 }
