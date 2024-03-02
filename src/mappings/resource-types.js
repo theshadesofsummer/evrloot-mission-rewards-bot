@@ -337,4 +337,152 @@ module.exports = { // resourceMappings.ts
     name: 'Small Crab (XL)',
     emoteId: '<:small_crab:1208445317268115476>'
   },
+  MINOR_HEALTH_POTION: {
+    id: 700,
+    tokenUri: 'ipfs://QmWor9zXPm4zEm2HgCi1Dpzv5Ymc8NeZjZrcFPFdP65QTE/minor_health_potion.json',
+    name: 'Minor Health Potion',
+    emoteId: '<:minor_health_potion:1212420274838970428>'
+  },
+  HEALTH_POTION: {
+    id: 701,
+    tokenUri: 'ipfs://QmWor9zXPm4zEm2HgCi1Dpzv5Ymc8NeZjZrcFPFdP65QTE/health_potion.json',
+    name: 'Health Potion',
+    emoteId: '<:health_potion:1212420261979099226>'
+  },
+  MAJOR_HEALTH_POTION: {
+    id: 702,
+    tokenUri: 'ipfs://QmWor9zXPm4zEm2HgCi1Dpzv5Ymc8NeZjZrcFPFdP65QTE/major_health_potion.json',
+    name: 'Major Health Potion',
+    emoteId: '<:major_health_potion:1212420542947139634>'
+  },
+  MINOR_FORTIFYING_POTION: {
+    id: 703,
+    tokenUri: 'ipfs://QmWor9zXPm4zEm2HgCi1Dpzv5Ymc8NeZjZrcFPFdP65QTE/minor_fortifying_potion.json',
+    name: 'Minor Fortifying Potion',
+    emoteId: '<:minor_fortifying_potion:1212420272792014858>'
+  },
+  FORTIFYING_POTION: {
+    id: 704,
+    tokenUri: 'ipfs://QmWor9zXPm4zEm2HgCi1Dpzv5Ymc8NeZjZrcFPFdP65QTE/fortifying_potion.json',
+    name: 'Fortifying Potion',
+    emoteId: '<:fortifying_potion:1212420259940929538>'
+  },
+  MAJOR_FORTIFYING_POTION: {
+    id: 705,
+    tokenUri: 'ipfs://QmWor9zXPm4zEm2HgCi1Dpzv5Ymc8NeZjZrcFPFdP65QTE/major_fortifying_potion.json',
+    name: 'Major Fortifying Potion',
+    emoteId: '<:major_fortifying_potion:1212420265426948166>'
+  },
+  MINOR_STRIKING_POTION: {
+    id: 706,
+    tokenUri: 'ipfs://QmWor9zXPm4zEm2HgCi1Dpzv5Ymc8NeZjZrcFPFdP65QTE/minor_striking_potion.json',
+    name: 'Minor Striking Potion',
+    emoteId: '<:minor_striking_potion:1212420277380583454>'
+  },
+  STRIKING_POTION: {
+    id: 707,
+    tokenUri: 'ipfs://QmWor9zXPm4zEm2HgCi1Dpzv5Ymc8NeZjZrcFPFdP65QTE/strinking_potion.json',
+    name: 'Striking Potion',
+    emoteId: '<:striking_potion:1212420280836694106>'
+  },
+  MAJOR_STRIKING_POTION: {
+    id: 708,
+    tokenUri: 'ipfs://QmbXSYNpkjYRaB32c6T4RQTpuUpYwBak2zQguZ2XUCySRz',
+    name: 'Major Striking Potion',
+    emoteId: '<:major_striking_potion:1212420541416476802>'
+  },
+  TINCTURE_OF_AGILE_RISK: {
+    id: 709,
+    tokenUri: 'ipfs://QmWor9zXPm4zEm2HgCi1Dpzv5Ymc8NeZjZrcFPFdP65QTE/tincture_of_agile_risk.json',
+    name: 'Tincture of Agile Risk',
+    emoteId: '<:tincture_of_agile_risk:1212449624921743370>'
+  },
+  TINCTURE_OF_DEXTERITY: {
+    id: 710,
+    tokenUri: 'ipfs://QmWor9zXPm4zEm2HgCi1Dpzv5Ymc8NeZjZrcFPFdP65QTE/tincture_of_dexterity.json',
+    name: 'Tincture of Dexterity',
+    emoteId: '<:tincture_of_dexterity:1212449627266097172>'
+  },
+  TINCTURE_OF_FOCUSED_FOLLY: {
+    id: 711,
+    tokenUri:
+      'ipfs://QmWor9zXPm4zEm2HgCi1Dpzv5Ymc8NeZjZrcFPFdP65QTE/tincture_of_focused_folly.json',
+    name: 'Tincture of Focused Folly',
+    emoteId: '<:tincture_of_focused_folly:1212449628855730236>'
+  },
+  TINCTURE_OF_FORTITUDE: {
+    id: 712,
+    tokenUri: 'ipfs://QmWor9zXPm4zEm2HgCi1Dpzv5Ymc8NeZjZrcFPFdP65QTE/tincture_of_fortitude.json',
+    name: 'Tincture of Fortitude',
+    emoteId: '<:tincture_of_fortitude:1212449630504095784>'
+  },
+  TINCTURE_OF_INTELLIGENCE: {
+    id: 713,
+    tokenUri: 'ipfs://QmWor9zXPm4zEm2HgCi1Dpzv5Ymc8NeZjZrcFPFdP65QTE/tincture_of_intelligence.json',
+    name: 'Tincture of Intelligence',
+    emoteId: '<:tincture_of_intelligence:1212449632484069406>'
+  },
+  TINCTURE_OF_RECKLESS_MIGHT: {
+    id: 714,
+    tokenUri:
+      'ipfs://QmWor9zXPm4zEm2HgCi1Dpzv5Ymc8NeZjZrcFPFdP65QTE/tincture_of_reckless_might.json',
+    name: 'Tincture of Reckless Might',
+    emoteId: '<:tincture_of_reckless_might:1212449634916634715>'
+  },
+  TINCTURE_OF_SAGES_SACRIFICE: {
+    id: 715,
+    tokenUri:
+      'ipfs://QmWor9zXPm4zEm2HgCi1Dpzv5Ymc8NeZjZrcFPFdP65QTE/tincture_of_sages_sacrifice.json',
+    name: 'Tincture of Sages Sacrifice',
+    emoteId: '<:tincture_of_sages_sacrifice:1212449637433090138>'
+  },
+  TINCTURE_OF_STRENGTH: {
+    id: 716,
+    tokenUri: 'ipfs://QmWor9zXPm4zEm2HgCi1Dpzv5Ymc8NeZjZrcFPFdP65QTE/tincture_of_strength.json',
+    name: 'Tincture of Strength',
+    emoteId: '<:tincture_of_strenght:1212449639677173841>'
+  },
+  TINCTURE_OF_TITANS_GAMBLE: {
+    id: 717,
+    tokenUri:
+      'ipfs://QmWor9zXPm4zEm2HgCi1Dpzv5Ymc8NeZjZrcFPFdP65QTE/tincture_of_titans_gamble.json',
+    name: 'Tincture of Titans Gamble',
+    emoteId: '<:tincture_of_the_titans_gamble:1212449642089021551>'
+  },
+  TINCTURE_OF_WISDOM: {
+    id: 718,
+    tokenUri: 'ipfs://QmWor9zXPm4zEm2HgCi1Dpzv5Ymc8NeZjZrcFPFdP65QTE/tincture_of_wisdom.json',
+    name: 'Tincture of Wisdom',
+    emoteId: '<:tincture_of_wisdom:1212449643858763877>'
+  },
+  CACTUS_LEAF: {
+    id: 719,
+    tokenUri: 'ipfs://QmWor9zXPm4zEm2HgCi1Dpzv5Ymc8NeZjZrcFPFdP65QTE/cactus_leaf.json',
+    name: 'Cactus Leaf',
+    emoteId: '<:cactusleaf:1213624364218454076>'
+  },
+  DEEPROOT: {
+    id: 720,
+    tokenUri: 'ipfs://QmWor9zXPm4zEm2HgCi1Dpzv5Ymc8NeZjZrcFPFdP65QTE/deeproot.json',
+    name: 'Deeproot',
+    emoteId: '<:deeproot:1213624366361878568>'
+  },
+  DRY_SAND_HERB: {
+    id: 721,
+    tokenUri: 'ipfs://QmWor9zXPm4zEm2HgCi1Dpzv5Ymc8NeZjZrcFPFdP65QTE/dry_sand_herb.json',
+    name: 'Dry Sand Herb',
+    emoteId: '<:drysandherb:1213624368605831179>'
+  },
+  GLADE_GRASS: {
+    id: 722,
+    tokenUri: 'ipfs://QmWor9zXPm4zEm2HgCi1Dpzv5Ymc8NeZjZrcFPFdP65QTE/glade_grass.json',
+    name: 'Glade Grass',
+    emoteId: '<:gladegrass:1213624370661167224>'
+  },
+  MIRAGE_SPROUT: {
+    id: 723,
+    tokenUri: 'ipfs://QmWor9zXPm4zEm2HgCi1Dpzv5Ymc8NeZjZrcFPFdP65QTE/mirage_sprout.json',
+    name: 'Mirage Sprout',
+    emoteId: '<:miragesprout:1213624362058645567>'
+  },
 };
