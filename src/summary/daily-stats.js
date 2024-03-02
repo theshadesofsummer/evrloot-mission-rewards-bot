@@ -44,6 +44,7 @@ function getStats() {
 function resetStats() {
     stats.clear();
     missionCounter = 0;
+    fs.writeFileSync('./stats.json', JSON.stringify({counter: missionCounter, stats: [...stats]}) , 'utf-8');
 }
 
 function addToStats(reward) {
