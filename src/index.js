@@ -60,7 +60,7 @@ function setupMissionRewardListener() {
         console.log('connected to mission reward event')
       })
       .on('data', function (event) {
-        //fetchMissionReward(event)
+        fetchMissionReward(event)
       })
       .on('error', function (error, receipt) {
         console.log('Error:', error, receipt);
