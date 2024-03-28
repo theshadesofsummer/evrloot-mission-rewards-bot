@@ -12,14 +12,11 @@ module.exports = function generateSummary() {
         .filter(hasSelectedRarity)
         .sort(raritySorter)
 
-    const sortedStatsWithRarityWithoutCrab = sortedStatsWithRarity
-      .filter(entry => !isCrabItem(entry))
-
     let summary = '```ansi\n' +
         `Missions claimed: \u001b[4;36m${missionCounter}\u001b[0m\n\n` +
         'Gathered in the last 24 hours:\n';
 
-    for (const [itemName, value] of sortedStatsWithRarityWithoutCrab) {
+    for (const [itemName, value] of sortedStatsWithRarity) {
         const rarityColor = getColorRarity(value.rarity)
         summary += `${rarityColor}${itemName}\u001b[0m: ${value.amount}\n`
     }
@@ -30,15 +27,6 @@ module.exports = function generateSummary() {
 
     for (const [itemName, value] of sortedStatsWithoutRarity) {
         summary += `\u001b[1;36m${itemName}\u001b[0m: ${value.amount}\n`
-    }
-
-    const sortedStatsWithRarityWithCrab =
-      sortedStatsWithRarity.filter(isCrabItem)
-    summary += `\n\u001b[1;35mPink Rewards:\n`
-
-    for (const [itemName, value] of sortedStatsWithRarityWithCrab) {
-        const rarityColor = getColorRarity(value.rarity)
-        summary += `${rarityColor}${itemName}\u001b[0m: ${value.amount}\n`
     }
     summary += '```'
     
@@ -76,9 +64,4 @@ function raritySorter(entryA, entryB) {
 function hasSelectedRarity(entry) {
     const entryRarity = entry[1].rarity
     return ['Common', 'Rare', 'Epic', 'Legendary'].includes(entryRarity)
-}
-
-function isCrabItem(entry) {
-    const entryName = entry[0];
-    return entryName.includes('Crab')
 }
