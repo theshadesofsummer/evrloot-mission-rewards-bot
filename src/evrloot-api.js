@@ -4,12 +4,55 @@ const fs = require("fs");
 const {getSoulIpfsLink} = require("./abi-interaction");
 
 const SQUID_ADDRESS = 'https://squid.subsquid.io/evrsquid/graphql';
+const SQUID_MOONBASE_ADDRESS = 'http://api.evrloot.io:4350/graphql';
 const QUERY_SOUL_ID_BY_ESTRA_TOKEN_ID = `
 query MyQuery($estraTokenId: Int!) {
   nfts(where: {estraTokenId_eq: $estraTokenId}) {
     id
   }
 }`
+const QUERY_TRADE_BY_ID = `
+query MyQuery($tradeId: String!) {
+  tradeById(id: $tradeId) {
+    id
+    active
+    block
+    buyOutEther
+    cancelledBlock
+    endTime
+    endedBlock
+    buyOutErc20 {
+      amount
+      contractAddress
+      id
+    }
+    ownerAddress
+    startTime
+    erc721s {
+      contractAddress
+      id
+      tokenId
+    }
+    erc1155s {
+      amount
+      contractAddress
+      id
+      tokenId
+    }
+    unclaimedResources {
+      amount
+      id
+      resourceId
+    }
+    unclaimedNfts {
+      amount
+      contractAddress
+      id
+      itemId
+    }
+  }
+}
+`
 
 module.exports = {
   getSouls,
@@ -19,6 +62,7 @@ module.exports = {
   mapMetadataToSoul,
   getFromIpfs,
   fetchSoulIdFromSquid,
+  fetchTradeByIdFromSquid,
 }
 
 
@@ -90,6 +134,31 @@ async function fetchSoulIdFromSquid(estraTokenId) {
     .then((res) => res.json())
     .then((result) => {
       return result.data.nfts[0].id;
+    })
+    .catch((err) => {
+      console.log('error while fetching from squid:', err);
+      return undefined
+    });
+}
+
+async function fetchTradeByIdFromSquid(tradeId) {
+  console.log('[API]', 'fetching trade from squid for tradeId', tradeId)
+  return fetch(SQUID_MOONBASE_ADDRESS, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      query: QUERY_TRADE_BY_ID,
+      variables: {
+        tradeId: tradeId,
+      },
+    }),
+  })
+    .then((res) => res.json())
+    .then((result) => {
+      console.log('>> RESULT:', result)
+      return result.data.tradeById;
     })
     .catch((err) => {
       console.log('error while fetching from squid:', err);

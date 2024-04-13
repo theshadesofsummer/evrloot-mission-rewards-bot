@@ -1,12 +1,13 @@
 require('dotenv').config();
 const { setupDiscordBot } = require("./setup-discord-bot.js");
-const { MISSION_CONTRACT } = require("./abi-interaction.js")
+const { MISSION_CONTRACT, MARKETPLACE_CONTRACT } = require("./abi-interaction.js")
 const { fetchMissionReward } = require('./mission-interaction.js');
 const cron = require('node-cron');
 const {MongoClient} = require("mongodb");
 const {publishSummary, sendVerificationDm} = require("./discord-client");
 const {initStats} = require("./summary/daily-stats");
-const {loadRevealStatus, getRevealStatus, saveRevealStatus} = require("./reveal-status");
+const {loadRevealStatus} = require("./reveal-status");
+const {handleNewTrade} = require("./trades/handle-new-trade");
 
 setupDiscordBot().then(() => {
     setupMissionRewardListener()
@@ -17,6 +18,8 @@ setupDiscordBot().then(() => {
     cron.schedule('0 0 * * *', () => {
         publishSummary();
     });
+
+    handleNewTrade('0x1e86e61c33bd2ae3b62da7e4ebdd0a6af98ed5119a4f66dd92c808d1e15dedf4')
 });
 
 function setupMongoDbConnection() {
@@ -61,6 +64,32 @@ function setupMissionRewardListener() {
       })
       .on('data', function (event) {
         fetchMissionReward(event)
+      })
+      .on('error', function (error, receipt) {
+        console.log('Error:', error, receipt);
+      });
+
+    MARKETPLACE_CONTRACT.events.BidCreated({fromBlock: 'latest'})
+      .on("connected", function (_subscriptionId) {
+        console.log('connected to bid created event')
+      })
+      .on('data', function (event) {
+        console.log('bid created event')
+        console.log(event)
+      })
+      .on('error', function (error, receipt) {
+        console.log('Error:', error, receipt);
+      });
+
+    MARKETPLACE_CONTRACT.events.TradeCreated({fromBlock: 'latest'})
+      .on("connected", function (_subscriptionId) {
+        console.log('connected to trade created event')
+      })
+      .on('data', function (event) {
+        console.log('trade created event')
+        console.log('>>> event', event)
+
+        handleNewTrade(event.returnValues.tradeId)
       })
       .on('error', function (error, receipt) {
         console.log('Error:', error, receipt);

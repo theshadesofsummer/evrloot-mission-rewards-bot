@@ -15,6 +15,7 @@ module.exports = {
   postTournamentStop,
   postResourceReveal,
   postPotionReveal,
+  postNewTrade,
   sendVerificationDm,
   mapClientIdToName,
   getUserByClientId
@@ -83,6 +84,12 @@ async function postPotionReveal(embed, file) {
   console.log('[BOT] publish potion reveal')
   const channel = await getChannel(client, process.env.REVEAL_CHANNEL_ID)
   return await channel.send({embeds: [embed], files: [file]});
+}
+
+async function postNewTrade(embed) {
+  console.log('[BOT] publish new trade')
+  const channel = await getChannel(client, process.env.TRADE_CHANNEL_ID)
+  return await channel.send({embeds: [embed]});
 }
 
 async function sendVerificationDm(discordName, wallet) {

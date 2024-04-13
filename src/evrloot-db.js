@@ -415,3 +415,27 @@ async function addFightParticipants(discordId){
     await client.close();
   }
 }
+
+async function getTradeMessages(block, address) {
+  const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+  try {
+    console.log('[DB]', 'get the cooldown from a soul', soulId)
+    const collection = client.db("evrloot").collection("trademessages");
+
+    const cooldownDoc = await collection.findOne({playerAddress: address, block});
+    cooldownDoc.title
+    cooldownDoc.message
+
+    if (cooldownDoc.cooldownUntil < Math.round(Date.now() / 1000)) {
+      await collection.deleteOne({soul: soulId})
+      return undefined
+    }
+
+    return cooldownDoc;
+  } catch (error) {
+    console.error('[DB]', 'Error getting the soul cooldown', error);
+    return undefined
+  } finally {
+    await client.close();
+  }
+}
