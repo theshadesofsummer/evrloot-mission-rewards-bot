@@ -1,4 +1,4 @@
-const {fetchTradeByIdFromSquid, getFromIpfs} = require("../evrloot-api");
+const {fetchTradeByIdFromSquid, getFromIpfs, fetchNftMetadataByIdAndCollection} = require("../evrloot-api");
 const {postNewTrade} = require("../discord-client");
 const createNewTradeEmbed = require('../embeds/new-trade-embed')
 const resourceRewards = require("../mappings/resource-types");
@@ -15,7 +15,17 @@ async function handleNewTrade(tradeId) {
 
   const tradeResources = []
   for (const erc1155 of tradeInfo.erc1155s) {
-    const resourceInfo = await enrichErc1155Info(erc1155)
+    const resourceInfo = await enrichErc1155Info(erc1155.tokenId, erc1155.amount)
+    tradeResources.push(resourceInfo)
+  }
+  for (const erc1155 of tradeInfo.unclaimedResources) {
+    const resourceInfo = await enrichErc1155Info(erc1155.resourceId, erc1155.amount)
+    tradeResources.push(resourceInfo)
+  }
+
+  for (const erc721 of tradeInfo.erc721s) {
+    const erc721Metadata = await fetchNftMetadataByIdAndCollection(erc721.tokenId, erc721.contractAddress)
+    console.log('erc721Metadata', erc721Metadata)
     tradeResources.push(resourceInfo)
   }
 
@@ -25,9 +35,8 @@ async function handleNewTrade(tradeId) {
 
 }
 
-
-async function enrichErc1155Info(erc1155) {
-  const resourceType = Object.values(resourceRewards).find(rr => rr.id === erc1155.tokenId)
+async function enrichErc1155Info(erc1155Id, erc1155Amount) {
+  const resourceType = Object.values(resourceRewards).find(rr => rr.id === erc1155Id)
   const metadataUri = resourceType.tokenUri;
 
   const retrievedMetadata = metadataUri
@@ -35,8 +44,8 @@ async function enrichErc1155Info(erc1155) {
     : undefined;
 
   return {
-    id: erc1155.tokenId,
-    amount: erc1155.amount,
+    id: erc1155Id,
+    amount: erc1155Amount,
     retrievedMetadata: retrievedMetadata,
     emoteId: resourceType.emoteId
   };

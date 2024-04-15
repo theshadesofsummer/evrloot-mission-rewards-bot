@@ -19,7 +19,7 @@ setupDiscordBot().then(() => {
         publishSummary();
     });
 
-    handleNewTrade('0x1e86e61c33bd2ae3b62da7e4ebdd0a6af98ed5119a4f66dd92c808d1e15dedf4')
+    handleNewTrade("0xed079e4e34df54a9f8e8e1111fc4f6d07bca6c37de4b138fec40f52f1ea3d094")
 });
 
 function setupMongoDbConnection() {
