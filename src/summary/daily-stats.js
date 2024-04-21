@@ -5,6 +5,7 @@ module.exports = {
     resetStats,
     addToStats,
     increaseMissionCounter,
+    increaseExpeditionCounter,
     initStats,
 }
 
@@ -17,6 +18,7 @@ let stats = new Map();
 //   }
 // >
 let missionCounter = 0;
+let expeditionCounter = 0;
 
 function initStats() {
     console.log('init stats')
@@ -37,14 +39,16 @@ function initStats() {
 function getStats() {
     return {
         stats: stats,
-        missionCounter: missionCounter
+        missionCounter: missionCounter,
+        expeditionCounter
     };
 }
 
 function resetStats() {
     stats.clear();
     missionCounter = 0;
-    fs.writeFileSync('./stats.json', JSON.stringify({counter: missionCounter, stats: [...stats]}) , 'utf-8');
+    expeditionCounter = 0;
+    fs.writeFileSync('./stats.json', JSON.stringify({counter: missionCounter, expeditionCounter, stats: [...stats]}) , 'utf-8');
 }
 
 function addToStats(reward) {
@@ -73,4 +77,8 @@ function addToStats(reward) {
 
 function increaseMissionCounter() {
     missionCounter++;
+}
+
+function increaseExpeditionCounter() {
+    expeditionCounter++;
 }

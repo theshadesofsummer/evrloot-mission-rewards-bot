@@ -1,0 +1,793 @@
+[
+  {
+    "inputs": [],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "inputs": [],
+    "name": "ContractIsPaused",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ExpeditionFeeIncorrect",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ExpeditionNotEnabled",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "FeeNotSent",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "IncompatibleResourceSupplied",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InsufficientEnergyForExpedition",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InsufficientSuppliedNfts",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidTokenID",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NoRollableAssets",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_user",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_contractOwner",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_backendAddress",
+        "type": "address"
+      }
+    ],
+    "name": "NotPermitted",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "SenderIsNotOwnerOfStakedToken",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "SoulHasActiveOrUnclaimedExpedition",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "SoulHasActiveOrUnclaimedMission",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "SuppliedNftCannotBeOwnedByNft",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "SuppliedNftNotOwnedByPlayer",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "UnclaimedNftsInvalidBurnAmount",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "UnclaimedResourcesInvalidBurnAmount",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "UnsupportedExpedition",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ZeroAddress",
+    "type": "error"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "playerAddress",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "contractAddress",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "itemId",
+        "type": "uint16"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "BurnedUnclaimedNfts",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "playerAddress",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "resourceId",
+        "type": "uint16"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "amount",
+        "type": "uint16"
+      }
+    ],
+    "name": "BurnedUnclaimedResources",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "expeditionId",
+        "type": "uint256"
+      }
+    ],
+    "name": "ExpeditionAdded",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "estraTokenId",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "expeditionId",
+        "type": "uint256"
+      },
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "contractAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "uint16",
+            "name": "itemId",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "amount",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint8",
+            "name": "groupId",
+            "type": "uint8"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct NftByItemIdV3[]",
+        "name": "nftRewards",
+        "type": "tuple[]"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint16",
+            "name": "resourceId",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "amount",
+            "type": "uint16"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct ResourceData[]",
+        "name": "resourceRewards",
+        "type": "tuple[]"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "activityId",
+        "type": "uint16"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "experienceGained",
+        "type": "uint256"
+      }
+    ],
+    "name": "ExpeditionCompleted",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "estraTokenId",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "expeditionId",
+        "type": "uint256"
+      },
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "contractAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "tokenId",
+            "type": "uint256"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct InputNftData[]",
+        "name": "suppliedNfts",
+        "type": "tuple[]"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint16",
+            "name": "resourceId",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "amount",
+            "type": "uint16"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct ResourceData[]",
+        "name": "suppliedResources",
+        "type": "tuple[]"
+      }
+    ],
+    "name": "ExpeditionStart",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "playerAddress",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "contractAddress",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "itemId",
+        "type": "uint16"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "MintedUnclaimedNfts",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "playerAddress",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "resourceId",
+        "type": "uint16"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "amount",
+        "type": "uint16"
+      }
+    ],
+    "name": "MintedUnclaimedResources",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "bool",
+            "name": "enabled",
+            "type": "bool"
+          },
+          {
+            "internalType": "uint32[]",
+            "name": "collectionIds",
+            "type": "uint32[]"
+          }
+        ],
+        "internalType": "struct ExpeditionData",
+        "name": "data",
+        "type": "tuple"
+      },
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "contractAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "uint16",
+            "name": "itemId",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "amount",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint8",
+            "name": "groupId",
+            "type": "uint8"
+          }
+        ],
+        "internalType": "struct NftByItemIdV3[]",
+        "name": "nftRequirements",
+        "type": "tuple[]"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint16",
+            "name": "resourceId",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "amount",
+            "type": "uint16"
+          }
+        ],
+        "internalType": "struct ResourceData[]",
+        "name": "resourceRequirements",
+        "type": "tuple[]"
+      },
+      {
+        "internalType": "uint256",
+        "name": "replacesId",
+        "type": "uint256"
+      }
+    ],
+    "name": "addExpedition",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "expeditionId",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "estraTokenId",
+        "type": "uint256"
+      }
+    ],
+    "name": "availableEnergy",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "availableExpeditions",
+    "outputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "",
+        "type": "uint256[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint16",
+        "name": "expeditionId",
+        "type": "uint16"
+      },
+      {
+        "internalType": "uint256",
+        "name": "estraTokenId",
+        "type": "uint256"
+      },
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "contractAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "uint16",
+            "name": "itemId",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "amount",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint8",
+            "name": "groupId",
+            "type": "uint8"
+          }
+        ],
+        "internalType": "struct NftByItemIdV3[]",
+        "name": "nftRewards",
+        "type": "tuple[]"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint16",
+            "name": "resourceId",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "amount",
+            "type": "uint16"
+          }
+        ],
+        "internalType": "struct ResourceData[]",
+        "name": "resourceRewards",
+        "type": "tuple[]"
+      },
+      {
+        "internalType": "uint16",
+        "name": "activityId",
+        "type": "uint16"
+      },
+      {
+        "internalType": "uint256",
+        "name": "experienceGained",
+        "type": "uint256"
+      }
+    ],
+    "name": "completeExpedition",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "expeditionFee",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "expeditionId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getExpeditionData",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "bool",
+            "name": "enabled",
+            "type": "bool"
+          },
+          {
+            "internalType": "uint32[]",
+            "name": "collectionIds",
+            "type": "uint32[]"
+          }
+        ],
+        "internalType": "struct ExpeditionData",
+        "name": "",
+        "type": "tuple"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint16",
+            "name": "resourceId",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "amount",
+            "type": "uint16"
+          }
+        ],
+        "internalType": "struct ResourceData[]",
+        "name": "",
+        "type": "tuple[]"
+      },
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "contractAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "uint16",
+            "name": "itemId",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "amount",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint8",
+            "name": "groupId",
+            "type": "uint8"
+          }
+        ],
+        "internalType": "struct NftByItemIdV3[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "estraTokenId",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "getLastExpeditionsByTokenIds",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint16",
+            "name": "expeditionId",
+            "type": "uint16"
+          },
+          {
+            "internalType": "address",
+            "name": "playerAddress",
+            "type": "address"
+          }
+        ],
+        "internalType": "struct PlayerExpedition[]",
+        "name": "expeditions",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "estraTokenId",
+        "type": "uint256"
+      }
+    ],
+    "name": "secondsUntilNextEnergyReset",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "expeditionId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "enabled",
+        "type": "bool"
+      }
+    ],
+    "name": "setExpeditionEnabled",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "fee",
+        "type": "uint256"
+      }
+    ],
+    "name": "setExpeditionFee",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "maxEnergy",
+        "type": "uint256"
+      }
+    ],
+    "name": "setMaxEnergy",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "estraTokenId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint16",
+        "name": "expeditionId",
+        "type": "uint16"
+      },
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "contractAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "tokenId",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct InputNftData[]",
+        "name": "suppliedNfts",
+        "type": "tuple[]"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint16",
+            "name": "resourceId",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "amount",
+            "type": "uint16"
+          }
+        ],
+        "internalType": "struct ResourceData[]",
+        "name": "suppliedResources",
+        "type": "tuple[]"
+      }
+    ],
+    "name": "startExpedition",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  }
+]

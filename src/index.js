@@ -5,9 +5,10 @@ const { fetchMissionReward } = require('./mission-interaction.js');
 const cron = require('node-cron');
 const {MongoClient} = require("mongodb");
 const {publishSummary, sendVerificationDm} = require("./discord-client");
-const {initStats} = require("./summary/daily-stats");
+const {initStats, increaseExpeditionCounter, resetStats} = require("./summary/daily-stats");
 const {loadRevealStatus} = require("./reveal-status");
 const {handleNewTrade} = require("./trades/handle-new-trade");
+const {EXPEDITION_CONTRACT} = require("./abi-interaction");
 
 setupDiscordBot().then(() => {
     setupMissionRewardListener()
@@ -19,7 +20,7 @@ setupDiscordBot().then(() => {
         publishSummary();
     });
 
-    handleNewTrade("0xaf79f0735d78572a1dfda7e04906545a4be1ea524f593eaad08077203f40841b")
+    //handleNewTrade("0xaf79f0735d78572a1dfda7e04906545a4be1ea524f593eaad08077203f40841b")
 });
 
 function setupMongoDbConnection() {
@@ -69,29 +70,40 @@ function setupMissionRewardListener() {
         console.log('Error:', error, receipt);
       });
 
-    MARKETPLACE_CONTRACT.events.BidCreated({fromBlock: 'latest'})
-      .on("connected", function (_subscriptionId) {
-        console.log('connected to bid created event')
-      })
-      .on('data', function (event) {
-        console.log('bid created event')
-        console.log(event)
-      })
-      .on('error', function (error, receipt) {
-        console.log('Error:', error, receipt);
-      });
+    // MARKETPLACE_CONTRACT.events.BidCreated({fromBlock: 'latest'})
+    //   .on("connected", function (_subscriptionId) {
+    //     console.log('connected to bid created event')
+    //   })
+    //   .on('data', function (event) {
+    //     console.log('bid created event')
+    //     console.log(event)
+    //   })
+    //   .on('error', function (error, receipt) {
+    //     console.log('Error:', error, receipt);
+    //   });
+    //
+    // MARKETPLACE_CONTRACT.events.TradeCreated({fromBlock: 'latest'})
+    //   .on("connected", function (_subscriptionId) {
+    //     console.log('connected to trade created event')
+    //   })
+    //   .on('data', function (event) {
+    //     console.log('trade created event')
+    //     console.log('>>> event', event)
+    //
+    //     handleNewTrade(event.returnValues.tradeId)
+    //   })
+    //   .on('error', function (error, receipt) {
+    //     console.log('Error:', error, receipt);
+    //   });
 
-    MARKETPLACE_CONTRACT.events.TradeCreated({fromBlock: 'latest'})
-      .on("connected", function (_subscriptionId) {
-        console.log('connected to trade created event')
-      })
-      .on('data', function (event) {
-        console.log('trade created event')
-        console.log('>>> event', event)
-
-        handleNewTrade(event.returnValues.tradeId)
-      })
-      .on('error', function (error, receipt) {
-        console.log('Error:', error, receipt);
-      });
+  EXPEDITION_CONTRACT.events.ExpeditionStart({fromBlock: 'latest'})
+    .on("connected", function (_subscriptionId) {
+      console.log('connected to expedition start event')
+    })
+    .on('data', function (_event) {
+      increaseExpeditionCounter()
+    })
+    .on('error', function (error, receipt) {
+      console.log('Error:', error, receipt);
+    });
 }
