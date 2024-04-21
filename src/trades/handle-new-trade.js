@@ -13,6 +13,13 @@ async function handleNewTrade(tradeId) {
   const tradeInfo = await fetchTradeByIdFromSquid(tradeId)
   console.log('tradeInfo', tradeInfo)
 
+  const tradeNfts = []
+  for (const erc721 of tradeInfo.erc721s) {
+    const erc721MetadataLink = await fetchNftMetadataByIdAndCollection(erc721.tokenId, erc721.contractAddress.toLowerCase())
+    const erc721Metadata = await getFromIpfs(erc721MetadataLink)
+    tradeNfts.push(erc721Metadata)
+  }
+
   const tradeResources = []
   for (const erc1155 of tradeInfo.erc1155s) {
     const resourceInfo = await enrichErc1155Info(erc1155.tokenId, erc1155.amount)
@@ -23,13 +30,7 @@ async function handleNewTrade(tradeId) {
     tradeResources.push(resourceInfo)
   }
 
-  for (const erc721 of tradeInfo.erc721s) {
-    const erc721Metadata = await fetchNftMetadataByIdAndCollection(erc721.tokenId, erc721.contractAddress)
-    console.log('erc721Metadata', erc721Metadata)
-    tradeResources.push(resourceInfo)
-  }
-
-  const newTradeEmbed = createNewTradeEmbed(tradeInfo, tradeResources)
+  const newTradeEmbed = createNewTradeEmbed(tradeInfo, tradeNfts, tradeResources)
 
   await postNewTrade(newTradeEmbed)
 

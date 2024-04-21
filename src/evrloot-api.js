@@ -54,6 +54,18 @@ query MyQuery($tradeId: String!) {
 }
 `
 
+const QUERY_NFT_METADATA_BY_ID_AND_COLLECTION = `
+query MyQuery($tokenId: Int!, $collectionAddress: String!) {
+  nfts(where: {tokenId_eq: $tokenId, collection: {address_eq: $collectionAddress}}) {
+    assets {
+      asset {
+        metadata
+      }
+    }
+  }
+}
+`
+
 module.exports = {
   getSouls,
   getOnlySouls,
@@ -63,6 +75,7 @@ module.exports = {
   getFromIpfs,
   fetchSoulIdFromSquid,
   fetchTradeByIdFromSquid,
+  fetchNftMetadataByIdAndCollection
 }
 
 
@@ -157,7 +170,6 @@ async function fetchTradeByIdFromSquid(tradeId) {
   })
     .then((res) => res.json())
     .then((result) => {
-      console.log('>> RESULT:', result)
       return result.data.tradeById;
     })
     .catch((err) => {
@@ -165,3 +177,29 @@ async function fetchTradeByIdFromSquid(tradeId) {
       return undefined
     });
 }
+
+async function fetchNftMetadataByIdAndCollection(tokenId, collectionAddress) {
+  console.log('[API]', 'fetching nft metadata from squid for tokenId', tokenId, 'collection', collectionAddress)
+  return fetch(SQUID_MOONBASE_ADDRESS, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      query: QUERY_NFT_METADATA_BY_ID_AND_COLLECTION,
+      variables: {
+        tokenId,
+        collectionAddress
+      },
+    }),
+  })
+    .then((res) => res.json())
+    .then((result) => {
+      return result.data.nfts[0].assets[0].asset.metadata;
+    })
+    .catch((err) => {
+      console.log('error while fetching from squid:', err);
+      return undefined
+    });
+}
+QUERY_NFT_METADATA_BY_ID_AND_COLLECTION

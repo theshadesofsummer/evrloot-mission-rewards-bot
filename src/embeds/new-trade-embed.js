@@ -1,3 +1,4 @@
+const {findValueForAttribute} = require("../helpers/attribute-finder");
 const GLMR_DECIMALS = Math.pow(10, 18);
 const TOKEN_INFOS = new Map([
   ['0x7D23Be80b71Dfe922E17407CaB9F9B8c796835D4', {
@@ -5,11 +6,22 @@ const TOKEN_INFOS = new Map([
     decimals: Math.pow(10, 18)
   }]
 ])
-module.exports = function createNewTradeEmbed(tradeInfo, tradeResources) {
+module.exports = function createNewTradeEmbed(tradeInfo, tradeNfts, tradeResources) {
   const fields = []
 
   const glmrAmount = parseInt(tradeInfo.buyOutEther)
   const erc20Amount = parseInt(tradeInfo.buyOutErc20.amount)
+
+  if (tradeNfts.length > 0) {
+    const nftInfo = tradeNfts
+      .map(formatNftLines)
+      .join('\n')
+
+    fields.push({
+      name: 'Nfts',
+      value: nftInfo
+    })
+  }
 
   if (tradeResources.length > 0) {
     const resourceInfo = tradeResources
@@ -54,6 +66,37 @@ module.exports = function createNewTradeEmbed(tradeInfo, tradeResources) {
 }
 
 function formatResourceLine(resource) {
-  console.log('only resource to format', resource)
   return `${resource.amount}x **${resource.retrievedMetadata.name}** ${resource.emoteId}`
+}
+const relevantStatAttributes = [
+  "Strength",
+  "Dexterity",
+  "Intelligence",
+  "Wisdom",
+  "Fortitude",
+  "Luck",
+  "Armor",
+  "MinDamage",
+  "MaxDamage",
+  "Fishing",
+]
+const shortenedStatName = new Map([
+  ["Strength", "STR"],
+  ["Dexterity", "DEX"],
+  ["Intelligence", "INT"],
+  ["Wisdom", "WSDM"],
+  ["Fortitude", "FOR"],
+  ["Luck", "LUCK"],
+  ["Armor", "ARMOR"],
+  ["MinDamage", "MINDAM"],
+  ["MaxDamage", "MAXDAM"],
+  ["Fishing", "FISH"],
+])
+function formatNftLines(nft) {
+  const rarity = findValueForAttribute(nft.attributes, 'Rarity')
+  const relevantStats = nft.attributes.filter(attribute => relevantStatAttributes.includes(attribute.label))
+  const formattedStats = relevantStats
+    .map(stat => `\`(+${stat.value} ${shortenedStatName.get(stat.label)})\``)
+    .join('\n')
+  return `[${rarity}] **${nft.name}**\n${formattedStats}`
 }
