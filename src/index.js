@@ -101,6 +101,7 @@ function setupMissionRewardListener() {
       console.log('connected to expedition start event')
     })
     .on('data', function (_event) {
+      console.log('increaseExpeditionCounter')
       increaseExpeditionCounter()
     })
     .on('error', function (error, receipt) {

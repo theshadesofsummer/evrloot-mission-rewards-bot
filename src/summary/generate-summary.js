@@ -10,7 +10,7 @@ module.exports = function generateSummary() {
         .sort(raritySorter)
 
     let summary = '```ansi\n' +
-        `\u001b[1;31;47mExpeditions started: ${missionCounter}\u001b[0m\n\n` +
+        `\u001b[1;31mExpeditions started: ${missionCounter}\u001b[0m\n\n` +
         `Missions claimed: \u001b[1;36m${missionCounter}\u001b[0m\n` +
         'Gathered in the last 24 hours:\n';
 
