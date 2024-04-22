@@ -1,7 +1,7 @@
 const { getStats, resetStats } = require('./daily-stats')
 
 module.exports = function generateSummary() {
-    const {stats, missionCounter} = getStats();
+    const {stats, missionCounter, expeditionCounter} = getStats();
 
     const allStats = Array.from(stats)
     const sortedStatsWithRarity =
@@ -10,7 +10,7 @@ module.exports = function generateSummary() {
         .sort(raritySorter)
 
     let summary = '```ansi\n' +
-        `\u001b[1;31mExpeditions started: ${missionCounter}\u001b[0m\n\n` +
+        `\u001b[1;31mExpeditions started: ${expeditionCounter}\u001b[0m\n\n` +
         `Missions claimed: \u001b[1;36m${missionCounter}\u001b[0m\n` +
         'Gathered in the last 24 hours:\n';
 

@@ -28,8 +28,10 @@ function initStats() {
         const savedStatsJson = JSON.parse(savedStats);
         if (savedStatsJson['stats'])
             statsMapAsArray = savedStatsJson['stats'];
-        if (savedStatsJson['counter'])
-            missionCounter = savedStatsJson['counter'];
+        if (savedStatsJson['missionCounter'])
+            missionCounter = savedStatsJson['missionCounter'];
+        if (savedStatsJson['expeditionCounter'])
+            missionCounter = savedStatsJson['expeditionCounter'];
     } catch (err) {
         console.warn('could not load init map', err)
     }
@@ -39,7 +41,7 @@ function initStats() {
 function getStats() {
     return {
         stats: stats,
-        missionCounter: missionCounter,
+        missionCounter,
         expeditionCounter
     };
 }
@@ -48,7 +50,7 @@ function resetStats() {
     stats.clear();
     missionCounter = 0;
     expeditionCounter = 0;
-    fs.writeFileSync('./stats.json', JSON.stringify({counter: missionCounter, expeditionCounter, stats: [...stats]}) , 'utf-8');
+    fs.writeFileSync('./stats.json', JSON.stringify({expeditionCounter, missionCounter, stats: [...stats]}) , 'utf-8');
 }
 
 function addToStats(reward) {
@@ -71,14 +73,16 @@ function addToStats(reward) {
             }
         )
     }
-    fs.writeFileSync('./stats.json', JSON.stringify({counter: missionCounter, stats: [...stats]}) , 'utf-8');
+    fs.writeFileSync('./stats.json', JSON.stringify({expeditionCounter, missionCounter, stats: [...stats]}) , 'utf-8');
 }
 
 
 function increaseMissionCounter() {
     missionCounter++;
+    fs.writeFileSync('./stats.json', JSON.stringify({expeditionCounter, missionCounter, stats: [...stats]}) , 'utf-8');
 }
 
 function increaseExpeditionCounter() {
     expeditionCounter++;
+    fs.writeFileSync('./stats.json', JSON.stringify({expeditionCounter, missionCounter, stats: [...stats]}) , 'utf-8');
 }
