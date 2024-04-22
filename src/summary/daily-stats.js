@@ -31,7 +31,7 @@ function initStats() {
         if (savedStatsJson['missionCounter'])
             missionCounter = savedStatsJson['missionCounter'];
         if (savedStatsJson['expeditionCounter'])
-            missionCounter = savedStatsJson['expeditionCounter'];
+            expeditionCounter = savedStatsJson['expeditionCounter'];
     } catch (err) {
         console.warn('could not load init map', err)
     }
