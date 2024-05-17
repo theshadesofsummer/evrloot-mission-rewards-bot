@@ -6,7 +6,7 @@ const TOKEN_INFOS = new Map([
     decimals: Math.pow(10, 18)
   }]
 ])
-module.exports = function createNewTradeEmbed(tradeInfo, tradeNfts, tradeResources) {
+module.exports = function createNewTradeEmbed(tradeInfo, textInfo, tradeCreator, tradeNfts, tradeResources) {
   const fields = []
 
   const glmrAmount = parseInt(tradeInfo.buyOutEther)
@@ -49,17 +49,26 @@ module.exports = function createNewTradeEmbed(tradeInfo, tradeNfts, tradeResourc
     });
   }
 
+  let author = undefined
+  if (tradeCreator) {
+    author = {
+      iconURL: tradeCreator.avatarURL(),
+      name: tradeCreator.globalName
+    }
+  } else {
+    author = {
+      name: 'Unknown user'
+    }
+  }
+
   return {
     color: 0x5308a8,
-    title: 'New Trade on the marketplace!',
-    author: {
-      name: `no name`,
-      //icon_url: `https://game.evrloot.com/Soulclaim/${findValueForAttribute(attributes, 'Soul Class').toLowerCase()}.png`,
-    },
+    title: `New Trade: ${textInfo.title}`,
+    author,
     // thumbnail: {
     //   url: soul.retrievedMetadata.image
     // },
-    description: '',
+    description: textInfo.message,
     fields,
     timestamp: new Date().toISOString(),
   };

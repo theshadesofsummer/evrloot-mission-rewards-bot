@@ -1,7 +1,8 @@
 const {fetchTradeByIdFromSquid, getFromIpfs, fetchNftMetadataByIdAndCollection} = require("../evrloot-api");
-const {postNewTrade} = require("../discord-client");
+const {postNewTrade, getUserByClientId} = require("../discord-client");
 const createNewTradeEmbed = require('../embeds/new-trade-embed')
 const resourceRewards = require("../mappings/resource-types");
+const {getTradeMessages, getAccountByWallet} = require("../evrloot-db");
 
 module.exports = {
   handleNewTrade
@@ -11,7 +12,21 @@ async function handleNewTrade(tradeId) {
   console.log('handle new trade event with', tradeId)
 
   const tradeInfo = await fetchTradeByIdFromSquid(tradeId)
-  console.log('tradeInfo', tradeInfo)
+  console.log('>>>>>> tradeInfo', tradeInfo)
+  if (!tradeInfo) {
+    return;
+  }
+  const textInfo = await getTradeMessages(tradeInfo.id)
+  console.log(textInfo)
+  if (!textInfo) {
+    return;
+  }
+
+  let tradeCreator = undefined
+  const savedUser = await getAccountByWallet(tradeInfo.ownerAddress.toLowerCase())
+  if (savedUser) {
+    tradeCreator = await getUserByClientId(savedUser.discordId)
+  }
 
   const tradeNfts = []
   for (const erc721 of tradeInfo.erc721s) {
@@ -30,7 +45,7 @@ async function handleNewTrade(tradeId) {
     tradeResources.push(resourceInfo)
   }
 
-  const newTradeEmbed = createNewTradeEmbed(tradeInfo, tradeNfts, tradeResources)
+  const newTradeEmbed = createNewTradeEmbed(tradeInfo, textInfo, tradeCreator, tradeNfts, tradeResources)
 
   await postNewTrade(newTradeEmbed)
 

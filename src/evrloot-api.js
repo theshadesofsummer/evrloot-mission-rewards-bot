@@ -4,7 +4,6 @@ const fs = require("fs");
 const {getSoulIpfsLink} = require("./abi-interaction");
 
 const SQUID_ADDRESS = 'https://squid.subsquid.io/evrsquid/graphql';
-const SQUID_MOONBASE_ADDRESS = 'http://api.evrloot.io:4350/graphql';
 const QUERY_SOUL_ID_BY_ESTRA_TOKEN_ID = `
 query MyQuery($estraTokenId: Int!) {
   nfts(where: {estraTokenId_eq: $estraTokenId}) {
@@ -156,7 +155,7 @@ async function fetchSoulIdFromSquid(estraTokenId) {
 
 async function fetchTradeByIdFromSquid(tradeId) {
   console.log('[API]', 'fetching trade from squid for tradeId', tradeId)
-  return fetch(SQUID_MOONBASE_ADDRESS, {
+  return fetch(SQUID_ADDRESS, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -180,7 +179,7 @@ async function fetchTradeByIdFromSquid(tradeId) {
 
 async function fetchNftMetadataByIdAndCollection(tokenId, collectionAddress) {
   console.log('[API]', 'fetching nft metadata from squid for tokenId', tokenId, 'collection', collectionAddress)
-  return fetch(SQUID_MOONBASE_ADDRESS, {
+  return fetch(SQUID_ADDRESS, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

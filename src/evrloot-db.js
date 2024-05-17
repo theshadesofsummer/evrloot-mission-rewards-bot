@@ -21,7 +21,8 @@ module.exports = {
   getSoulCooldown,
   getLeaderboardEntries,
   updateWinnerOnLeaderboard,
-  addFightParticipants
+  addFightParticipants,
+  getTradeMessages
 }
 
 const uri = `mongodb+srv://${process.env.MONGODB_ACCESS}@cluster0.cbrbn.mongodb.net/evrloot?retryWrites=true&w=majority`;
@@ -416,24 +417,21 @@ async function addFightParticipants(discordId){
   }
 }
 
-async function getTradeMessages(block, address) {
+async function getTradeMessages(tradeId) {
   const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
   try {
-    console.log('[DB]', 'get the cooldown from a soul', soulId)
+    console.log('[DB]', 'get trade messages', tradeId)
     const collection = client.db("evrloot").collection("trademessages");
 
-    const cooldownDoc = await collection.findOne({playerAddress: address, block});
-    cooldownDoc.title
-    cooldownDoc.message
+    const tradeMessagesDoc = await collection.findOne({tradeId});
 
-    if (cooldownDoc.cooldownUntil < Math.round(Date.now() / 1000)) {
-      await collection.deleteOne({soul: soulId})
-      return undefined
+    if (!tradeMessagesDoc) {
+      console.warn('[DB] no trade message for', tradeId)
     }
 
-    return cooldownDoc;
+    return tradeMessagesDoc
   } catch (error) {
-    console.error('[DB]', 'Error getting the soul cooldown', error);
+    console.error('[DB]', 'Error getting trade messages', error);
     return undefined
   } finally {
     await client.close();

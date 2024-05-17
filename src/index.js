@@ -20,7 +20,7 @@ setupDiscordBot().then(() => {
         publishSummary();
     });
 
-    //handleNewTrade("0xaf79f0735d78572a1dfda7e04906545a4be1ea524f593eaad08077203f40841b")
+    // handleNewTrade("0x2f627cc8385d31a67220e4901045265a683060ff3f6f78abc22a12617819be9b")
 });
 
 function setupMongoDbConnection() {
@@ -70,31 +70,31 @@ function setupMissionRewardListener() {
         console.log('Error:', error, receipt);
       });
 
-    // MARKETPLACE_CONTRACT.events.BidCreated({fromBlock: 'latest'})
-    //   .on("connected", function (_subscriptionId) {
-    //     console.log('connected to bid created event')
-    //   })
-    //   .on('data', function (event) {
-    //     console.log('bid created event')
-    //     console.log(event)
-    //   })
-    //   .on('error', function (error, receipt) {
-    //     console.log('Error:', error, receipt);
-    //   });
-    //
-    // MARKETPLACE_CONTRACT.events.TradeCreated({fromBlock: 'latest'})
-    //   .on("connected", function (_subscriptionId) {
-    //     console.log('connected to trade created event')
-    //   })
-    //   .on('data', function (event) {
-    //     console.log('trade created event')
-    //     console.log('>>> event', event)
-    //
-    //     handleNewTrade(event.returnValues.tradeId)
-    //   })
-    //   .on('error', function (error, receipt) {
-    //     console.log('Error:', error, receipt);
-    //   });
+    MARKETPLACE_CONTRACT.events.BidCreated({fromBlock: 'latest'})
+      .on("connected", function (_subscriptionId) {
+        console.log('connected to bid created event')
+      })
+      .on('data', function (event) {
+        console.log('bid created event')
+        console.log(event)
+      })
+      .on('error', function (error, receipt) {
+        console.log('Error:', error, receipt);
+      });
+
+    MARKETPLACE_CONTRACT.events.TradeCreated({fromBlock: 'latest'})
+      .on("connected", function (_subscriptionId) {
+        console.log('connected to trade created event')
+      })
+      .on('data', function (event) {
+        console.log('trade created event')
+        console.log('>>> event', event)
+
+        handleNewTrade(event.returnValues.tradeId)
+      })
+      .on('error', function (error, receipt) {
+        console.log('Error:', error, receipt);
+      });
 
   EXPEDITION_CONTRACT.events.ExpeditionStart({fromBlock: 'latest'})
     .on("connected", function (_subscriptionId) {
