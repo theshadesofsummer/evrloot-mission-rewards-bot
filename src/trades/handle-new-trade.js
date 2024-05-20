@@ -11,6 +11,7 @@ module.exports = {
 async function handleNewTrade(tradeId) {
   console.log('handle new trade event with', tradeId)
 
+  await new Promise(resolve => setTimeout(resolve, 10000));
   const tradeInfo = await fetchTradeByIdFromSquid(tradeId)
   console.log('>>>>>> tradeInfo', tradeInfo)
   if (!tradeInfo) {

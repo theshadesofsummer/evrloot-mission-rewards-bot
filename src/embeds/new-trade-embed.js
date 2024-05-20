@@ -1,8 +1,8 @@
 const {findValueForAttribute} = require("../helpers/attribute-finder");
 const GLMR_DECIMALS = Math.pow(10, 18);
 const TOKEN_INFOS = new Map([
-  ['0x7D23Be80b71Dfe922E17407CaB9F9B8c796835D4', {
-    ticker: 'tEVR',
+  ['0xfFfFFfFf30478fAFBE935e466da114E14fB3563d', {
+    ticker: 'PINK',
     decimals: Math.pow(10, 18)
   }]
 ])

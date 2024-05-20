@@ -6,32 +6,12 @@
   },
   {
     "inputs": [],
-    "name": "BidExceedsBuyoutPrice",
+    "name": "AmountCannotBeZero",
     "type": "error"
   },
   {
     "inputs": [],
-    "name": "BuyOutERC20BidCannotContainOtherItems",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "BuyOutEtherBidCannotContainOtherItems",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "CancellationFeeIncorrect",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "CannotBidOnOwnTrade",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "CannotCancelTradeYet",
+    "name": "ContractIsPaused",
     "type": "error"
   },
   {
@@ -41,85 +21,907 @@
   },
   {
     "inputs": [],
-    "name": "InsufficientBid",
+    "name": "ERC6059ChildNotFound",
     "type": "error"
   },
   {
     "inputs": [],
-    "name": "MarketBidDoesNotExist",
+    "name": "ERC6059NotOwner",
     "type": "error"
   },
   {
     "inputs": [],
-    "name": "MarketBidDoesNotMatchTrade",
+    "name": "ERC6059NotStakedOwner",
     "type": "error"
   },
   {
     "inputs": [],
-    "name": "MarketTradeDoesNotExist",
+    "name": "ERC721NotOwner",
     "type": "error"
   },
   {
     "inputs": [],
-    "name": "NotBidOwner",
-    "type": "error"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_user",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_contractOwner",
-        "type": "address"
-      }
-    ],
-    "name": "NotContractOwner",
-    "type": "error"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_user",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_contractOwner",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_backendAddress",
-        "type": "address"
-      }
-    ],
-    "name": "NotPermitted",
+    "name": "Erc20AddressNotSupported",
     "type": "error"
   },
   {
     "inputs": [],
-    "name": "NotTradeOwner",
+    "name": "InsufficientEscrowedResource",
     "type": "error"
   },
   {
     "inputs": [],
-    "name": "ReEntrancyLock",
+    "name": "InsufficientEscrowedUnclaimedNft",
     "type": "error"
   },
   {
     "inputs": [],
-    "name": "UnclaimedResourcesInvalidBurnAmount",
+    "name": "InsufficientEscrowedUnclaimedResource",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NftNotEscrowed",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NftNotSupported",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NoItemsSuppliedForTrade",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ResourceIdNotSupported",
     "type": "error"
   },
   {
     "inputs": [],
     "name": "ZeroAddress",
     "type": "error"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "bytes32",
+        "name": "tradeId",
+        "type": "bytes32"
+      },
+      {
+        "components": [
+          {
+            "components": [
+              {
+                "internalType": "address",
+                "name": "contractAddress",
+                "type": "address"
+              },
+              {
+                "internalType": "uint16",
+                "name": "itemId",
+                "type": "uint16"
+              },
+              {
+                "internalType": "uint16",
+                "name": "amount",
+                "type": "uint16"
+              }
+            ],
+            "internalType": "struct NftByItemId[]",
+            "name": "unclaimedNfts",
+            "type": "tuple[]"
+          },
+          {
+            "components": [
+              {
+                "internalType": "uint16",
+                "name": "resourceId",
+                "type": "uint16"
+              },
+              {
+                "internalType": "uint16",
+                "name": "amount",
+                "type": "uint16"
+              }
+            ],
+            "internalType": "struct ResourceData[]",
+            "name": "unclaimedResources",
+            "type": "tuple[]"
+          },
+          {
+            "components": [
+              {
+                "internalType": "address",
+                "name": "contractAddress",
+                "type": "address"
+              },
+              {
+                "internalType": "uint256",
+                "name": "tokenId",
+                "type": "uint256"
+              }
+            ],
+            "internalType": "struct NftByTokenId[]",
+            "name": "nfts",
+            "type": "tuple[]"
+          },
+          {
+            "components": [
+              {
+                "internalType": "uint16",
+                "name": "resourceId",
+                "type": "uint16"
+              },
+              {
+                "internalType": "uint16",
+                "name": "amount",
+                "type": "uint16"
+              }
+            ],
+            "internalType": "struct ResourceData[]",
+            "name": "resources",
+            "type": "tuple[]"
+          },
+          {
+            "components": [
+              {
+                "internalType": "address",
+                "name": "contractAddress",
+                "type": "address"
+              },
+              {
+                "internalType": "uint16",
+                "name": "itemId",
+                "type": "uint16"
+              },
+              {
+                "internalType": "uint16",
+                "name": "amount",
+                "type": "uint16"
+              }
+            ],
+            "internalType": "struct NftByItemId[]",
+            "name": "escrowedUnclaimedNfts",
+            "type": "tuple[]"
+          },
+          {
+            "components": [
+              {
+                "internalType": "uint16",
+                "name": "resourceId",
+                "type": "uint16"
+              },
+              {
+                "internalType": "uint16",
+                "name": "amount",
+                "type": "uint16"
+              }
+            ],
+            "internalType": "struct ResourceData[]",
+            "name": "escrowedUnclaimedResources",
+            "type": "tuple[]"
+          },
+          {
+            "components": [
+              {
+                "internalType": "address",
+                "name": "contractAddress",
+                "type": "address"
+              },
+              {
+                "internalType": "uint256",
+                "name": "tokenId",
+                "type": "uint256"
+              }
+            ],
+            "internalType": "struct NftByTokenId[]",
+            "name": "escrowedNfts",
+            "type": "tuple[]"
+          },
+          {
+            "components": [
+              {
+                "internalType": "uint16",
+                "name": "resourceId",
+                "type": "uint16"
+              },
+              {
+                "internalType": "uint16",
+                "name": "amount",
+                "type": "uint16"
+              }
+            ],
+            "internalType": "struct ResourceData[]",
+            "name": "escrowedResources",
+            "type": "tuple[]"
+          },
+          {
+            "components": [
+              {
+                "internalType": "address",
+                "name": "contractAddress",
+                "type": "address"
+              },
+              {
+                "internalType": "uint256",
+                "name": "amount",
+                "type": "uint256"
+              }
+            ],
+            "internalType": "struct Erc20Token",
+            "name": "buyOutErc20Token",
+            "type": "tuple"
+          },
+          {
+            "internalType": "uint256",
+            "name": "buyOutEtherPrice",
+            "type": "uint256"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct NewTrade",
+        "name": "tradeData",
+        "type": "tuple"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "tradeOwnerAddress",
+        "type": "address"
+      }
+    ],
+    "name": "TradeCreated",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "components": [
+              {
+                "internalType": "address",
+                "name": "contractAddress",
+                "type": "address"
+              },
+              {
+                "internalType": "uint16",
+                "name": "itemId",
+                "type": "uint16"
+              },
+              {
+                "internalType": "uint16",
+                "name": "amount",
+                "type": "uint16"
+              }
+            ],
+            "internalType": "struct NftByItemId[]",
+            "name": "unclaimedNfts",
+            "type": "tuple[]"
+          },
+          {
+            "components": [
+              {
+                "internalType": "uint16",
+                "name": "resourceId",
+                "type": "uint16"
+              },
+              {
+                "internalType": "uint16",
+                "name": "amount",
+                "type": "uint16"
+              }
+            ],
+            "internalType": "struct ResourceData[]",
+            "name": "unclaimedResources",
+            "type": "tuple[]"
+          },
+          {
+            "components": [
+              {
+                "internalType": "address",
+                "name": "contractAddress",
+                "type": "address"
+              },
+              {
+                "internalType": "uint256",
+                "name": "tokenId",
+                "type": "uint256"
+              }
+            ],
+            "internalType": "struct NftByTokenId[]",
+            "name": "nfts",
+            "type": "tuple[]"
+          },
+          {
+            "components": [
+              {
+                "internalType": "uint16",
+                "name": "resourceId",
+                "type": "uint16"
+              },
+              {
+                "internalType": "uint16",
+                "name": "amount",
+                "type": "uint16"
+              }
+            ],
+            "internalType": "struct ResourceData[]",
+            "name": "resources",
+            "type": "tuple[]"
+          },
+          {
+            "components": [
+              {
+                "internalType": "address",
+                "name": "contractAddress",
+                "type": "address"
+              },
+              {
+                "internalType": "uint16",
+                "name": "itemId",
+                "type": "uint16"
+              },
+              {
+                "internalType": "uint16",
+                "name": "amount",
+                "type": "uint16"
+              }
+            ],
+            "internalType": "struct NftByItemId[]",
+            "name": "escrowedUnclaimedNfts",
+            "type": "tuple[]"
+          },
+          {
+            "components": [
+              {
+                "internalType": "uint16",
+                "name": "resourceId",
+                "type": "uint16"
+              },
+              {
+                "internalType": "uint16",
+                "name": "amount",
+                "type": "uint16"
+              }
+            ],
+            "internalType": "struct ResourceData[]",
+            "name": "escrowedUnclaimedResources",
+            "type": "tuple[]"
+          },
+          {
+            "components": [
+              {
+                "internalType": "address",
+                "name": "contractAddress",
+                "type": "address"
+              },
+              {
+                "internalType": "uint256",
+                "name": "tokenId",
+                "type": "uint256"
+              }
+            ],
+            "internalType": "struct NftByTokenId[]",
+            "name": "escrowedNfts",
+            "type": "tuple[]"
+          },
+          {
+            "components": [
+              {
+                "internalType": "uint16",
+                "name": "resourceId",
+                "type": "uint16"
+              },
+              {
+                "internalType": "uint16",
+                "name": "amount",
+                "type": "uint16"
+              }
+            ],
+            "internalType": "struct ResourceData[]",
+            "name": "escrowedResources",
+            "type": "tuple[]"
+          },
+          {
+            "components": [
+              {
+                "internalType": "address",
+                "name": "contractAddress",
+                "type": "address"
+              },
+              {
+                "internalType": "uint256",
+                "name": "amount",
+                "type": "uint256"
+              }
+            ],
+            "internalType": "struct Erc20Token",
+            "name": "buyOutErc20Token",
+            "type": "tuple"
+          },
+          {
+            "internalType": "uint256",
+            "name": "buyOutEtherPrice",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct NewTrade",
+        "name": "_newTrade",
+        "type": "tuple"
+      }
+    ],
+    "name": "createTrade",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "tradeId",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "components": [
+              {
+                "internalType": "address",
+                "name": "contractAddress",
+                "type": "address"
+              },
+              {
+                "internalType": "uint16",
+                "name": "itemId",
+                "type": "uint16"
+              },
+              {
+                "internalType": "uint16",
+                "name": "amount",
+                "type": "uint16"
+              }
+            ],
+            "internalType": "struct NftByItemId[]",
+            "name": "unclaimedNfts",
+            "type": "tuple[]"
+          },
+          {
+            "components": [
+              {
+                "internalType": "uint16",
+                "name": "resourceId",
+                "type": "uint16"
+              },
+              {
+                "internalType": "uint16",
+                "name": "amount",
+                "type": "uint16"
+              }
+            ],
+            "internalType": "struct ResourceData[]",
+            "name": "unclaimedResources",
+            "type": "tuple[]"
+          },
+          {
+            "components": [
+              {
+                "internalType": "address",
+                "name": "contractAddress",
+                "type": "address"
+              },
+              {
+                "internalType": "uint256",
+                "name": "tokenId",
+                "type": "uint256"
+              }
+            ],
+            "internalType": "struct NftByTokenId[]",
+            "name": "nfts",
+            "type": "tuple[]"
+          },
+          {
+            "components": [
+              {
+                "internalType": "uint16",
+                "name": "resourceId",
+                "type": "uint16"
+              },
+              {
+                "internalType": "uint16",
+                "name": "amount",
+                "type": "uint16"
+              }
+            ],
+            "internalType": "struct ResourceData[]",
+            "name": "resources",
+            "type": "tuple[]"
+          },
+          {
+            "components": [
+              {
+                "internalType": "address",
+                "name": "contractAddress",
+                "type": "address"
+              },
+              {
+                "internalType": "uint16",
+                "name": "itemId",
+                "type": "uint16"
+              },
+              {
+                "internalType": "uint16",
+                "name": "amount",
+                "type": "uint16"
+              }
+            ],
+            "internalType": "struct NftByItemId[]",
+            "name": "escrowedUnclaimedNfts",
+            "type": "tuple[]"
+          },
+          {
+            "components": [
+              {
+                "internalType": "uint16",
+                "name": "resourceId",
+                "type": "uint16"
+              },
+              {
+                "internalType": "uint16",
+                "name": "amount",
+                "type": "uint16"
+              }
+            ],
+            "internalType": "struct ResourceData[]",
+            "name": "escrowedUnclaimedResources",
+            "type": "tuple[]"
+          },
+          {
+            "components": [
+              {
+                "internalType": "address",
+                "name": "contractAddress",
+                "type": "address"
+              },
+              {
+                "internalType": "uint256",
+                "name": "tokenId",
+                "type": "uint256"
+              }
+            ],
+            "internalType": "struct NftByTokenId[]",
+            "name": "escrowedNfts",
+            "type": "tuple[]"
+          },
+          {
+            "components": [
+              {
+                "internalType": "uint16",
+                "name": "resourceId",
+                "type": "uint16"
+              },
+              {
+                "internalType": "uint16",
+                "name": "amount",
+                "type": "uint16"
+              }
+            ],
+            "internalType": "struct ResourceData[]",
+            "name": "escrowedResources",
+            "type": "tuple[]"
+          },
+          {
+            "components": [
+              {
+                "internalType": "address",
+                "name": "contractAddress",
+                "type": "address"
+              },
+              {
+                "internalType": "uint256",
+                "name": "amount",
+                "type": "uint256"
+              }
+            ],
+            "internalType": "struct Erc20Token",
+            "name": "buyOutErc20Token",
+            "type": "tuple"
+          },
+          {
+            "internalType": "uint256",
+            "name": "buyOutEtherPrice",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct NewTrade",
+        "name": "_newTrade",
+        "type": "tuple"
+      }
+    ],
+    "name": "tradeCreationFee",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "bytes32",
+        "name": "tradeId",
+        "type": "bytes32"
+      }
+    ],
+    "name": "TradeCancelled",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "ownerAddress",
+        "type": "address"
+      },
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "contractAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "uint16",
+            "name": "itemId",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "amount",
+            "type": "uint16"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct NftByItemId[]",
+        "name": "unclaimedNfts",
+        "type": "tuple[]"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint16",
+            "name": "resourceId",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "amount",
+            "type": "uint16"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct ResourceData[]",
+        "name": "unclaimedResources",
+        "type": "tuple[]"
+      },
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "contractAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "tokenId",
+            "type": "uint256"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct NftByTokenId[]",
+        "name": "nfts",
+        "type": "tuple[]"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint16",
+            "name": "resourceId",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "amount",
+            "type": "uint16"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct ResourceData[]",
+        "name": "resources",
+        "type": "tuple[]"
+      },
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "contractAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amount",
+            "type": "uint256"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct Erc20Token",
+        "name": "erc20Token",
+        "type": "tuple"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "etherValue",
+        "type": "uint256"
+      }
+    ],
+    "name": "WithdrawEscrow",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "tradeId",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bool",
+        "name": "keepInEscrow",
+        "type": "bool"
+      }
+    ],
+    "name": "cancelTrade",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_tradeId",
+        "type": "bytes32"
+      }
+    ],
+    "name": "getTradeById",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "tradeOwnerAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "uint32",
+            "name": "creationBlock",
+            "type": "uint32"
+          },
+          {
+            "internalType": "uint16",
+            "name": "inclusionsBitmap",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "spare1",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "spare2",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "spare3",
+            "type": "uint16"
+          }
+        ],
+        "internalType": "struct StoredTrade",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "playerAddress",
+        "type": "address"
+      }
+    ],
+    "name": "nextTradeId",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "tradeId",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "tradeId",
+        "type": "bytes32"
+      }
+    ],
+    "name": "verifyTradeById",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "tradeOwnerAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "uint32",
+            "name": "creationBlock",
+            "type": "uint32"
+          },
+          {
+            "internalType": "uint16",
+            "name": "inclusionsBitmap",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "spare1",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "spare2",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "spare3",
+            "type": "uint16"
+          }
+        ],
+        "internalType": "struct StoredTrade",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
   },
   {
     "anonymous": false,
@@ -237,6 +1039,79 @@
                 "type": "address"
               },
               {
+                "internalType": "uint16",
+                "name": "itemId",
+                "type": "uint16"
+              },
+              {
+                "internalType": "uint16",
+                "name": "amount",
+                "type": "uint16"
+              }
+            ],
+            "internalType": "struct NftByItemId[]",
+            "name": "escrowedUnclaimedNfts",
+            "type": "tuple[]"
+          },
+          {
+            "components": [
+              {
+                "internalType": "uint16",
+                "name": "resourceId",
+                "type": "uint16"
+              },
+              {
+                "internalType": "uint16",
+                "name": "amount",
+                "type": "uint16"
+              }
+            ],
+            "internalType": "struct ResourceData[]",
+            "name": "escrowedUnclaimedResources",
+            "type": "tuple[]"
+          },
+          {
+            "components": [
+              {
+                "internalType": "address",
+                "name": "contractAddress",
+                "type": "address"
+              },
+              {
+                "internalType": "uint256",
+                "name": "tokenId",
+                "type": "uint256"
+              }
+            ],
+            "internalType": "struct NftByTokenId[]",
+            "name": "escrowedNfts",
+            "type": "tuple[]"
+          },
+          {
+            "components": [
+              {
+                "internalType": "uint16",
+                "name": "resourceId",
+                "type": "uint16"
+              },
+              {
+                "internalType": "uint16",
+                "name": "amount",
+                "type": "uint16"
+              }
+            ],
+            "internalType": "struct ResourceData[]",
+            "name": "escrowedResources",
+            "type": "tuple[]"
+          },
+          {
+            "components": [
+              {
+                "internalType": "address",
+                "name": "contractAddress",
+                "type": "address"
+              },
+              {
                 "internalType": "uint256",
                 "name": "amount",
                 "type": "uint256"
@@ -245,6 +1120,28 @@
             "internalType": "struct Erc20Token",
             "name": "offeredErc20Token",
             "type": "tuple"
+          },
+          {
+            "components": [
+              {
+                "internalType": "address",
+                "name": "contractAddress",
+                "type": "address"
+              },
+              {
+                "internalType": "uint256",
+                "name": "amount",
+                "type": "uint256"
+              }
+            ],
+            "internalType": "struct Erc20Token",
+            "name": "escrowedErc20Token",
+            "type": "tuple"
+          },
+          {
+            "internalType": "uint256",
+            "name": "escrowedEtherValue",
+            "type": "uint256"
           }
         ],
         "indexed": false,
@@ -317,6 +1214,37 @@
       },
       {
         "indexed": false,
+        "internalType": "address",
+        "name": "contractAddress",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "itemId",
+        "type": "uint16"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "BurnedUnclaimedNfts",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "playerAddress",
+        "type": "address"
+      },
+      {
+        "indexed": false,
         "internalType": "uint16",
         "name": "resourceId",
         "type": "uint16"
@@ -336,12 +1264,30 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "bytes32",
-        "name": "tradeId",
-        "type": "bytes32"
+        "internalType": "address",
+        "name": "playerAddress",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "contractAddress",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "itemId",
+        "type": "uint16"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
       }
     ],
-    "name": "TradeCancelled",
+    "name": "MintedUnclaimedNfts",
     "type": "event"
   },
   {
@@ -349,121 +1295,138 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "bytes32",
-        "name": "tradeId",
-        "type": "bytes32"
+        "internalType": "address",
+        "name": "playerAddress",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "resourceId",
+        "type": "uint16"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "amount",
+        "type": "uint16"
+      }
+    ],
+    "name": "MintedUnclaimedResources",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "ownerAddress",
+        "type": "address"
       },
       {
         "components": [
           {
-            "components": [
-              {
-                "internalType": "address",
-                "name": "contractAddress",
-                "type": "address"
-              },
-              {
-                "internalType": "uint16",
-                "name": "itemId",
-                "type": "uint16"
-              },
-              {
-                "internalType": "uint16",
-                "name": "amount",
-                "type": "uint16"
-              }
-            ],
-            "internalType": "struct NftByItemId[]",
-            "name": "unclaimedNfts",
-            "type": "tuple[]"
+            "internalType": "address",
+            "name": "contractAddress",
+            "type": "address"
           },
           {
-            "components": [
-              {
-                "internalType": "uint16",
-                "name": "resourceId",
-                "type": "uint16"
-              },
-              {
-                "internalType": "uint16",
-                "name": "amount",
-                "type": "uint16"
-              }
-            ],
-            "internalType": "struct ResourceData[]",
-            "name": "unclaimedResources",
-            "type": "tuple[]"
+            "internalType": "uint16",
+            "name": "itemId",
+            "type": "uint16"
           },
           {
-            "components": [
-              {
-                "internalType": "address",
-                "name": "contractAddress",
-                "type": "address"
-              },
-              {
-                "internalType": "uint256",
-                "name": "tokenId",
-                "type": "uint256"
-              }
-            ],
-            "internalType": "struct NftByTokenId[]",
-            "name": "nfts",
-            "type": "tuple[]"
+            "internalType": "uint16",
+            "name": "amount",
+            "type": "uint16"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct NftByItemId[]",
+        "name": "unclaimedNfts",
+        "type": "tuple[]"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint16",
+            "name": "resourceId",
+            "type": "uint16"
           },
           {
-            "components": [
-              {
-                "internalType": "uint16",
-                "name": "resourceId",
-                "type": "uint16"
-              },
-              {
-                "internalType": "uint16",
-                "name": "amount",
-                "type": "uint16"
-              }
-            ],
-            "internalType": "struct ResourceData[]",
-            "name": "resources",
-            "type": "tuple[]"
-          },
+            "internalType": "uint16",
+            "name": "amount",
+            "type": "uint16"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct ResourceData[]",
+        "name": "unclaimedResources",
+        "type": "tuple[]"
+      },
+      {
+        "components": [
           {
-            "components": [
-              {
-                "internalType": "address",
-                "name": "contractAddress",
-                "type": "address"
-              },
-              {
-                "internalType": "uint256",
-                "name": "amount",
-                "type": "uint256"
-              }
-            ],
-            "internalType": "struct Erc20Token",
-            "name": "buyOutErc20Token",
-            "type": "tuple"
+            "internalType": "address",
+            "name": "contractAddress",
+            "type": "address"
           },
           {
             "internalType": "uint256",
-            "name": "buyOutEtherPrice",
+            "name": "tokenId",
             "type": "uint256"
           }
         ],
         "indexed": false,
-        "internalType": "struct NewTrade",
-        "name": "tradeData",
+        "internalType": "struct NftByTokenId[]",
+        "name": "nfts",
+        "type": "tuple[]"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint16",
+            "name": "resourceId",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "amount",
+            "type": "uint16"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct ResourceData[]",
+        "name": "resources",
+        "type": "tuple[]"
+      },
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "contractAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amount",
+            "type": "uint256"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct Erc20Token",
+        "name": "erc20Token",
         "type": "tuple"
       },
       {
         "indexed": false,
-        "internalType": "address",
-        "name": "tradeOwnerAddress",
-        "type": "address"
+        "internalType": "uint256",
+        "name": "etherValue",
+        "type": "uint256"
       }
     ],
-    "name": "TradeCreated",
+    "name": "WithdrawEscrow",
     "type": "event"
   },
   {
@@ -482,19 +1445,6 @@
     "name": "acceptBid",
     "outputs": [],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "tradeId",
-        "type": "bytes32"
-      }
-    ],
-    "name": "cancelTrade",
-    "outputs": [],
-    "stateMutability": "payable",
     "type": "function"
   },
   {
@@ -587,6 +1537,79 @@
                 "type": "address"
               },
               {
+                "internalType": "uint16",
+                "name": "itemId",
+                "type": "uint16"
+              },
+              {
+                "internalType": "uint16",
+                "name": "amount",
+                "type": "uint16"
+              }
+            ],
+            "internalType": "struct NftByItemId[]",
+            "name": "escrowedUnclaimedNfts",
+            "type": "tuple[]"
+          },
+          {
+            "components": [
+              {
+                "internalType": "uint16",
+                "name": "resourceId",
+                "type": "uint16"
+              },
+              {
+                "internalType": "uint16",
+                "name": "amount",
+                "type": "uint16"
+              }
+            ],
+            "internalType": "struct ResourceData[]",
+            "name": "escrowedUnclaimedResources",
+            "type": "tuple[]"
+          },
+          {
+            "components": [
+              {
+                "internalType": "address",
+                "name": "contractAddress",
+                "type": "address"
+              },
+              {
+                "internalType": "uint256",
+                "name": "tokenId",
+                "type": "uint256"
+              }
+            ],
+            "internalType": "struct NftByTokenId[]",
+            "name": "escrowedNfts",
+            "type": "tuple[]"
+          },
+          {
+            "components": [
+              {
+                "internalType": "uint16",
+                "name": "resourceId",
+                "type": "uint16"
+              },
+              {
+                "internalType": "uint16",
+                "name": "amount",
+                "type": "uint16"
+              }
+            ],
+            "internalType": "struct ResourceData[]",
+            "name": "escrowedResources",
+            "type": "tuple[]"
+          },
+          {
+            "components": [
+              {
+                "internalType": "address",
+                "name": "contractAddress",
+                "type": "address"
+              },
+              {
                 "internalType": "uint256",
                 "name": "amount",
                 "type": "uint256"
@@ -595,6 +1618,28 @@
             "internalType": "struct Erc20Token",
             "name": "offeredErc20Token",
             "type": "tuple"
+          },
+          {
+            "components": [
+              {
+                "internalType": "address",
+                "name": "contractAddress",
+                "type": "address"
+              },
+              {
+                "internalType": "uint256",
+                "name": "amount",
+                "type": "uint256"
+              }
+            ],
+            "internalType": "struct Erc20Token",
+            "name": "escrowedErc20Token",
+            "type": "tuple"
+          },
+          {
+            "internalType": "uint256",
+            "name": "escrowedEtherValue",
+            "type": "uint256"
           }
         ],
         "internalType": "struct NewBid",
@@ -621,268 +1666,30 @@
   {
     "inputs": [
       {
-        "components": [
-          {
-            "internalType": "bytes32",
-            "name": "tradeId",
-            "type": "bytes32"
-          },
-          {
-            "components": [
-              {
-                "internalType": "address",
-                "name": "contractAddress",
-                "type": "address"
-              },
-              {
-                "internalType": "uint16",
-                "name": "itemId",
-                "type": "uint16"
-              },
-              {
-                "internalType": "uint16",
-                "name": "amount",
-                "type": "uint16"
-              }
-            ],
-            "internalType": "struct NftByItemId[]",
-            "name": "unclaimedNfts",
-            "type": "tuple[]"
-          },
-          {
-            "components": [
-              {
-                "internalType": "uint16",
-                "name": "resourceId",
-                "type": "uint16"
-              },
-              {
-                "internalType": "uint16",
-                "name": "amount",
-                "type": "uint16"
-              }
-            ],
-            "internalType": "struct ResourceData[]",
-            "name": "unclaimedResources",
-            "type": "tuple[]"
-          },
-          {
-            "components": [
-              {
-                "internalType": "address",
-                "name": "contractAddress",
-                "type": "address"
-              },
-              {
-                "internalType": "uint256",
-                "name": "tokenId",
-                "type": "uint256"
-              }
-            ],
-            "internalType": "struct NftByTokenId[]",
-            "name": "nfts",
-            "type": "tuple[]"
-          },
-          {
-            "components": [
-              {
-                "internalType": "uint16",
-                "name": "resourceId",
-                "type": "uint16"
-              },
-              {
-                "internalType": "uint16",
-                "name": "amount",
-                "type": "uint16"
-              }
-            ],
-            "internalType": "struct ResourceData[]",
-            "name": "resources",
-            "type": "tuple[]"
-          },
-          {
-            "components": [
-              {
-                "internalType": "address",
-                "name": "contractAddress",
-                "type": "address"
-              },
-              {
-                "internalType": "uint256",
-                "name": "amount",
-                "type": "uint256"
-              }
-            ],
-            "internalType": "struct Erc20Token",
-            "name": "offeredErc20Token",
-            "type": "tuple"
-          }
-        ],
-        "internalType": "struct NewBid",
-        "name": "_newBid",
-        "type": "tuple"
+        "internalType": "bytes32",
+        "name": "bidId",
+        "type": "bytes32"
       },
       {
         "internalType": "bytes32",
-        "name": "replacesBidId",
+        "name": "tradeId",
         "type": "bytes32"
       }
     ],
-    "name": "createBidFromTrade",
-    "outputs": [
+    "name": "rejectBid",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
       {
         "internalType": "bytes32",
         "name": "bidId",
         "type": "bytes32"
       }
     ],
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "components": [
-          {
-            "components": [
-              {
-                "internalType": "address",
-                "name": "contractAddress",
-                "type": "address"
-              },
-              {
-                "internalType": "uint16",
-                "name": "itemId",
-                "type": "uint16"
-              },
-              {
-                "internalType": "uint16",
-                "name": "amount",
-                "type": "uint16"
-              }
-            ],
-            "internalType": "struct NftByItemId[]",
-            "name": "unclaimedNfts",
-            "type": "tuple[]"
-          },
-          {
-            "components": [
-              {
-                "internalType": "uint16",
-                "name": "resourceId",
-                "type": "uint16"
-              },
-              {
-                "internalType": "uint16",
-                "name": "amount",
-                "type": "uint16"
-              }
-            ],
-            "internalType": "struct ResourceData[]",
-            "name": "unclaimedResources",
-            "type": "tuple[]"
-          },
-          {
-            "components": [
-              {
-                "internalType": "address",
-                "name": "contractAddress",
-                "type": "address"
-              },
-              {
-                "internalType": "uint256",
-                "name": "tokenId",
-                "type": "uint256"
-              }
-            ],
-            "internalType": "struct NftByTokenId[]",
-            "name": "nfts",
-            "type": "tuple[]"
-          },
-          {
-            "components": [
-              {
-                "internalType": "uint16",
-                "name": "resourceId",
-                "type": "uint16"
-              },
-              {
-                "internalType": "uint16",
-                "name": "amount",
-                "type": "uint16"
-              }
-            ],
-            "internalType": "struct ResourceData[]",
-            "name": "resources",
-            "type": "tuple[]"
-          },
-          {
-            "components": [
-              {
-                "internalType": "address",
-                "name": "contractAddress",
-                "type": "address"
-              },
-              {
-                "internalType": "uint256",
-                "name": "amount",
-                "type": "uint256"
-              }
-            ],
-            "internalType": "struct Erc20Token",
-            "name": "buyOutErc20Token",
-            "type": "tuple"
-          },
-          {
-            "internalType": "uint256",
-            "name": "buyOutEtherPrice",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct NewTrade",
-        "name": "_newTrade",
-        "type": "tuple"
-      }
-    ],
-    "name": "createTrade",
-    "outputs": [
-      {
-        "internalType": "bytes32",
-        "name": "tradeId",
-        "type": "bytes32"
-      }
-    ],
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "tradeId",
-        "type": "bytes32"
-      }
-    ],
-    "name": "getActiveBidsByTrade",
-    "outputs": [
-      {
-        "internalType": "bytes32[]",
-        "name": "",
-        "type": "bytes32[]"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "_bidId",
-        "type": "bytes32"
-      }
-    ],
-    "name": "getBidById",
+    "name": "verifyBidById",
     "outputs": [
       {
         "components": [
@@ -933,134 +1740,6 @@
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "_bidder",
-        "type": "address"
-      }
-    ],
-    "name": "getBidsByBidder",
-    "outputs": [
-      {
-        "internalType": "bytes32[]",
-        "name": "",
-        "type": "bytes32[]"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "_tradeId",
-        "type": "bytes32"
-      }
-    ],
-    "name": "getTradeById",
-    "outputs": [
-      {
-        "components": [
-          {
-            "internalType": "address",
-            "name": "tradeOwnerAddress",
-            "type": "address"
-          },
-          {
-            "internalType": "uint32",
-            "name": "creationBlock",
-            "type": "uint32"
-          },
-          {
-            "internalType": "uint16",
-            "name": "inclusionsBitmap",
-            "type": "uint16"
-          },
-          {
-            "internalType": "uint16",
-            "name": "spare1",
-            "type": "uint16"
-          },
-          {
-            "internalType": "uint16",
-            "name": "spare2",
-            "type": "uint16"
-          },
-          {
-            "internalType": "uint16",
-            "name": "spare3",
-            "type": "uint16"
-          }
-        ],
-        "internalType": "struct StoredTrade",
-        "name": "",
-        "type": "tuple"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_tradeOwner",
-        "type": "address"
-      }
-    ],
-    "name": "getTradesForAddress",
-    "outputs": [
-      {
-        "internalType": "bytes32[]",
-        "name": "",
-        "type": "bytes32[]"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      },
-      {
-        "internalType": "bytes",
-        "name": "",
-        "type": "bytes"
-      }
-    ],
-    "name": "onERC1155Received",
-    "outputs": [
-      {
-        "internalType": "bytes4",
-        "name": "",
-        "type": "bytes4"
-      }
-    ],
-    "stateMutability": "pure",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "bytes32",
         "name": "bidId",
         "type": "bytes32"
@@ -1069,236 +1748,11 @@
         "internalType": "bytes32",
         "name": "tradeId",
         "type": "bytes32"
-      }
-    ],
-    "name": "rejectBid",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint16[]",
-        "name": "_supportedResources",
-        "type": "uint16[]"
-      }
-    ],
-    "name": "setPermittedResources",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address[]",
-        "name": "_supportedTokens",
-        "type": "address[]"
-      }
-    ],
-    "name": "setPermittedTokens",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_tradeCancellationFee",
-        "type": "uint256"
-      }
-    ],
-    "name": "setTradeCancellationFee",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_tradeCommissionRateBps",
-        "type": "uint256"
-      }
-    ],
-    "name": "setTradeCommissionRate",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_tradeCancelationBlockDuration",
-        "type": "uint256"
-      }
-    ],
-    "name": "setTradeDurations",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_collectionAddress",
-        "type": "address"
       },
       {
-        "internalType": "uint256",
-        "name": "_tradeFeePerNft",
-        "type": "uint256"
-      }
-    ],
-    "name": "setTradeFeeByNft",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_tradeFeePerResource",
-        "type": "uint256"
-      }
-    ],
-    "name": "setTradeFeePerResource",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "components": [
-          {
-            "components": [
-              {
-                "internalType": "address",
-                "name": "contractAddress",
-                "type": "address"
-              },
-              {
-                "internalType": "uint16",
-                "name": "itemId",
-                "type": "uint16"
-              },
-              {
-                "internalType": "uint16",
-                "name": "amount",
-                "type": "uint16"
-              }
-            ],
-            "internalType": "struct NftByItemId[]",
-            "name": "unclaimedNfts",
-            "type": "tuple[]"
-          },
-          {
-            "components": [
-              {
-                "internalType": "uint16",
-                "name": "resourceId",
-                "type": "uint16"
-              },
-              {
-                "internalType": "uint16",
-                "name": "amount",
-                "type": "uint16"
-              }
-            ],
-            "internalType": "struct ResourceData[]",
-            "name": "unclaimedResources",
-            "type": "tuple[]"
-          },
-          {
-            "components": [
-              {
-                "internalType": "address",
-                "name": "contractAddress",
-                "type": "address"
-              },
-              {
-                "internalType": "uint256",
-                "name": "tokenId",
-                "type": "uint256"
-              }
-            ],
-            "internalType": "struct NftByTokenId[]",
-            "name": "nfts",
-            "type": "tuple[]"
-          },
-          {
-            "components": [
-              {
-                "internalType": "uint16",
-                "name": "resourceId",
-                "type": "uint16"
-              },
-              {
-                "internalType": "uint16",
-                "name": "amount",
-                "type": "uint16"
-              }
-            ],
-            "internalType": "struct ResourceData[]",
-            "name": "resources",
-            "type": "tuple[]"
-          },
-          {
-            "components": [
-              {
-                "internalType": "address",
-                "name": "contractAddress",
-                "type": "address"
-              },
-              {
-                "internalType": "uint256",
-                "name": "amount",
-                "type": "uint256"
-              }
-            ],
-            "internalType": "struct Erc20Token",
-            "name": "buyOutErc20Token",
-            "type": "tuple"
-          },
-          {
-            "internalType": "uint256",
-            "name": "buyOutEtherPrice",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct NewTrade",
-        "name": "_newTrade",
-        "type": "tuple"
-      }
-    ],
-    "name": "tradeCreationFee",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "bidId",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "tradeId",
-        "type": "bytes32"
+        "internalType": "bool",
+        "name": "keepInEscrow",
+        "type": "bool"
       }
     ],
     "name": "withdrawBid",
