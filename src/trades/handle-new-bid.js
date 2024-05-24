@@ -11,7 +11,7 @@ module.exports = {
 async function handleNewBid(bidId) {
   console.log('handle new bid event with', bidId)
 
-  // await new Promise(resolve => setTimeout(resolve, 10000));
+  await new Promise(resolve => setTimeout(resolve, 10000));
   const bidInfo = await fetchBidByIdFromSquid(bidId)
   console.log('>>>>>> bidInfo', bidInfo)
   if (!bidInfo) {

@@ -64,6 +64,7 @@ module.exports = function createNewTradeEmbed(tradeInfo, textInfo, tradeCreator,
   return {
     color: 0x5308a8,
     title: `New Trade: ${textInfo.title}`,
+    url: `https://game.evrloot.com/marketplace?mId=${tradeInfo.id}`,
     author,
     // thumbnail: {
     //   url: soul.retrievedMetadata.image

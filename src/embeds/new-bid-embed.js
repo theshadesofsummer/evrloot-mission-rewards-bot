@@ -66,6 +66,7 @@ module.exports = function createNewBidEmbed(bidInfo, textInfo, tradeCreator, bid
   return {
     color: 0x5308a8,
     title: `New Bid: ${textInfo.title} ${tradeCreatorInfo}`,
+    url: `https://game.evrloot.com/marketplace?mId=${bidInfo.trade.id}`,
     author,
     // thumbnail: {
     //   url: soul.retrievedMetadata.image

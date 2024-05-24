@@ -21,7 +21,7 @@ setupDiscordBot().then(() => {
         publishSummary();
     });
 
-    handleNewBid("0xba44fb9b685b3d30d58db0adeb6b016ca670390d8fbaa72fe39c5632936fbd80")
+   // handleNewBid("0xba44fb9b685b3d30d58db0adeb6b016ca670390d8fbaa72fe39c5632936fbd80")
 });
 
 function setupMongoDbConnection() {
