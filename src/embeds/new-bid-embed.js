@@ -41,7 +41,7 @@ module.exports = function createNewBidEmbed(bidInfo, textInfo, tradeCreator, bid
       value: `${readableGlmrAmount} $GLMR`
     });
   } else if (erc20Amount > 0){
-    const erc20TokenInfo = TOKEN_INFOS.get(bidInfo.buyOutErc20.contractAddress)
+    const erc20TokenInfo = TOKEN_INFOS.get(bidInfo.offeredErc20.contractAddress)
     const readableErc20Amount = erc20Amount * 100 / erc20TokenInfo.decimals / 100.0
     fields.push({
       name: 'Offered Buy Out',
