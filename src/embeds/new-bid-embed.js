@@ -64,7 +64,7 @@ module.exports = function createNewBidEmbed(bidInfo, textInfo, tradeCreator, bid
   const tradeCreatorInfo = tradeCreator ? `on ${bidCreator.globalName}'s trade` : ''
 
   return {
-    color: 0x5308a8,
+    color: 0x059e31,
     title: `New Bid: ${textInfo.title} ${tradeCreatorInfo}`,
     url: `https://game.evrloot.com/marketplace?mId=${bidInfo.trade.id}`,
     author,
