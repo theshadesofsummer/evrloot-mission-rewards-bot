@@ -55,11 +55,10 @@ query MyQuery($tradeId: String!) {
 
 const QUERY_BID_BY_ID = `
 query MyQuery($bidId: String!) {
-  tradeById(id: $bidId) {
+  bidById(id: $bidId) {
     id
-    buyOutEther
-    cancelledBlock
     endTime
+    offeredEther
     offeredErc20 {
       amount
       contractAddress
@@ -222,7 +221,7 @@ async function fetchTradeByIdFromSquid(tradeId) {
 }
 
 async function fetchBidByIdFromSquid(bidId) {
-  console.log('[API]', 'fetching bid from squid for tradeId', bidId)
+  console.log('[API]', 'fetching bid from squid for bidId', bidId)
   return fetch(SQUID_ADDRESS, {
     method: 'POST',
     headers: {
@@ -231,13 +230,13 @@ async function fetchBidByIdFromSquid(bidId) {
     body: JSON.stringify({
       query: QUERY_BID_BY_ID,
       variables: {
-        tradeId: bidId,
+        bidId: bidId,
       },
     }),
   })
     .then((res) => res.json())
     .then((result) => {
-      return result.data.bidId;
+      return result.data.bidById;
     })
     .catch((err) => {
       console.log('error while fetching from squid:', err);
@@ -269,4 +268,3 @@ async function fetchNftMetadataByIdAndCollection(tokenId, collectionAddress) {
       return undefined
     });
 }
-QUERY_NFT_METADATA_BY_ID_AND_COLLECTION

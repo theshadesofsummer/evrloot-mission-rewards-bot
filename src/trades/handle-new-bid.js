@@ -1,4 +1,4 @@
-const {fetchTradeByIdFromSquid, getFromIpfs, fetchNftMetadataByIdAndCollection} = require("../evrloot-api");
+const {fetchTradeByIdFromSquid, getFromIpfs, fetchNftMetadataByIdAndCollection, fetchBidByIdFromSquid} = require("../evrloot-api");
 const {postNewTrade, getUserByClientId} = require("../discord-client");
 const createNewBidEmbed = require('../embeds/new-bid-embed')
 const resourceRewards = require("../mappings/resource-types");
@@ -11,8 +11,8 @@ module.exports = {
 async function handleNewBid(bidId) {
   console.log('handle new bid event with', bidId)
 
-  await new Promise(resolve => setTimeout(resolve, 10000));
-  const bidInfo = await fetchTradeByIdFromSquid(bidId)
+  // await new Promise(resolve => setTimeout(resolve, 10000));
+  const bidInfo = await fetchBidByIdFromSquid(bidId)
   console.log('>>>>>> bidInfo', bidInfo)
   if (!bidInfo) {
     console.error('no bid found for', bidId)
