@@ -53,6 +53,49 @@ query MyQuery($tradeId: String!) {
 }
 `
 
+const QUERY_BID_BY_ID = `
+query MyQuery($bidId: String!) {
+  tradeById(id: $bidId) {
+    id
+    buyOutEther
+    cancelledBlock
+    endTime
+    offeredErc20 {
+      amount
+      contractAddress
+      id
+    }
+    ownerAddress
+    erc721s {
+      contractAddress
+      id
+      tokenId
+    }
+    erc1155s {
+      amount
+      contractAddress
+      id
+      tokenId
+    }
+    unclaimedResources {
+      amount
+      id
+      resourceId
+    }
+    unclaimedNfts {
+      amount
+      contractAddress
+      id
+      itemId
+    }
+    trade {
+      id
+      ownerAddress
+    }
+  }
+}
+`
+
 const QUERY_NFT_METADATA_BY_ID_AND_COLLECTION = `
 query MyQuery($tokenId: Int!, $collectionAddress: String!) {
   nfts(where: {tokenId_eq: $tokenId, collection: {address_eq: $collectionAddress}}) {
@@ -74,6 +117,7 @@ module.exports = {
   getFromIpfs,
   fetchSoulIdFromSquid,
   fetchTradeByIdFromSquid,
+  fetchBidByIdFromSquid,
   fetchNftMetadataByIdAndCollection
 }
 
@@ -170,6 +214,30 @@ async function fetchTradeByIdFromSquid(tradeId) {
     .then((res) => res.json())
     .then((result) => {
       return result.data.tradeById;
+    })
+    .catch((err) => {
+      console.log('error while fetching from squid:', err);
+      return undefined
+    });
+}
+
+async function fetchBidByIdFromSquid(bidId) {
+  console.log('[API]', 'fetching bid from squid for tradeId', bidId)
+  return fetch(SQUID_ADDRESS, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      query: QUERY_BID_BY_ID,
+      variables: {
+        tradeId: bidId,
+      },
+    }),
+  })
+    .then((res) => res.json())
+    .then((result) => {
+      return result.data.bidId;
     })
     .catch((err) => {
       console.log('error while fetching from squid:', err);

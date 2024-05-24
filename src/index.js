@@ -9,6 +9,7 @@ const {initStats, increaseExpeditionCounter, resetStats} = require("./summary/da
 const {loadRevealStatus} = require("./reveal-status");
 const {handleNewTrade} = require("./trades/handle-new-trade");
 const {EXPEDITION_CONTRACT} = require("./abi-interaction");
+const {handleNewBid} = require("./trades/handle-new-bid");
 
 setupDiscordBot().then(() => {
     setupMissionRewardListener()
@@ -75,8 +76,7 @@ function setupMissionRewardListener() {
         console.log('connected to bid created event')
       })
       .on('data', function (event) {
-        console.log('bid created event')
-        console.log(event)
+        handleNewBid(event.returnValues.bidId)
       })
       .on('error', function (error, receipt) {
         console.log('Error:', error, receipt);
