@@ -61,7 +61,7 @@ module.exports = function createNewBidEmbed(bidInfo, textInfo, tradeCreator, bid
     }
   }
 
-  const tradeCreatorInfo = tradeCreator ? `on ${bidCreator.globalName}'s trade` : ''
+  const tradeCreatorInfo = tradeCreator ? `on ${tradeCreator.globalName}'s trade` : ''
 
   return {
     color: 0x059e31,
