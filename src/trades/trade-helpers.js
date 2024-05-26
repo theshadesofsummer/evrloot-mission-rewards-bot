@@ -3,14 +3,6 @@ const resourceRewards = require("../mappings/resource-types");
 const {getAccountByWallet} = require("../evrloot-db");
 const {getUserByClientId} = require("../discord-client");
 
-module.exports = {
-  GLMR_DECIMALS,
-  TOKEN_INFOS,
-  getNftWithMetadata,
-  getResourcesWithMetadata,
-  getDiscordUserForWallet
-}
-
 const GLMR_DECIMALS = Math.pow(10, 18);
 const TOKEN_INFOS = new Map([
   ['0xfFfFFfFf30478fAFBE935e466da114E14fB3563d', {
@@ -18,6 +10,14 @@ const TOKEN_INFOS = new Map([
     decimals: Math.pow(10, 10)
   }]
 ])
+
+module.exports = {
+  GLMR_DECIMALS,
+  TOKEN_INFOS,
+  getNftWithMetadata,
+  getResourcesWithMetadata,
+  getDiscordUserForWallet
+}
 
 async function getNftWithMetadata(erc721s, unclaimedNfts) {
   const tradeNfts = []

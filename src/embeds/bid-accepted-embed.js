@@ -1,5 +1,3 @@
-const {findValueForAttribute} = require("../helpers/attribute-finder");
-const {GLMR_DECIMALS, TOKEN_INFOS} = require("../trades/trade-helpers");
 const {getFields} = require("../trades/embed-helpers");
 
 module.exports = function createBidAcceptedEmbed(tradeInfo, textInfo, tradeCreator, tradeNfts, tradeResources, bidInfo, bidCreator, bidNfts, bidResources) {

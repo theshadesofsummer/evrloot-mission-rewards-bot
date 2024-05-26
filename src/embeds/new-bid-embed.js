@@ -1,4 +1,3 @@
-const {findValueForAttribute} = require("../helpers/attribute-finder");
 const {getFields, getAuthor} = require("../trades/embed-helpers");
 module.exports = function createNewBidEmbed(bidInfo, textInfo, tradeCreator, bidCreator, bidNfts, bidResources) {
   const fields = getFields(bidInfo, bidNfts, bidResources, false);
