@@ -10,6 +10,7 @@ const {loadRevealStatus} = require("./reveal-status");
 const {handleNewTrade} = require("./trades/handle-new-trade");
 const {EXPEDITION_CONTRACT} = require("./abi-interaction");
 const {handleNewBid} = require("./trades/handle-new-bid");
+const {handleBidAccepted} = require("./trades/handle-bid-accepted");
 
 setupDiscordBot().then(() => {
     setupMissionRewardListener()
@@ -95,6 +96,21 @@ function setupMissionRewardListener() {
       .on('error', function (error, receipt) {
         console.log('Error:', error, receipt);
       });
+
+  MARKETPLACE_CONTRACT.events.BidAccepted({fromBlock: 'latest'})
+    .on("connected", function (_subscriptionId) {
+      console.log('connected to bid accepted event')
+    })
+    .on('data', function (event) {
+      console.log('bid accepted event')
+      console.log('>>> event', event)
+
+      handleBidAccepted(event.returnValues.tradeId)
+    })
+    .on('error', function (error, receipt) {
+      console.log('Error:', error, receipt);
+    });
+
 
   EXPEDITION_CONTRACT.events.ExpeditionStart({fromBlock: 'latest'})
     .on("connected", function (_subscriptionId) {
