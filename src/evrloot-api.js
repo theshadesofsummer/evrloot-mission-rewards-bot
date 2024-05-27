@@ -49,6 +49,9 @@ query MyQuery($tradeId: String!) {
       id
       itemId
     }
+    acceptedBid {
+      id
+    }
   }
 }
 `
