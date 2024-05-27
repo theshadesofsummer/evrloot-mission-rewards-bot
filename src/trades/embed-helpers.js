@@ -9,9 +9,6 @@ module.exports = {
 function getFields(tradeInfo, tradeNfts, tradeResources, forTrade) {
   const fields = []
 
-  const glmrAmount = parseInt(tradeInfo.buyOutEther)
-  const erc20Amount = parseInt(tradeInfo.buyOutErc20.amount)
-
   if (tradeNfts.length > 0) {
     const nftInfo = tradeNfts
       .map(formatNftLines)
@@ -34,15 +31,23 @@ function getFields(tradeInfo, tradeNfts, tradeResources, forTrade) {
     })
   }
 
+  const glmrAmountTrade = parseInt(tradeInfo.buyOutEther)
+  const glmrAmountBid = parseInt(tradeInfo.offeredEther)
+  const erc20Trade = parseInt(tradeInfo.buyOutErc20.amount)
+  const erc20Bid = parseInt(tradeInfo.offeredErc20.amount)
+
+  const glmrAmount = forTrade ? glmrAmountTrade : glmrAmountBid
+  const erc20 = forTrade ? erc20Trade : erc20Bid
+
   if (glmrAmount > 0) {
     const readableGlmrAmount = glmrAmount * 100 / GLMR_DECIMALS / 100.0 // e.g. 3.06
     fields.push({
       name: forTrade ? 'Trade Buy Out' : 'Offered Buy Out',
       value: `${readableGlmrAmount} $GLMR`
     });
-  } else if (erc20Amount > 0){
-    const erc20TokenInfo = TOKEN_INFOS.get(tradeInfo.buyOutErc20.contractAddress)
-    const readableErc20Amount = erc20Amount * 100 / erc20TokenInfo.decimals / 100.0
+  } else if (erc20.amount > 0){
+    const erc20TokenInfo = TOKEN_INFOS.get(tradeInfo.erc20.contractAddress)
+    const readableErc20Amount = erc20.amount * 100 / erc20TokenInfo.decimals / 100.0
     fields.push({
       name: forTrade ? 'Trade Buy Out' : 'Offered Buy Out',
       value: `${readableErc20Amount} $${erc20TokenInfo.ticker}`
