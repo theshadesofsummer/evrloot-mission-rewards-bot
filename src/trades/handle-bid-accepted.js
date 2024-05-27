@@ -12,7 +12,6 @@ module.exports = {
 async function handleBidAccepted(tradeId) {
   console.log('handle bid accepted event with', tradeId)
 
-
   await new Promise(resolve => setTimeout(resolve, 10000));
   const tradeInfo = await fetchTradeByIdFromSquid(tradeId)
   if (!tradeInfo) {
@@ -26,7 +25,7 @@ async function handleBidAccepted(tradeId) {
   const tradeNfts = await getNftWithMetadata(tradeInfo.erc721s, tradeInfo.unclaimedNfts)
   const tradeResources = await getResourcesWithMetadata(tradeInfo.erc1155s, tradeInfo.unclaimedResources)
 
-  const bidId = tradeId.acceptedBid.id
+  const bidId = tradeInfo.acceptedBid.id
   const bidInfo = await fetchBidByIdFromSquid(bidId)
   const bidCreator = await getDiscordUserForWallet(bidInfo.ownerAddress)
 
@@ -36,5 +35,4 @@ async function handleBidAccepted(tradeId) {
   const bidAcceptedEmbed = createBidAcceptedEmbed(tradeInfo, textInfo, tradeCreator, tradeNfts, tradeResources, bidInfo, bidCreator, bidNfts, bidResources)
 
   await postNewTrade(bidAcceptedEmbed)
-
 }
