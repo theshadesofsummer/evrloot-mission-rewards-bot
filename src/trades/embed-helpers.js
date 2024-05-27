@@ -31,13 +31,8 @@ function getFields(tradeInfo, tradeNfts, tradeResources, forTrade) {
     })
   }
 
-  const glmrAmountTrade = parseInt(tradeInfo.buyOutEther)
-  const glmrAmountBid = parseInt(tradeInfo.offeredEther)
-  const erc20Trade = parseInt(tradeInfo.buyOutErc20.amount)
-  const erc20Bid = parseInt(tradeInfo.offeredErc20.amount)
-
-  const glmrAmount = forTrade ? glmrAmountTrade : glmrAmountBid
-  const erc20 = forTrade ? erc20Trade : erc20Bid
+  const glmrAmount = forTrade ? parseInt(tradeInfo.buyOutEther) : parseInt(tradeInfo.offeredEther)
+  const erc20 = forTrade ? parseInt(tradeInfo.buyOutErc20.amount) : parseInt(tradeInfo.offeredErc20.amount)
 
   if (glmrAmount > 0) {
     const readableGlmrAmount = glmrAmount * 100 / GLMR_DECIMALS / 100.0 // e.g. 3.06

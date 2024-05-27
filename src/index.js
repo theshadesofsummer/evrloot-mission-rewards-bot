@@ -89,7 +89,6 @@ function setupMissionRewardListener() {
       })
       .on('data', function (event) {
         console.log('trade created event')
-        console.log('>>> event', event)
 
         handleNewTrade(event.returnValues.tradeId)
       })
