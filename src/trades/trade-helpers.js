@@ -27,12 +27,13 @@ async function getNftWithMetadata(erc721s, unclaimedNfts) {
     tradeNfts.push(erc721Metadata)
   }
   for (const erc721 of unclaimedNfts) {
-    console.log("DEBUG: fetch unclaimedNfts metadata incoming")
-    const erc721MetadataLink = await fetchNftMetadataByIdAndCollection(erc721.itemId, erc721.contractAddress.toLowerCase())
-    console.log("DEBUG: fetched link", erc721MetadataLink)
-    const erc721Metadata = await getFromIpfs(erc721MetadataLink)
-    console.log("DEBUG: fetched metadata", erc721Metadata)
-    tradeNfts.push(erc721Metadata)
+      console.log("DEBUG: fetch unclaimedNfts metadata incoming")
+      const erc721MetadataLink = await fetchNftMetadataByIdAndCollection(erc721.itemId, erc721.contractAddress.toLowerCase())
+      console.log("DEBUG: fetched link", erc721MetadataLink)
+      const erc721Metadata = await getFromIpfs(erc721MetadataLink)
+      console.log("DEBUG: fetched metadata", erc721Metadata)
+      tradeNfts.push(erc721Metadata)
+
   }
   return tradeNfts
 }
@@ -51,19 +52,25 @@ async function getResourcesWithMetadata(erc1155s, unclaimedResources) {
 }
 
 async function enrichErc1155Info(erc1155Id, erc1155Amount) {
-  const resourceType = Object.values(resourceRewards).find(rr => rr.id === erc1155Id)
-  const metadataUri = resourceType.tokenUri;
+  try {
+    const resourceType = Object.values(resourceRewards).find(rr => rr.id === erc1155Id)
+    const metadataUri = resourceType.tokenUri;
 
-  const retrievedMetadata = metadataUri
-    ? await getFromIpfs(metadataUri)
-    : undefined;
+    const retrievedMetadata = metadataUri
+      ? await getFromIpfs(metadataUri)
+      : undefined;
 
-  return {
-    id: erc1155Id,
-    amount: erc1155Amount,
-    retrievedMetadata: retrievedMetadata,
-    emoteId: resourceType.emoteId
-  };
+    return {
+      id: erc1155Id,
+      amount: erc1155Amount,
+      retrievedMetadata: retrievedMetadata,
+      emoteId: resourceType.emoteId
+    };
+  } catch (err) {
+    console.error('error in enricherc1155info with id', erc1155Id, 'amount', erc1155Amount, err);
+    return undefined
+  }
+
 }
 
 async function getDiscordUserForWallet(wallet) {

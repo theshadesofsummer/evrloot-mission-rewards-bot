@@ -62,7 +62,11 @@ function getAuthor(user) {
 }
 
 function formatResourceLine(resource) {
-  return `${resource.amount}x **${resource.retrievedMetadata.name}** ${resource.emoteId}`
+  if (resource) {
+    return `${resource.amount}x **${resource.retrievedMetadata.name}** ${resource.emoteId}`
+  } else {
+    return 'unknown resource(s)'
+  }
 }
 const relevantStatAttributes = [
   "Strength",
@@ -94,5 +98,5 @@ function formatNftLines(nft) {
   const formattedStats = relevantStats
     .map(stat => `\`(+${stat.value} ${shortenedStatName.get(stat.label)})\``)
     .join('\n')
-  return `[${rarity}] **${nft.name}**\n${formattedStats}`
+  return `[${rarity}] **${nft.name}**${formattedStats.length >= 1 ? `\n${formattedStats}` : ''}`
 }
