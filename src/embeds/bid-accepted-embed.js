@@ -1,4 +1,4 @@
-const {getFields} = require("../trades/embed-helpers");
+const {getFields, getAuthor} = require("../trades/embed-helpers");
 
 module.exports = function createBidAcceptedEmbed(tradeInfo, textInfo, tradeCreator, tradeNfts, tradeResources, bidInfo, bidCreator, bidNfts, bidResources) {
   const tradeFields = getFields(tradeInfo, tradeNfts, tradeResources, true)
@@ -6,7 +6,7 @@ module.exports = function createBidAcceptedEmbed(tradeInfo, textInfo, tradeCreat
 
   const fields = [...tradeFields, ...bidFields]
 
-  const author = tradeCreator(tradeCreator)
+  const author =  getAuthor(tradeCreator)
 
   const titlePrefix = `${bidCreator ? `${bidCreator.globalName}'s ` : ''}`
   const title = `${titlePrefix}Bid Accepted: ${textInfo.title}`
