@@ -6,7 +6,7 @@ const {postTournamentStart, postTournamentStop} = require("../discord-client");
 
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName('tournament')
+    .setName('tournament-settings')
     .setDescription('Tournament related commands, not for general use!')
     .addSubcommand(subcommand =>
       subcommand.setName('start')

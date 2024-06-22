@@ -16,6 +16,7 @@ const revealCommand = require('./commands/reveal')
 const guessPotionCommand = require('./commands/guess-potion')
 const guessTinctureCommand = require('./commands/guess-tincture')
 const recipeBookCommand = require('./commands/recipe-book')
+const newFightCommand = require('./commands/new-fight/new-fight')
 
 module.exports = {
   setupDiscordBot,
@@ -32,7 +33,8 @@ const commands = [
   revealCommand,
   guessPotionCommand,
   guessTinctureCommand,
-  recipeBookCommand
+  recipeBookCommand,
+  newFightCommand
 ]
 
 async function setupDiscordBot() {

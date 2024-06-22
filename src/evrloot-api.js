@@ -113,6 +113,7 @@ query MyQuery($tokenId: Int!, $collectionAddress: String!) {
 module.exports = {
   getSouls,
   getOnlySouls,
+  getOnlyTemporarySouls,
   startFight,
   getSoulMetadata,
   mapMetadataToSoul,
@@ -133,6 +134,15 @@ async function getSouls(address) {
 
 async function getOnlySouls(address) {
   return await fetchAsync(`https://api.evrloot.xyz/api/evmnfts/evmwallet/soulsOnly/${address}`);
+}
+
+async function getOnlyTemporarySouls(address) {
+  const response = await fetchAsync(`https://api.evrloot.io/api/temporary-soul/getTemporarySoul/${address}`);
+  console.log('response', response)
+  if (response.error) {
+    return []
+  }
+  return response
 }
 
 async function startFight(attackers, defenders) {
