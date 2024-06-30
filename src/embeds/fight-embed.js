@@ -1,6 +1,6 @@
-const {findClassEmote} = require("../helpers/emotes");
+const { findClassEmote } = require("../helpers/emotes");
 
-module.exports = function createFightEmbed(fight, winPoints) {
+module.exports = function createFightEmbed(fight) {
   return {
     color: 0xae1917,
     title: `New Fight on the Trakanian Battlefield!`,
@@ -22,7 +22,7 @@ module.exports = function createFightEmbed(fight, winPoints) {
       },
       {
         name: 'Result',
-        value: getFightResult(fight, winPoints),
+        value: getFightResult(fight),
       }
     ],
     timestamp: new Date().toISOString(),
@@ -43,29 +43,27 @@ function getFinalState(finalTeamMembers) {
     .join('\n')
 }
 function stateOfSoul(soulState, index) {
-  return `[${index+1}] ${Math.round(Math.max(soulState.hp, 0) * 10) / 10}❤️ ` +
+  return `[${index + 1}] ${Math.round(Math.max(soulState.hp, 0) * 10) / 10}❤️ ` +
     `${Math.round(Math.max(soulState.armor, 0) * 10) / 10}🛡️ ` +
     `${Math.round(Math.max(soulState.initiative, 0) * 10) / 10}⚡ `
 }
-function getFightResult(fight, winPoints) {
+function getFightResult(fight) {
   let result = '';
-
-  const roundedWinPoints = Math.round(winPoints * 100) / 100
 
   const winnerTeam = fight.winner;
   if (winnerTeam === 'Team A') {
-    result += `*Winner*: <@${fight.teamA.discordId}>'s soul ${fight.teamA.metadata.name} got **${roundedWinPoints} Points** on the Leaderboard!\n`
+    result += `*Winner*: <@${fight.teamA.discordId}>'s soul ${fight.teamA.metadata.name} got **3 Points** on the Leaderboard!\n`
+    result += `<@${fight.teamB.discordId}>'s soul ${fight.teamB.metadata.name} got **1 Point** on the Leaderboard!\n`
     result += '*Combat Rounds*: ' + fight.combatRounds.length + '\n\n'
     result += `<@${fight.teamA.discordId}>'s soul got a cooldown for 6h\n`
     result += `<@${fight.teamB.discordId}>'s soul got a cooldown for 10h\n\n`
   } else {
-    result += `*Winner*: <@${fight.teamB.discordId}>'s soul ${fight.teamB.metadata.name} got **${roundedWinPoints} Points** on the Leaderboard!\n`
+    result += `*Winner*: <@${fight.teamB.discordId}>'s soul ${fight.teamB.metadata.name} got **3 Points** on the Leaderboard!\n`
+    result += `<@${fight.teamA.discordId}>'s soul ${fight.teamA.metadata.name} got **1 Point** on the Leaderboard!\n`
     result += '*Combat Rounds*: ' + fight.combatRounds.length + '\n\n'
     result += `<@${fight.teamB.discordId}>'s soul got a cooldown for 6h\n`
     result += `<@${fight.teamA.discordId}>'s soul got a cooldown for 10h\n\n`
   }
-
-  result += `*Note: Win equals 2 Points. 0.2 Points will be deducted for each legendary item, another 0.2 Points for every 2 epic items.*`
 
   return result
 }

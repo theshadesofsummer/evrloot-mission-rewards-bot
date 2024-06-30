@@ -6,17 +6,17 @@ const {createSoulFighterMenuRow} = require("../../helpers/select-menu");
 
 
 module.exports = {
-  showFighters,
+  battle,
 }
 
-async function showFighters(interaction, wallets) {
+async function battle(interaction, wallets) {
+  await interaction.editReply('<a:Doubloon:1256636404658602076> Fetching Fighters')
   const allAccountsWithTemporarySouls = wallets.map(getOnlyTemporarySouls)
   Promise.all(allAccountsWithTemporarySouls).then(async temporarySoulsInAllAccounts => {
     const soulList = temporarySoulsInAllAccounts
       .flat()
       .map(mapMetadataToSoul)
-
-    console.log('soulList', soulList)
+    await interaction.editReply('<a:Doubloon:1256636404658602076> Getting Fighter Information')
 
     Promise.all(soulList).then(async soulListWithMetadata => {
       if (soulListWithMetadata.length <= 0) {
@@ -24,8 +24,7 @@ async function showFighters(interaction, wallets) {
         return;
       }
 
-      console.log('soulListWithMetadata', soulListWithMetadata)
-
+      await interaction.editReply('<a:Doubloon:1256636404658602076> Checking if fighter is on cooldown or in fight pool')
       const allSoulsWithStatus = await mapStatusToSoul(soulListWithMetadata)
 
       const sortedSoulsWithStatus = allSoulsWithStatus.sort(soulSorterByStatus)
@@ -36,6 +35,8 @@ async function showFighters(interaction, wallets) {
         .setEmbeds(embeds)
         .setEphemeral(true)
         .addActionRows([createSoulFighterMenuRow(sortedSoulsWithStatus, 'choose-fighter-a-menu')], ExtraRowPosition.Below);
+
+      await interaction.editReply('Select Fighter:')
 
       await pagination.render();
     })

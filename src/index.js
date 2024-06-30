@@ -39,24 +39,26 @@ function setupMongoDbConnection() {
     const collection = client.db("evrloot").collection("discordverifications");
 
     // Initialize change stream
-    const changeStream = collection.watch([{ $match: { operationType: "insert" } }]);
+    if (process.env.DISCORDJS_CLIENTID !== "1121489061115338773") {
+      const changeStream = collection.watch([{ $match: { operationType: "insert" } }]);
 
-    // Start listening to changes
-    changeStream.on('change', (next) => {
-      console.log('sending discord dm to', next.fullDocument.discordId, 'with', next.fullDocument.wallet)
-      sendVerificationDm(next.fullDocument.discordName, next.fullDocument.wallet)
-    });
+      // Start listening to changes
+      changeStream.on('change', (next) => {
+        console.log('sending discord dm to', next.fullDocument.discordId, 'with', next.fullDocument.wallet)
+        sendVerificationDm(next.fullDocument.discordName, next.fullDocument.wallet)
+      });
 
-    // Handle errors (optional but recommended)
-    changeStream.on('error', (error) => {
-      console.error('Error in change stream', error);
-    });
+      // Handle errors (optional but recommended)
+      changeStream.on('error', (error) => {
+        console.error('Error in change stream', error);
+      });
 
-    // Close change stream after some time or based on some condition (optional)
-    // setTimeout(() => {
-    //     changeStream.close();
-    //     client.close();
-    // }, 60000); // Close after 1 minute
+      // Close change stream after some time or based on some condition (optional)
+      // setTimeout(() => {
+      //     changeStream.close();
+      //     client.close();
+      // }, 60000); // Close after 1 minute
+    }
   });
 }
 

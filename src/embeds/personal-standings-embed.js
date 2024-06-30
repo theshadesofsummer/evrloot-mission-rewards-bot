@@ -3,7 +3,7 @@
 module.exports = function createPersonalStandingsEmbed(ownSoulsWithIndex) {
   return {
     color: 0xae1917,
-    title: `⚔️ Personal souls on the leaderboard (must have won at least one game) ⚔️`,
+    title: `⚔️ Personal souls on the leaderboard (must have participated in at least one battle) ⚔️`,
     fields: [
       {
         name: 'Place:',

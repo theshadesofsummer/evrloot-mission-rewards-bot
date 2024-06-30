@@ -1,13 +1,13 @@
 const {getLeaderboardEntries} = require("../../evrloot-db");
-const {getOnlySouls} = require("../../evrloot-api");
+const { getOnlyTemporarySouls } = require("../../evrloot-api");
 const createPersonalStandingsEmbed = require("../../embeds/personal-standings-embed");
 
 module.exports = async function (interaction, wallets) {
-  const allAccountsWithSouls = wallets.map(getOnlySouls)
+  const allAccountsWithSouls = wallets.map(getOnlyTemporarySouls)
   Promise.all(allAccountsWithSouls).then(async soulsInAllAccounts => {
     const soulIds = soulsInAllAccounts
       .flat()
-      .map(soul => soul.id)
+      .map(soul => `EVR-SOULS-${soul.temporarySoul.id}`)
 
     const leaderboardEntries = await getLeaderboardEntries();
     const sortedLeaderboardEntries = leaderboardEntries

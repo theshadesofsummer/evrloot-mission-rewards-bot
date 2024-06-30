@@ -9,6 +9,7 @@ const soulInfoSelectMenu = require("./commands/select-menu/soul-info-select-menu
 const finishedInviteSelectMenu = require("./commands/select-menu/finished-invite-select-menu");
 const finishedAcceptFightSelectMenu = require("./commands/select-menu/finished-accept-fight-select-menu");
 const selectedOpponentSelectMenu = require("./commands/select-menu/after-select-opponent")
+const showFighterSelectMenu = require("./commands/select-menu/show-fighter-select-menu.js")
 const updateUsernameCommand = require('./commands/update-username')
 const tournamentCommand = require('./commands/tournament-fight')
 const claimableSoulsCommand = require('./commands/claimable-souls')
@@ -104,6 +105,8 @@ async function setupDiscordBot() {
           await selectedOpponentSelectMenu.execute(interaction)
         else if (interaction.customId === 'choose-fighter-b-menu')
           await finishedAcceptFightSelectMenu.execute(interaction)
+        else if (interaction.customId === 'show-fighter-menu')
+          await showFighterSelectMenu.execute(interaction)
         else {
           interaction.reply({
             ephemeral: true,

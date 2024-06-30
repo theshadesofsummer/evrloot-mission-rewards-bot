@@ -9,6 +9,9 @@ module.exports = {
   updateDocument,
   deleteWallet,
   createNewFight,
+  getOpenPoolFight,
+  createNewFightInPool,
+  addFighterToOpenPoolFight,
   getFightByFighters,
   getFightByFightId,
   getOutstandingInvitationWithSoul,
@@ -220,7 +223,7 @@ async function getOutstandingInvitationWithSoul(soulId) {
     console.log('[DB]', 'check if a soul', soulId, 'is in an open invitation')
     const collection = client.db("evrloot").collection("discordfights");
 
-    return await collection.findOne({soulA: soulId});
+    return await collection.findOne({fighterA: soulId});
   } catch (error) {
     console.error('[DB]', 'Error searching for an open invitation by soulId', error);
     return undefined;
@@ -247,6 +250,68 @@ async function addFightingSoul(fightId, soulId, firstFighter) {
     // Update the document with provided data
     const soulToAdd = firstFighter ? {soulA: soulId} : {soulB: soulId}
     await collection.updateOne({_id: fightObjectId}, { $set: soulToAdd});
+  } catch (error) {
+    console.error('[DB]', 'Error adding the soul to the fight', error);
+  } finally {
+    await client.close();
+  }
+}
+
+async function getOpenPoolFight(discordId) {
+  const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+  try {
+    console.log('[DB]', 'get open fight in pool')
+    const collection = client.db("evrloot").collection("discordfights");
+
+    // Fetch the document
+    const doc = await collection.findOne({ fighterA: { $ne: null }, discordIdA: { $ne: discordId }, fighterB: null });
+
+    if (!doc) {
+      console.log('[DB]', 'no open fight found');
+      return;
+    }
+
+    console.log('[DB]', 'fight found', doc);
+    return doc
+  } catch (error) {
+    console.error('[DB]', 'Error getting open soul in pool', error);
+  } finally {
+    await client.close();
+  }
+}
+
+async function createNewFightInPool(soulId, discordId) {
+  const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+  try {
+    console.log('[DB]', 'createNewFightInPool', soulId)
+    const collection = client.db("evrloot").collection("discordfights");
+
+    // Fetch the document
+    return await collection.insertOne({ fighterA: soulId, discordIdA: discordId });
+  } catch (error) {
+    console.error('[DB]', 'Error creating new fight in pool', error);
+  } finally {
+    await client.close();
+  }
+}
+
+async function addFighterToOpenPoolFight(openPoolFightId, soulId, discordId) {
+  const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+  try {
+    console.log('[DB]', 'add', soulId, 'to the fight', openPoolFightId, 'with supplier', discordId)
+    const collection = client.db("evrloot").collection("discordfights");
+
+    // Fetch the document
+    const doc = await collection.findOne({ _id: openPoolFightId })
+
+    if (!doc) {
+      console.log('[DB]', 'no fight found with the id', openPoolFightId);
+      return;
+    }
+
+    // Update the document with provided data
+    await collection.updateOne({ _id: openPoolFightId }, { $set: { fighterB: soulId, discordIdB: discordId} });
+    return await collection.findOne({ _id: openPoolFightId })
   } catch (error) {
     console.error('[DB]', 'Error adding the soul to the fight', error);
   } finally {
@@ -286,13 +351,13 @@ async function getOpenInvitationsFromYou(userId, withFighter) {
   }
 }
 
-async function deleteFight(fightId) {
+async function deleteFight(openPoolFight) {
   const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
   try {
-    console.log('[DB]', 'delete fight by id', fightId)
+    console.log('[DB]', 'delete fight by id', openPoolFight._id)
     const collection = client.db("evrloot").collection("discordfights");
 
-    return await collection.deleteOne({_id: new ObjectId(fightId)});
+    return await collection.deleteOne({ _id: openPoolFight._id});
   } catch (error) {
     console.error('[DB]', 'Error deleting the fight', error);
   } finally {

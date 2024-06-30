@@ -138,7 +138,6 @@ async function getOnlySouls(address) {
 
 async function getOnlyTemporarySouls(address) {
   const response = await fetchAsync(`https://api.evrloot.io/api/temporary-soul/getTemporarySoul/${address}`);
-  console.log('response', response)
   if (response.error) {
     return []
   }
@@ -163,9 +162,18 @@ async function getSoulMetadata(soulId) {
 }
 
 async function mapMetadataToSoul(soul) {
-  const soulMetadataLink = await getSoulIpfsLink(Number.parseInt(soul.id.split('-').reverse()[0]));
-  const soulMetadata = await getFromIpfs(soulMetadataLink);
-  return {...soul, retrievedMetadata: soulMetadata}
+  let soulMetadataLink
+  // for temp souls soul is divided in .soul and .temporarySoul
+  console.log('soul', soul)
+  if (soul.soul) {
+    soulMetadataLink = await getSoulIpfsLink(Number.parseInt(soul.soul.id.split('-').reverse()[0]));
+    const soulMetadata = await getFromIpfs(soulMetadataLink);
+    return { ...soul.soul, id: `EVR-SOULS-${soul.temporarySoul.id}`, retrievedMetadata: soulMetadata }
+  } else {
+    soulMetadataLink = await getSoulIpfsLink(Number.parseInt(soul.id.split('-').reverse()[0]));
+    const soulMetadata = await getFromIpfs(soulMetadataLink);
+    return { ...soul, retrievedMetadata: soulMetadata }
+  }
 }
 
 async function getFromIpfs(ipfsLink) {

@@ -50,10 +50,8 @@ async function postTournamentStart() {
   return await channel.send({
     content: `# The tournament has been started!\n`
           + 'Prove your worth among the ranks of your fellow souls, only the best ones may ascend into the finals.\n'
-          + 'Initiate the combat with the `/fight` commands. Use `/fight invite` to invite other players, '
-          + '`/fight accept` to accept other peoples invitation and `/fight overview` if you were away and want to check'
-          + ' incoming outgoing fight requests.\n'
-          + 'You can check the best souls with `/fight leaderboard`\n\n'
+          + 'Initiate the combat with the `/tournament` commands. Use `/tournament battle` to fight other players!\n '
+          + 'You can check the best souls with `/tournament leaderboard`\n\n'
           + 'Good Luck out there, you will need it.'
   });
 }
@@ -68,10 +66,10 @@ async function postTournamentStop() {
   });
 }
 
-async function postFightResult(embed) {
+async function postFightResult(fight, embed) {
   console.log('[BOT] publish fight result')
   const channel = await getChannel(client, process.env.ARENA_CHANNEL_ID)
-  return await channel.send({embeds: [embed]});
+  return await channel.send({ content: `<@${fight.teamA.discordId}> vs. <@${fight.teamB.discordId}>`, embeds: [embed]});
 }
 
 async function postResourceReveal(embed, file) {

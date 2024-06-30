@@ -1,20 +1,23 @@
 const {SlashCommandBuilder} = require("discord.js");
 const config = require("../../config");
-const {showFighters} = require("./show-fighters");
+const {showFighters} = require("./show-fighter");
 const {getAllFighterAccounts} = require("../../evrloot-db");
+const { battle } = require("./battle");
+const showLeaderboard = require("../fight/show-leaderboard");
+const showPersonalStandings = require("../fight/show-personal-standings");
 
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('tournament')
     .setDescription('Pick one of your souls to fight against your friends or (soon to be) enemies!')
     .addSubcommand(subcommand =>
-      subcommand.setName('show-fighters')
-        .setDescription('Show of your fighters!')
-    )
-    .addSubcommand(subcommand =>
-      subcommand.setName('fight')
+      subcommand.setName('battle')
         .setDescription('Start a challenge and wait for an opponent!')
     )
+    // .addSubcommand(subcommand =>
+    //   subcommand.setName('show-fighter')
+    //     .setDescription('Show of your fighter(s)!')
+    // )
     .addSubcommand(subcommand =>
       subcommand.setName('leaderboard')
         .setDescription('Check who has the highest rating among them all!')
@@ -31,9 +34,12 @@ module.exports = {
     await interaction.deferReply({
       ephemeral: true
     })
+    await interaction.editReply('<a:Doubloon:1256636404658602076> Processing Command')
 
     try {
       const userId = interaction.user.id
+
+      await interaction.editReply('<a:Doubloon:1256636404658602076> Fetching connected wallets')
       const accounts = await getAllFighterAccounts(userId)
       const wallets = accounts.map(account => account.wallet)
 
@@ -44,8 +50,16 @@ module.exports = {
 
       const subcommand = interaction.options.getSubcommand();
       const isTournamentRunning = config.tournament.started;
-      if (subcommand === 'show-fighters') {
+      if (!isTournamentRunning) {
+        await interaction.editReply('The tournament is not running!')
+        return;
+      }
+
+      if (subcommand === 'battle') {
+        await battle(interaction, wallets)
+      } else if (subcommand === 'show-fighter') {
         await showFighters(interaction, wallets)
+      
         // } else if (subcommand === 'accept') {
         //   if (!isTournamentRunning) {
         //     await interaction.editReply('The tournament is not running anymore, the invite was not accepted!')
@@ -60,10 +74,10 @@ module.exports = {
         //   await fightOverview(interaction)
         // } else if (subcommand === 'revoke') {
         //   await fightRevoke(interaction)
-        // } else if (subcommand === 'leaderboard') {
-        //   await showLeaderboard(interaction)
-        // } else if (subcommand === 'personal-standings') {
-        //   await showPersonalStandings(interaction, wallets)
+        } else if (subcommand === 'leaderboard') {
+          await showLeaderboard(interaction)
+        } else if (subcommand === 'personal-standings') {
+          await showPersonalStandings(interaction, wallets)
         //   // } else if (subcommand === 'anyone') {
         //   //   await handleFightAnyone(interaction, wallets)
       }

@@ -1,29 +1,23 @@
 const {addFightingSoul, getOutstandingInvitationWithSoul, getSoulCooldown} = require("../../evrloot-db");
 const {isSoulAvailable} = require("../../helpers/fighting-soul-helpers");
-const {postFightAnnouncement} = require("../../discord-client");
+const { addSoulToFightPool } = require("../new-fight/add-soul-to-fight-pool");
 
 module.exports = {
   async execute(interaction) {
-    const [fightId, soulId] = interaction.values[0].split(';');
+    const [soulId] = interaction.values;
+
+    console.log(soulId)
+    await interaction.deferReply({ephemeral: true})
+    await interaction.editReply('<a:Doubloon:1256636404658602076> Checking if soul is available')
 
     const isAvailable = await isSoulAvailable(soulId)
 
     if (!isAvailable) {
-      await interaction.reply({
-        ephemeral: true,
-        content: 'This soul either is on cooldown or in an outstanding invitation, please select another soul.'
-      })
+      await interaction.editReply('This soul either is on cooldown or already in the pool waiting for an opponent, please select another soul.')
       return;
     }
 
-    await addFightingSoul(fightId, soulId, true)
-
-    await interaction.reply({
-      ephemeral: true,
-      content: 'The invite was successful, now it is up to your opponent to accept the challenge!'
-    })
-
-    await postFightAnnouncement(fightId)
+    await addSoulToFightPool(interaction, soulId)
   },
 }
 

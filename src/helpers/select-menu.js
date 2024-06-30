@@ -23,12 +23,12 @@ function createSoulSelectMenuRow(souls, customId) {
   return new ActionRowBuilder().setComponents(chooseSoulSelectMenu)
 }
 
-function createSoulFighterMenuRow(soulsWithStatus, customId, insertId) {
+function createSoulFighterMenuRow(soulsWithStatus, customId) {
   const chooseSoulButtons = soulsWithStatus
     .slice(0,25)
     .map((soulWithStatus, index) => ({
     label: `[${index+1}] ${soulWithStatus.retrievedMetadata.name}`,
-    value: `${insertId};${soulWithStatus.id}`,
+    value: `${soulWithStatus.id}`,
     emoji: findClassEmoteObject(findValueForAttribute(soulWithStatus.retrievedMetadata.attributes, 'Soul Class'))
   }));
   const chooseSoulSelectMenu = new StringSelectMenuBuilder()

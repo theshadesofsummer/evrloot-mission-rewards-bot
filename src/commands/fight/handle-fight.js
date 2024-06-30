@@ -9,30 +9,31 @@ const createFighterEmbed = require('../../embeds/fighter-embed')
 
 const ONE_HOUR = 3600;
 
-module.exports = async function (fightId) {
-  const fightInfos = await getFightByFightId(fightId);
+module.exports = async function (interaction, openPoolFight) {
+  await interaction.editReply('<a:Doubloon:1256636404658602076> Starting Fight')
+  const fightResult = await startFight(openPoolFight.fighterA, openPoolFight.fighterB);
 
-  console.log('>>> fightInfos:', fightInfos)
+  await deleteFight(openPoolFight);
 
-  const fightResult = await startFight(fightInfos.soulA, fightInfos.soulB);
+  const fight = await addDiscordUserToFighters(fightResult[0], openPoolFight.discordIdA, openPoolFight.discordIdB);
+  await interaction.editReply('<a:Doubloon:1256636404658602076> Update Leaderboard and Cooldown')
 
-  await deleteFight(fightId);
-
-  const fight = await addDiscordUserToFighters(fightResult[0], fightInfos.fighterA, fightInfos.fighterB);
-  const winnerPoints = calculateWinnerPoints(fight);
   await saveSoulCooldowns(fight);
-  await saveWinnerToLeaderboard(fight, winnerPoints);
-  await countPlayerCombination(fightInfos.fighterA, fightInfos.fighterB)
+  await saveWinnerToLeaderboard(fight);
+  await countPlayerCombination(openPoolFight.discordIdA, openPoolFight.discordIdB)
 
   await addFightParticipants(fight.teamA.discordId);
   await addFightParticipants(fight.teamB.discordId);
 
-  const fightMessage = await postFightResult(createFightEmbed(fight, winnerPoints))
+  const fightMessage = await postFightResult(fight, createFightEmbed(fight))
   const fightThread = await fightMessage.startThread({
     name: `${fight.teamA.discordName} vs. ${fight.teamB.discordName}`,
     autoArchiveDuration: ThreadAutoArchiveDuration.OneHour
   })
   await sendCombatRounds(fightThread, fight)
+
+
+  await interaction.editReply('Check the fight in the battle channel!')
 }
 
 async function addDiscordUserToFighters(fightResult, discordIdA, discordIdB) {
@@ -66,44 +67,15 @@ async function saveSoulCooldowns(fight) {
   }
 }
 
-function calculateWinnerPoints(fight) {
-  const winner = fight.winner;
-  if (winner === 'Team A') {
-    return getWinnerPointsFor(fight.teamA)
-  } else if (winner === 'Team B') {
-    return getWinnerPointsFor(fight.teamB)
-  }
-}
-
-const importantSlots = ["Head", "Body", "Feet", "Main Hand", "Off Hand"]
-function getWinnerPointsFor(soul) {
-  let winningPoints = 2.0; //leg = -0.2; 2*epic = -0.2
-
-  let epicCounter = 0;
-
-  const importantSoulChildren = soul.nft.children
-    .filter(childNft => importantSlots.includes(childNft.retrievedMetadata.properties["Slot"].value));
-
-  for (const child of importantSoulChildren) {
-    const childRarity = child.retrievedMetadata.properties["Rarity"].value
-    if (childRarity === 'Legendary') winningPoints -= 0.2;
-    if (childRarity === 'Epic') epicCounter += 1
-  }
-
-  let epicReduction = epicCounter / 2;
-  if (epicReduction >= 1) {
-    winningPoints = winningPoints - (Math.floor(epicReduction) * 0.2)
-  }
-
-  return winningPoints;
-}
 async function saveWinnerToLeaderboard(fight, winPoints) {
   const winner = fight.winner;
 
   if (winner === 'Team A') {
-    await updateWinnerOnLeaderboard(fight.teamA.id, fight.teamA.metadata.name, winPoints)
+    await updateWinnerOnLeaderboard(fight.teamA.id, fight.teamA.metadata.name, 3)
+    await updateWinnerOnLeaderboard(fight.teamB.id, fight.teamB.metadata.name, 1)
   } else if (winner === 'Team B') {
-    await updateWinnerOnLeaderboard(fight.teamB.id, fight.teamB.metadata.name, winPoints)
+    await updateWinnerOnLeaderboard(fight.teamB.id, fight.teamB.metadata.name, 3)
+    await updateWinnerOnLeaderboard(fight.teamA.id, fight.teamA.metadata.name, 1)
   } else {
     console.log('saveWinnerToLeaderboard, no matching winner team found:', winner, winPoints)
   }
