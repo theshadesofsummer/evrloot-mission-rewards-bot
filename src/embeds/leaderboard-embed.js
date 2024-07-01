@@ -78,7 +78,7 @@ function listPoints(topTenEntries) {
 
   let topListMessage = '';
   topTenEntries.forEach((entry, index) => {
-    topListMessage += `${entry.amount} 🏆\n`
+    topListMessage += `${entry.amount} 🏆 (${entry.wins}W/${entry.losses}L) \n`
   })
   return topListMessage
 }
@@ -92,16 +92,16 @@ function listTopEntries(topTenEntries) {
   topTenEntries.forEach((entry, index) => {
     switch (index) {
       case 0:
-        topListMessage +=`🥇 **${entry.soulName}**: ${entry.amount} 🏆 (${entry.soulId})\n`
+        topListMessage +=`🥇 **${entry.soulName}**: ${entry.amount} 🏆(${entry.wins}W/${entry.losses}L) (${entry.soulId})\n`
         break;
       case 1:
-        topListMessage += `🥈 **${entry.soulName}**: ${entry.amount} 🏆 (${entry.soulId})\n`
+        topListMessage += `🥈 **${entry.soulName}**: ${entry.amount} 🏆(${entry.wins}W/${entry.losses}L)  (${entry.soulId})\n`
         break;
       case 2:
-        topListMessage += `🥉 **${entry.soulName}**: ${entry.amount} 🏆 (${entry.soulId})\n`
+        topListMessage += `🥉 **${entry.soulName}**: ${entry.amount} 🏆(${entry.wins}W/${entry.losses}L)  (${entry.soulId})\n`
         break;
       default:
-        topListMessage += `${index+1}: **${entry.soulName}**: ${entry.amount} 🏆 (${entry.soulId})\n`
+        topListMessage += `${index + 1}: **${entry.soulName}**: ${entry.amount} 🏆 (${entry.wins}W/${entry.losses}L) (${entry.soulId})\n`
         break;
     }
   })
