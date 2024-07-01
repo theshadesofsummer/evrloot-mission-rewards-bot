@@ -67,18 +67,11 @@ async function saveSoulCooldowns(fight) {
   }
 }
 
-async function saveWinnerToLeaderboard(fight, winPoints) {
+async function saveWinnerToLeaderboard(fight) {
   const winner = fight.winner;
 
-  if (winner === 'Team A') {
-    await updateWinnerOnLeaderboard(fight.teamA.id, fight.teamA.metadata.name, 3)
-    await updateWinnerOnLeaderboard(fight.teamB.id, fight.teamB.metadata.name, 1)
-  } else if (winner === 'Team B') {
-    await updateWinnerOnLeaderboard(fight.teamB.id, fight.teamB.metadata.name, 3)
-    await updateWinnerOnLeaderboard(fight.teamA.id, fight.teamA.metadata.name, 1)
-  } else {
-    console.log('saveWinnerToLeaderboard, no matching winner team found:', winner, winPoints)
-  }
+  await updateWinnerOnLeaderboard(fight.teamA.id, fight.teamA.metadata.name, winner === 'Team A')
+  await updateWinnerOnLeaderboard(fight.teamB.id, fight.teamB.metadata.name, winner === 'Team B')
 }
 
 async function sendCombatRounds(fightThread, fight) {
