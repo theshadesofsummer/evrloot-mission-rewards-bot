@@ -137,7 +137,7 @@ async function getOnlySouls(address) {
 }
 
 async function getOnlyTemporarySouls(address) {
-  const response = await fetchAsync(`https://api.evrloot.io/api/temporary-soul/getTemporarySoul/${address}`);
+  const response = await fetchAsync(`https://api.evrloot.xyz/api/temporary-soul/getTemporarySoul/${address}`);
   if (response.error) {
     return []
   }
