@@ -175,7 +175,7 @@ function formatAttack(attack, attackerId, defenderId) {
   }
 
   if (attack["stats"].lifestealHeal && attack["stats"].lifestealPercent) {
-    attackSummary += `${attackerId} heals ${attack["stats"].lifestealHeal}❤️ with ${attack["stats"].lifestealPercent}% Lifesteal\n`
+    attackSummary += `${attackerId} heals ${formatHealth(attack["stats"].lifestealHeal)} with ${attack["stats"].lifestealPercent}% Lifesteal\n`
   }
 
   return attackSummary;
