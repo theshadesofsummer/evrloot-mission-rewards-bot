@@ -56,7 +56,7 @@ function listPoints(ownSoulsWithIndex) {
 
   let result = '';
   ownSoulsWithIndex.forEach(soulWithIndex => {
-    result += `${soulWithIndex.entry.amount} 🏆\n`
+    result += `${soulWithIndex.entry.amount} 🏆 (${soulWithIndex.entry.wins}W/${soulWithIndex.entry.losses}L) \n`
   })
 
   return result
