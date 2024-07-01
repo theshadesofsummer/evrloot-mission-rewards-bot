@@ -27,7 +27,7 @@ const commands = [
   connectedWalletsCommand,
   walletSettingsCommand,
   soulInfoCommand,
-  fightCommand,
+  //fightCommand,
   tournamentCommand,
   updateUsernameCommand,
   claimableSoulsCommand,
