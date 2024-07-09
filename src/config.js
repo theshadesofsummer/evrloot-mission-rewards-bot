@@ -6,7 +6,7 @@ module.exports = {
         'Legendary'
     ],
     tournament: {
-        started: false,
+        started: true,
         allowedUserIDs: [
             '459760677935120384', //summer
             '392742443650646017'  //luuu
