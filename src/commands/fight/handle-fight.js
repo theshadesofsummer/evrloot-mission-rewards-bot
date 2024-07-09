@@ -92,7 +92,7 @@ function summarizeRound(round, idx, fight) {
     .map((action, idxOfBattleActions) => summarizeAction(action, idxOfBattleActions))
     .join('\n')
 
-  result = '### Health After Round:\n';
+  result += '### Health After Round:\n';
   result += summarizeTeam(round.teamA, fight.teamA.discordName)
   result += summarizeTeam(round.teamB, fight.teamB.discordName)
 
