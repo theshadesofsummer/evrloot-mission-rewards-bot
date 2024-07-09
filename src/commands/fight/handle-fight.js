@@ -95,14 +95,13 @@ async function sendCombatRounds(fightThread, fight) {
 function summarizeRound(round, idx, fight) {
   let result = '## Round #' + (idx+1) + '\n\n';
 
-  result += summarizeTeam(round.teamA, fight.teamA.discordName)
-  result += summarizeTeam(round.teamB, fight.teamB.discordName)
-
-  result += '\n'
-
   result += Object.values(round.battleActions)
     .map((action, idxOfBattleActions) => summarizeAction(action, idxOfBattleActions))
     .join('\n')
+
+  result += '### Final Health Stats After Round:\n'
+  result += summarizeTeam(round.teamA, fight.teamA.discordName)
+  result += summarizeTeam(round.teamB, fight.teamB.discordName)
 
   result += '\n\n---End of Round #' + (idx+1) + '---'
   return formatComment(result, fight);
@@ -110,7 +109,7 @@ function summarizeRound(round, idx, fight) {
 
 function summarizeTeam(team, fighterName) {
   const fighter = team[0]
-  return `Status **${fighterName}**: ${formatHealth(fighter.hp)}\n`
+  return `**${fighterName}**'s soul: ${formatHealth(fighter.hp)}\n`
 }
 
 function summarizeAction(action, idxOfBattleActions) {
