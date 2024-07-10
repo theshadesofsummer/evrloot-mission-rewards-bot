@@ -83,6 +83,7 @@ async function sendCombatRounds(fightThread, fight) {
     ]
   })
   fight.combatRounds.forEach((round, idx) => fightThread.send(summarizeRound(round, idx, fight)))
+  fightThread.send('## End of Fight')
 }
 
 function summarizeRound(round, idx, fight) {
@@ -174,8 +175,16 @@ function formatAttack(attack, attackerId, defenderId) {
 }
 
 function healthChange(attack) {
-  return `Attacker ${attack.attackers[0].id}: ${formatHealth(attack.attackers[0].hp.starting)} ➡ ${formatHealth(attack.attackers[0].hp.ending)}\n`
-    + `Defender ${attack.defenders[0].id}: ${formatHealth(attack.defenders[0].hp.starting)} ➡ ${formatHealth(attack.defenders[0].hp.ending)}\n`
+  let healthChange = '';
+
+  if (attack.attackers[0].hp.starting !== attack.attackers[0].hp.ending) {
+    healthChange += `Attacker ${attack.attackers[0].id}: ${formatHealth(attack.attackers[0].hp.starting)} ➡ ${formatHealth(attack.attackers[0].hp.ending)}\n`
+  }
+  if (attack.defenders[0].hp.starting !== attack.defenders[0].hp.ending) {
+    healthChange += `Defender ${attack.defenders[0].id}: ${formatHealth(attack.defenders[0].hp.starting)} ➡ ${formatHealth(attack.defenders[0].hp.ending)}\n`
+  }
+
+  return healthChange
 }
 
 function formatComment(comment, fight) {
