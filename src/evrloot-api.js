@@ -164,7 +164,6 @@ async function getSoulMetadata(soulId) {
 async function mapMetadataToSoul(soul) {
   let soulMetadataLink
   // for temp souls soul is divided in .soul and .temporarySoul
-  console.log('soul', soul)
   if (soul.soul) {
     soulMetadataLink = await getSoulIpfsLink(Number.parseInt(soul.soul.id.split('-').reverse()[0]));
     const soulMetadata = await getFromIpfs(soulMetadataLink);
