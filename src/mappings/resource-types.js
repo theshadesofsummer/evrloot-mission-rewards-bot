@@ -485,4 +485,159 @@ module.exports = { // resourceMappings.ts
     name: 'Mirage Sprout',
     emoteId: '<:miragesprout:1213624362058645567>'
   },
+   // NEW EXPEDITION RESOURCES
+   BONE_SHARD: {
+    id: 800,
+    tokenUri: 'ipfs://QmZiQmZZGHrNnmXxtttNcMxiwfc4e3nSUroqdAihxq5uZj/bone_shard.json',
+    name: 'Bone Shard',
+    emoteId: '<:bone_shard:1268673318307758213>'
+  },
+  CEREMONIAL_SKULL: {
+    id: 801,
+    tokenUri: 'ipfs://QmZiQmZZGHrNnmXxtttNcMxiwfc4e3nSUroqdAihxq5uZj/ceremonial_skull.json',
+    name: 'Ceremonial Skull',
+    emoteId: '<:ceremonial_skull:1268673363748978823> '
+  },
+  CLAW_IRON: {
+    id: 802,
+    tokenUri: 'ipfs://QmZiQmZZGHrNnmXxtttNcMxiwfc4e3nSUroqdAihxq5uZj/claw_iron.json',
+    name: 'Claw Iron',
+    emoteId: '<:iron_claw:1268673320056914083>'
+  },
+  METAL_SCRAPS: {
+    id: 803,
+    tokenUri: 'ipfs://QmZiQmZZGHrNnmXxtttNcMxiwfc4e3nSUroqdAihxq5uZj/metal_scraps.json',
+    name: 'Metal Scraps',
+    emoteId: '<:metal_scrap:1268673314612842557>'
+  },
+  RECIPE_AVENTAIL_HELM: {
+    id: 804,
+    tokenUri: 'ipfs://QmZiQmZZGHrNnmXxtttNcMxiwfc4e3nSUroqdAihxq5uZj/recipe_aventail_helm.json',
+    name: 'Recipe Aventail Helm',
+    emoteId: '<:recipe_epic:1268673360720826520>'
+  },
+  RECIPE_BIG_HAMMER: {
+    id: 805,
+    tokenUri: 'ipfs://QmZiQmZZGHrNnmXxtttNcMxiwfc4e3nSUroqdAihxq5uZj/recipe_big_hammer.json',
+    name: 'Recipe Big Hammer',
+    emoteId: '<:recipe_rare:1268673361752625274>'
+  },
+  RECIPE_BONEY_CLUB: {
+    id: 806,
+    tokenUri: 'ipfs://QmZiQmZZGHrNnmXxtttNcMxiwfc4e3nSUroqdAihxq5uZj/recipe_boney_club.json',
+    name: 'Recipe Boney Club',
+    emoteId: '<:recipe_common:1268673359294627884>'
+  },
+  RECIPE_CAGE_THURIBLE: {
+    id: 807,
+    tokenUri: 'ipfs://QmZiQmZZGHrNnmXxtttNcMxiwfc4e3nSUroqdAihxq5uZj/recipe_cage_thurible.json',
+    name: 'Recipe Cage Thurible',
+    emoteId: '<:recipe_common:1268673359294627884>'
+  },
+  RECIPE_DARK_LEATHER_FOOTWEAR: {
+    id: 808,
+    tokenUri:
+      'ipfs://QmZiQmZZGHrNnmXxtttNcMxiwfc4e3nSUroqdAihxq5uZj/recipe_dark_leather_footwear.json',
+    name: 'Recipe Dark Leather Footwear',
+    emoteId: '<:recipe_rare:1268673361752625274>'
+  },
+  RECIPE_FACE_OF_THE_TRICKSTER: {
+    id: 809,
+    tokenUri:
+      'ipfs://QmZiQmZZGHrNnmXxtttNcMxiwfc4e3nSUroqdAihxq5uZj/recipe_face_of_the_trickster.json',
+    name: 'Recipe Face of the Trickster',
+    emoteId: '<:recipe_epic:1268673360720826520>'
+  },
+  RECIPE_HALITOSIS_BOMB: {
+    id: 810,
+    tokenUri: 'ipfs://QmZiQmZZGHrNnmXxtttNcMxiwfc4e3nSUroqdAihxq5uZj/recipe_haltosis_bomb.json',
+    name: 'Recipe Haltosis Bomb',
+    emoteId: '<:recipe_common:1268673359294627884>'
+  },
+  RECIPE_HIGH_BOOTS: {
+    id: 811,
+    tokenUri: 'ipfs://QmZiQmZZGHrNnmXxtttNcMxiwfc4e3nSUroqdAihxq5uZj/recipe_high_boots.json',
+    name: 'Recipe High Boots',
+    emoteId: '<:recipe_common:1268673359294627884>'
+  },
+  RECIPE_HORNY_HELMET_OF_CONFUSION: {
+    id: 812,
+    tokenUri:
+      'ipfs://QmZiQmZZGHrNnmXxtttNcMxiwfc4e3nSUroqdAihxq5uZj/recipe_horny_helmet_of_confusion.json',
+    name: 'Recipe Horny Helmet of Confusion',
+    emoteId: '<:epic:1213624362058645567>'
+  },
+  RECIPE_LEATHER_WRAPPED_FOOTWEAR: {
+    id: 813,
+    tokenUri:
+      'ipfs://QmZiQmZZGHrNnmXxtttNcMxiwfc4e3nSUroqdAihxq5uZj/recipe_leather_wrapped_footwear.json',
+    name: 'Recipe Leather Wrapped Footwear',
+    emoteId: '<:recipe_common:1268673359294627884>'
+  },
+  RECIPE_PATCHWORK_SHOES: {
+    id: 814,
+    tokenUri: 'ipfs://QmZiQmZZGHrNnmXxtttNcMxiwfc4e3nSUroqdAihxq5uZj/recipe_patchwork_shoes.json',
+    name: 'Recipe Patchwork Shoes',
+    emoteId: '<:recipe_common:1268673359294627884>'
+  },
+  RECIPE_SCALE_THURIBLE: {
+    id: 815,
+    tokenUri: 'ipfs://QmZiQmZZGHrNnmXxtttNcMxiwfc4e3nSUroqdAihxq5uZj/recipe_scale_thurible.json',
+    name: 'Recipe Scale Thurible',
+    emoteId: '<:recipe_rare:1268673361752625274>'
+  },
+  RECIPE_SIMPLE_BLOWGUN: {
+    id: 816,
+    tokenUri: 'ipfs://QmZiQmZZGHrNnmXxtttNcMxiwfc4e3nSUroqdAihxq5uZj/recipe_simple_blowgun.json',
+    name: 'Recipe Simple Blowgun',
+    emoteId: '<:recipe_common:1268673359294627884>'
+  },
+  RECIPE_STONE_EYE_POUCH: {
+    id: 817,
+    tokenUri: 'ipfs://QmZiQmZZGHrNnmXxtttNcMxiwfc4e3nSUroqdAihxq5uZj/recipe_stone_eye_pouch.json',
+    name: 'Recipe Stone Eye Pouch',
+    emoteId: '<:recipe_rare:1268673361752625274>'
+  },
+  RECIPE_WOODEN_CLUB: {
+    id: 818,
+    tokenUri: 'ipfs://QmZiQmZZGHrNnmXxtttNcMxiwfc4e3nSUroqdAihxq5uZj/recipe_wooden_club.json',
+    name: 'Recipe Wooden Club',
+    emoteId: '<:recipe_common:1268673359294627884>'
+  },
+  SCALESKIN: {
+    id: 819,
+    tokenUri: 'ipfs://QmZiQmZZGHrNnmXxtttNcMxiwfc4e3nSUroqdAihxq5uZj/scaleskin.json',
+    name: 'Scaleskin',
+    emoteId: '<:scaleskin:1268673365418180691>'
+  },
+  SMELLY_GOOP: {
+    id: 820,
+    tokenUri: 'ipfs://QmZiQmZZGHrNnmXxtttNcMxiwfc4e3nSUroqdAihxq5uZj/smelly_goop.json',
+    name: 'Smelly Goop',
+    emoteId: '<:smelly_goop:1268673367687303188>'
+  },
+  STONE_EYE: {
+    id: 821,
+    tokenUri: 'ipfs://QmZiQmZZGHrNnmXxtttNcMxiwfc4e3nSUroqdAihxq5uZj/stone_eye.json',
+    name: 'Stone Eye',
+    emoteId: '<:stone_eye:1268673369637650568>'
+  },
+  VIBRACITE_CRYSTAL: {
+    id: 822,
+    tokenUri: 'ipfs://QmZiQmZZGHrNnmXxtttNcMxiwfc4e3nSUroqdAihxq5uZj/vibracite_crystal.json',
+    name: 'Vibracite Crystal',
+    emoteId: '<:vibracite_crystal:1268673370774573056>'
+  },
+  VIBRACITE_DUST: {
+    id: 823,
+    tokenUri: 'ipfs://QmZiQmZZGHrNnmXxtttNcMxiwfc4e3nSUroqdAihxq5uZj/vibracite_dust.json',
+    name: 'Vibracite Dust',
+    emoteId: '<:vibracite_dust:1268673372171141252>'
+  },
+  WORN_LEATHER: {
+    id: 824,
+    tokenUri: 'ipfs://QmZiQmZZGHrNnmXxtttNcMxiwfc4e3nSUroqdAihxq5uZj/worn_leather.json',
+    name: 'Worn Leather',
+    emoteId: '<:worn_leather:1268673316953264272>'
+  },
 };
