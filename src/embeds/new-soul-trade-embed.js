@@ -7,7 +7,7 @@ module.exports = function createSoulNewTradeEmbed(tradeInfo, textInfo, tradeCrea
 
   return {
     color: 0x5308a8,
-    title: `New Trade: ${textInfo.title}`,
+    title: `${findClassEmote(soul.retrievedMetadata.properties['Soul Class'].value)} New Trade: ${textInfo.title}`,
     url: `https://game.evrloot.com/marketplace?mId=${tradeInfo.id}`,
     author,
     image: {
@@ -32,7 +32,7 @@ module.exports = function createSoulNewTradeEmbed(tradeInfo, textInfo, tradeCrea
         inline: true
       },
       {
-        name: 'Children',
+        name: 'Equipment',
         value: soulChildsFormatter(soul.children),
         inline: true
       }

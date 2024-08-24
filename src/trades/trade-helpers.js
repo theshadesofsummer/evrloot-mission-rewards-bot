@@ -91,6 +91,12 @@ async function enrichErc1155Info(erc1155Id, erc1155Amount) {
 }
 
 async function getDiscordUserForWallet(wallet) {
-  const savedUser = await getAccountByWallet(wallet.toLowerCase())
+  try {
+    const savedUser = await getAccountByWallet(wallet.toLowerCase())
   return savedUser ? await getUserByClientId(savedUser.discordId) : undefined
+  } catch (e) {
+    // try catch only for testing purposes (because test bot is in another server)
+    return undefined
+  }
+  
 }

@@ -1,5 +1,5 @@
 const {fetchTradeByIdFromSquid, getSoulFromBackend, getSoulImage} = require("../evrloot-api");
-const {postNewTrade, getUserByClientId, postNewTradeWithImage} = require("../discord-client");
+const {postNewTrade, postNewTradeWithImage} = require("../discord-client");
 const createNewTradeEmbed = require('../embeds/new-trade-embed')
 const createNewSoulTradeEmbed = require('../embeds/new-soul-trade-embed')
 const resourceRewards = require("../mappings/resource-types");
