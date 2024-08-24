@@ -117,13 +117,14 @@ module.exports = {
   startFight,
   getSoulMetadata,
   mapMetadataToSoul,
+  getSoulFromBackend,
+  getSoulImage,
   getFromIpfs,
   fetchSoulIdFromSquid,
   fetchTradeByIdFromSquid,
   fetchBidByIdFromSquid,
   fetchNftMetadataByIdAndCollection
 }
-
 
 
 // could maybe be deprecated for getOnlySouls for speed/wide-band reasons?
@@ -152,7 +153,7 @@ async function startFight(attackers, defenders) {
       defenders,
       password: process.env.API_PASSWORD
     }),
-    headers: { 'Content-Type': 'application/json' }
+    headers: {'Content-Type': 'application/json'}
   });
 }
 
@@ -167,12 +168,34 @@ async function mapMetadataToSoul(soul) {
   if (soul.soul) {
     soulMetadataLink = await getSoulIpfsLink(Number.parseInt(soul.soul.id.split('-').reverse()[0]));
     const soulMetadata = await getFromIpfs(soulMetadataLink);
-    return { ...soul.soul, id: `EVR-SOULS-${soul.temporarySoul.id}`, retrievedMetadata: soulMetadata }
+    return {...soul.soul, id: `EVR-SOULS-${soul.temporarySoul.id}`, retrievedMetadata: soulMetadata}
   } else {
     soulMetadataLink = await getSoulIpfsLink(Number.parseInt(soul.id.split('-').reverse()[0]));
     const soulMetadata = await getFromIpfs(soulMetadataLink);
-    return { ...soul, retrievedMetadata: soulMetadata }
+    return {...soul, retrievedMetadata: soulMetadata}
   }
+}
+
+// normal way that should include everything
+async function getSoulFromBackend(fullSoulId) {
+  return await fetchAsync(`https://api.evrloot.xyz/api/evmnfts/${fullSoulId}`)
+}
+
+async function getSoulImage(soulId) {
+  const soulImageUrl = `https://api.evrloot.xyz/api/dynamic/evr-souls/${soulId}`
+  console.log(soulImageUrl);
+  return await fetchAsyncImage(soulImageUrl);
+}
+
+async function fetchAsyncImage(url) {
+  return fetch(url).then(response => {
+    if (!response.ok) {
+      throw new Error(`Request failed with status ${response.status}`)
+    }
+    return response.arrayBuffer()
+  }).then(arrayBuffer => {
+    return Buffer.from(arrayBuffer)
+  }).catch(error => console.log(error))
 }
 
 async function getFromIpfs(ipfsLink) {

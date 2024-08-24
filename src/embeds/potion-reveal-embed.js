@@ -1,4 +1,3 @@
-
 module.exports = function createRevealPotionEmbed(recipe, user) {
   return {
     color: 0xae1917,

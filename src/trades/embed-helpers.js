@@ -40,7 +40,7 @@ function getFields(tradeInfo, tradeNfts, tradeResources, forTrade) {
       name: forTrade ? 'Trade Buy Out' : 'Offered Buy Out',
       value: `${readableGlmrAmount} $GLMR`
     });
-  } else if (erc20.amount > 0){
+  } else if (erc20.amount > 0) {
     const erc20TokenInfo = TOKEN_INFOS.get(tradeInfo.erc20.contractAddress)
     const readableErc20Amount = erc20.amount * 100 / erc20TokenInfo.decimals / 100.0
     fields.push({
@@ -68,6 +68,7 @@ function formatResourceLine(resource) {
     return 'unknown resource(s)'
   }
 }
+
 const relevantStatAttributes = [
   "Strength",
   "Dexterity",
@@ -92,6 +93,7 @@ const shortenedStatName = new Map([
   ["MaxDamage", "MAXDAM"],
   ["Fishing", "FISH"],
 ])
+
 function formatNftLines(nft) {
   const rarity = findValueForAttribute(nft.attributes, 'Rarity')
   const relevantStats = nft.attributes.filter(attribute => relevantStatAttributes.includes(attribute.label))

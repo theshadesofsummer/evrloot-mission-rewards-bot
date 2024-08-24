@@ -1,4 +1,3 @@
-
 module.exports = function createResourceRewardEmbed(day, newResource) {
   return {
     color: 0xae1917,

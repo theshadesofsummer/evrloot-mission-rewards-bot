@@ -5,6 +5,7 @@ module.exports = {
   isSoulAvailable,
   soulSorterByStatus
 }
+
 function mapStatusToSoul(soulList) {
   return Promise.all(soulList.map(enrichSoulWithStatus));
 }

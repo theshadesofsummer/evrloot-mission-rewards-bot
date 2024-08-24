@@ -38,20 +38,19 @@ module.exports = {
 
         const soulsSortedByClaimTime = soulListWithMetadata
           .sort((soulA, soulB) => {
-            if (soulA.lastPlayerMission.reachedEndTime && soulB.lastPlayerMission.reachedEndTime) { // both finished -> claimed?
-              if (soulA.lastPlayerMission.claimedTime && soulB.lastPlayerMission.claimedTime) { // both claimable -> time
-                return soulA.lastPlayerMission.claimedTime.localeCompare(soulB.lastPlayerMission.claimedTime)
+              if (soulA.lastPlayerMission.reachedEndTime && soulB.lastPlayerMission.reachedEndTime) { // both finished -> claimed?
+                if (soulA.lastPlayerMission.claimedTime && soulB.lastPlayerMission.claimedTime) { // both claimable -> time
+                  return soulA.lastPlayerMission.claimedTime.localeCompare(soulB.lastPlayerMission.claimedTime)
+                }
+                if (soulA.lastPlayerMission.claimedTime) { // A is claimed -> back
+                  return 1
+                }
+                return soulA.lastPlayerMission.endTime.localeCompare(soulB.lastPlayerMission.endTime)
+              } else { // both waiting -> end time
+                return soulA.lastPlayerMission.endTime.localeCompare(soulB.lastPlayerMission.endTime)
               }
-              if (soulA.lastPlayerMission.claimedTime) { // A is claimed -> back
-                return 1
-              }
-              return soulA.lastPlayerMission.endTime.localeCompare(soulB.lastPlayerMission.endTime)
-            } else { // both waiting -> end time
-              return soulA.lastPlayerMission.endTime.localeCompare(soulB.lastPlayerMission.endTime)
             }
-          }
-
-        )
+          )
 
         const soulMissionStatusEmbed = await createSoulMissionStatusEmbed(userId, soulsSortedByClaimTime)
         await interaction.editReply({

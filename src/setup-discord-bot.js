@@ -1,5 +1,5 @@
-const {  REST, Collection } = require('discord.js');
-const { Routes } = require('discord-api-types/v9');
+const {REST, Collection} = require('discord.js');
+const {Routes} = require('discord-api-types/v9');
 const {client} = require('./discord-client')
 const connectedWalletsCommand = require("./commands/connected-wallets");
 const walletSettingsCommand = require("./commands/wallet-settings");
@@ -58,7 +58,7 @@ async function setupDiscordBot() {
         const command = client.commands.get(interaction.commandName);
         if (!command) return;
 
-        const { cooldowns } = interaction.client;
+        const {cooldowns} = interaction.client;
 
         if (!cooldowns.has(command.data.name)) {
           cooldowns.set(command.data.name, new Collection());
@@ -74,7 +74,10 @@ async function setupDiscordBot() {
 
           if (now < expirationTime) {
             const expiredTimestamp = Math.round(expirationTime / 1_000);
-            return interaction.reply({ content: `Please wait, you are on a cooldown for \`/${command.data.name}\`. You can use it again <t:${expiredTimestamp}:R>.`, ephemeral: true });
+            return interaction.reply({
+              content: `Please wait, you are on a cooldown for \`/${command.data.name}\`. You can use it again <t:${expiredTimestamp}:R>.`,
+              ephemeral: true
+            });
           }
         }
 
@@ -114,10 +117,9 @@ async function setupDiscordBot() {
           })
         }
 
-      }
-      catch (error) {
+      } catch (error) {
         console.log(error);
-        await interaction.editReply({ content: 'There was an error while interacting with the string select menu!' });
+        await interaction.editReply({content: 'There was an error while interacting with the string select menu!'});
       }
     }
   });
@@ -131,19 +133,18 @@ async function deployCommandsToServer() {
     commandData.push(command.data.toJSON());
   }
 
-  const rest = new REST({ version: '10' }).setToken(process.env.DISCORDJS_TOKEN);
+  const rest = new REST({version: '10'}).setToken(process.env.DISCORDJS_TOKEN);
 
   try {
     console.log('Started refreshing application (/) commands.');
 
     await rest.put(
       Routes.applicationCommands(process.env.DISCORDJS_CLIENTID),
-      { body: commandData },
+      {body: commandData},
     );
 
     console.log('Successfully reloaded application (/) commands.');
-  }
-  catch (error) {
+  } catch (error) {
     console.error(error);
   }
 }

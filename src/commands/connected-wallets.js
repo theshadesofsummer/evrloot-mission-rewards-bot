@@ -34,5 +34,5 @@ function messageContent(accounts) {
 }
 
 function accountEntry(account, idx) {
-  return `${idx+1}. ${account.wallet}\n\tverified: ${account.verified ? '✅' : '❎ '}\n\tanonymous: ${account.isAnonymous ? '✅' : '❎'}`
+  return `${idx + 1}. ${account.wallet}\n\tverified: ${account.verified ? '✅' : '❎ '}\n\tanonymous: ${account.isAnonymous ? '✅' : '❎'}`
 }

@@ -46,10 +46,10 @@ module.exports = {
     })
 
     if (!isUserAllowed(interaction.user.id)) {
-      await interaction.editReply({ content: 'You are not allowed to use this command!', ephemeral: true });
+      await interaction.editReply({content: 'You are not allowed to use this command!', ephemeral: true});
       return;
     } else {
-      await interaction.editReply({ content: 'Authorized, preparing further action!', ephemeral: true });
+      await interaction.editReply({content: 'Authorized, preparing further action!', ephemeral: true});
     }
 
     const subcommand = interaction.options.getSubcommand();
@@ -75,7 +75,10 @@ async function startTournament(interaction) {
     interaction.editReply({content: 'The tournament is already running, no action was taken', ephemeral: true})
   } else {
     config.tournament.started = true;
-    interaction.editReply({content: 'The tournament is has now started, message will be published in arena', ephemeral: true})
+    interaction.editReply({
+      content: 'The tournament is has now started, message will be published in arena',
+      ephemeral: true
+    })
     await postTournamentStart();
   }
 }
@@ -87,7 +90,10 @@ async function stopTournament(interaction) {
     interaction.editReply({content: 'The tournament is already stopped, no action was taken', ephemeral: true})
   } else {
     config.tournament.started = false;
-    interaction.editReply({content: 'The tournament is has now stopped, message will be published in arena', ephemeral: true})
+    interaction.editReply({
+      content: 'The tournament is has now stopped, message will be published in arena',
+      ephemeral: true
+    })
     await postTournamentStop();
   }
 }
@@ -105,12 +111,12 @@ async function startManualFight(interaction) {
   await addFightingSoul(fightId, attackerSoulId, true);
   await addFightingSoul(fightId, defenderSoulId, false);
 
-  await interaction.editReply({ content: 'initialized fight; starting battle!', ephemeral: true });
+  await interaction.editReply({content: 'initialized fight; starting battle!', ephemeral: true});
 
   const fightObj = await getFightByFightId(fightId.toString())
   console.log(attackerSoulId, defenderSoulId, fightObj)
 
   await handleFight(fightId.toString())
 
-  await interaction.editReply({ content: 'fight finished!', ephemeral: true });
+  await interaction.editReply({content: 'fight finished!', ephemeral: true});
 }

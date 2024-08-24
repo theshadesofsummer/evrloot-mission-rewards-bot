@@ -72,7 +72,7 @@ function getAvailableTinctures(recipeStatus) {
   return recipeStatus.tinctures.filter(recipe => daysRevealed.includes(recipe.availableOnDay))
 }
 
-function recipeIngredientsMatching(recipe, tinctureNa,me) {
+function recipeIngredientsMatching(recipe, tinctureNa, me) {
   if (recipe.length !== guessedRecipe.length) return false;
 
   const recipeMap = new Map(recipe)

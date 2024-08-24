@@ -48,12 +48,12 @@ module.exports = {
         )
     )
     .addSubcommand(subcommand =>
-      subcommand.setName('personal-standings')
-        .setDescription('See how your souls perform in the tournament!')
-    // )
-    // .addSubcommand(subcommand =>
-    //   subcommand.setName('anyone')
-    //     .setDescription('Fight against anyone available!')
+        subcommand.setName('personal-standings')
+          .setDescription('See how your souls perform in the tournament!')
+      // )
+      // .addSubcommand(subcommand =>
+      //   subcommand.setName('anyone')
+      //     .setDescription('Fight against anyone available!')
     ),
   async execute(interaction) {
     await interaction.deferReply({
@@ -95,8 +95,8 @@ module.exports = {
       await showLeaderboard(interaction)
     } else if (subcommand === 'personal-standings') {
       await showPersonalStandings(interaction, wallets)
-    // } else if (subcommand === 'anyone') {
-    //   await handleFightAnyone(interaction, wallets)
+      // } else if (subcommand === 'anyone') {
+      //   await handleFightAnyone(interaction, wallets)
     }
   },
 };

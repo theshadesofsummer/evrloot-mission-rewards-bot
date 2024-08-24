@@ -1,4 +1,9 @@
-const {fetchNftMetadataByIdAndCollection, getFromIpfs} = require("../evrloot-api");
+const {
+  fetchNftMetadataByIdAndCollection,
+  getFromIpfs,
+  fetchSoulIdFromSquid,
+  getSoulMetadata, getSoulFromBackend
+} = require("../evrloot-api");
 const resourceRewards = require("../mappings/resource-types");
 const {getAccountByWallet} = require("../evrloot-db");
 const {getUserByClientId} = require("../discord-client");
@@ -14,9 +19,22 @@ const TOKEN_INFOS = new Map([
 module.exports = {
   GLMR_DECIMALS,
   TOKEN_INFOS,
+  getSoulMetadataForTrade,
   getNftWithMetadata,
   getResourcesWithMetadata,
   getDiscordUserForWallet
+}
+
+async function getSoulMetadataForTrade(tradeInfo) {
+  if (tradeInfo.erc721s[0]) {
+    const soulId = await fetchSoulIdFromSquid(tradeInfo.erc721s[0].tokenId)
+    return await getSoulFromBackend(soulId);
+  } else {
+    console.log("3 DEBUG: fetch not staked soul metadata incoming", tradeInfo.unclaimedNfts[0])
+    const erc721MetadataLink = await fetchNftMetadataByIdAndCollection(tradeInfo.unclaimedNfts[0].itemId, tradeInfo.unclaimedNfts[0].contractAddress.toLowerCase())
+    console.log("3 DEBUG: fetched not staked soul metadata link", erc721MetadataLink)
+    return await getFromIpfs(erc721MetadataLink)
+  }
 }
 
 async function getNftWithMetadata(erc721s, unclaimedNfts) {
@@ -27,13 +45,12 @@ async function getNftWithMetadata(erc721s, unclaimedNfts) {
     tradeNfts.push(erc721Metadata)
   }
   for (const erc721 of unclaimedNfts) {
-      console.log("DEBUG: fetch unclaimedNfts metadata incoming")
-      const erc721MetadataLink = await fetchNftMetadataByIdAndCollection(erc721.itemId, erc721.contractAddress.toLowerCase())
-      console.log("DEBUG: fetched link", erc721MetadataLink)
-      const erc721Metadata = await getFromIpfs(erc721MetadataLink)
-      console.log("DEBUG: fetched metadata", erc721Metadata)
-      tradeNfts.push(erc721Metadata)
-
+    console.log("2 DEBUG: fetch unclaimedNfts metadata incoming", erc721)
+    const erc721MetadataLink = await fetchNftMetadataByIdAndCollection(erc721.itemId, erc721.contractAddress.toLowerCase())
+    console.log("2 DEBUG: fetched link", erc721MetadataLink)
+    const erc721Metadata = await getFromIpfs(erc721MetadataLink)
+    console.log("2 DEBUG: fetched metadata", erc721Metadata)
+    tradeNfts.push(erc721Metadata)
   }
   return tradeNfts
 }

@@ -47,7 +47,7 @@ function formatAll(souls) {
     soulString += `${findClassEmote(soulClassName)} **${soul.retrievedMetadata.name}**: *${soul.lastPlayerMission.mission.action}* `
     if (soul.lastPlayerMission.reachedEndTime) {
       if (soul.lastPlayerMission.claimedTime) {
-        const claimedTime =  new Date(soul.lastPlayerMission.claimedTime)
+        const claimedTime = new Date(soul.lastPlayerMission.claimedTime)
         soulString += `(claimed <t:${claimedTime.getTime() / 1000}:R>)\n`
       } else {
         soulString += `(ended <t:${endTime.getTime() / 1000}:R>)\n`
@@ -82,9 +82,10 @@ function bringSoulLinesIntoChunks(soulLines) {
 
   return chunks
 }
+
 function formatFieldsArray(fieldsBelowCharLimit) {
   return fieldsBelowCharLimit.map((chunk, idx) => ({
-    name: `Current Mission Status: (${idx+1}/${fieldsBelowCharLimit.length})`,
+    name: `Current Mission Status: (${idx + 1}/${fieldsBelowCharLimit.length})`,
     value: chunk
   }))
 

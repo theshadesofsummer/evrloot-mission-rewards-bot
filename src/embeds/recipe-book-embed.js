@@ -1,4 +1,3 @@
-
 module.exports = function createRevealRecipeEmbed(availableRecipesAmount, discoveredRecipes) {
 
   const recipeFields = formatRecipes(discoveredRecipes);

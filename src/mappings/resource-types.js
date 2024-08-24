@@ -1,5 +1,5 @@
 module.exports = { // resourceMappings.ts
-  // Misc (Quests / other)
+                   // Misc (Quests / other)
   HARPOON: {
     id: 0,
     tokenUri: 'ipfs://QmaVthjeRKpVk9PKvySMPhra7XvLeZJYg4Mwgo2QuAZdge/HARPOON.json',
@@ -485,8 +485,8 @@ module.exports = { // resourceMappings.ts
     name: 'Mirage Sprout',
     emoteId: '<:miragesprout:1213624362058645567>'
   },
-   // NEW EXPEDITION RESOURCES
-   BONE_SHARD: {
+  // NEW EXPEDITION RESOURCES
+  BONE_SHARD: {
     id: 800,
     tokenUri: 'ipfs://QmZiQmZZGHrNnmXxtttNcMxiwfc4e3nSUroqdAihxq5uZj/bone_shard.json',
     name: 'Bone Shard',

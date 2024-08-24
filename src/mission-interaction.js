@@ -1,9 +1,9 @@
 const createMissionRewardEmbed = require('./embeds/mission-reward-embed.js')
 const createPinkMissionRewardEmbed = require('./embeds/pink-mission-reward-embed')
 const resourceRewards = require('./mappings/resource-types.js');
-const { getFromIpfs } = require('./evrloot-api.js')
+const {getFromIpfs} = require('./evrloot-api.js')
 const config = require('./config.js')
-const { addToStats, increaseMissionCounter } = require('./summary/daily-stats.js')
+const {addToStats, increaseMissionCounter} = require('./summary/daily-stats.js')
 const {getAccountByWallet} = require("./evrloot-db");
 const {getAccountFromTx} = require("./abi-interaction");
 const {nftMapping} = require("./mappings/item-ids");

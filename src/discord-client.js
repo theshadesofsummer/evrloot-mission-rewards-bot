@@ -16,6 +16,7 @@ module.exports = {
   postResourceReveal,
   postPotionReveal,
   postNewTrade,
+  postNewTradeWithImage,
   sendVerificationDm,
   mapClientIdToName,
   getUserByClientId
@@ -49,10 +50,10 @@ async function postTournamentStart() {
   const channel = await getChannel(client, process.env.ARENA_CHANNEL_ID)
   return await channel.send({
     content: `# The tournament has been started!\n`
-          + 'Prove your worth among the ranks of your fellow souls, only the best ones may ascend into the finals.\n'
-          + 'Initiate the combat with the `/tournament` commands. Use `/tournament battle` to fight other players!\n '
-          + 'You can check the best souls with `/tournament leaderboard`\n\n'
-          + 'Good Luck out there, you will need it.'
+      + 'Prove your worth among the ranks of your fellow souls, only the best ones may ascend into the finals.\n'
+      + 'Initiate the combat with the `/tournament` commands. Use `/tournament battle` to fight other players!\n '
+      + 'You can check the best souls with `/tournament leaderboard`\n\n'
+      + 'Good Luck out there, you will need it.'
   });
 }
 
@@ -69,7 +70,7 @@ async function postTournamentStop() {
 async function postFightResult(fight, embed) {
   console.log('[BOT] publish fight result')
   const channel = await getChannel(client, process.env.ARENA_CHANNEL_ID)
-  return await channel.send({ content: `<@${fight.teamA.discordId}> vs. <@${fight.teamB.discordId}>`, embeds: [embed]});
+  return await channel.send({content: `<@${fight.teamA.discordId}> vs. <@${fight.teamB.discordId}>`, embeds: [embed]});
 }
 
 async function postResourceReveal(embed, file) {
@@ -90,11 +91,17 @@ async function postNewTrade(embed) {
   return await channel.send({embeds: [embed]});
 }
 
+async function postNewTradeWithImage(embed, file) {
+  console.log('[BOT] publish new trade')
+  const channel = await getChannel(client, process.env.TRADE_CHANNEL_ID)
+  return await channel.send({embeds: [embed], files: [file]});
+}
+
 async function sendVerificationDm(discordName, wallet) {
   await client.guilds.fetch();
   const guild = client.guilds.cache.get(process.env.GUILD_ID);
 
-  const memberMap = await guild.members.fetch({ query: discordName, limit: 10})
+  const memberMap = await guild.members.fetch({query: discordName, limit: 10})
 
   let userWithMatchingUsername = undefined;
   memberMap.forEach(member => {

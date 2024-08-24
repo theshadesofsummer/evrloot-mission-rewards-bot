@@ -4,7 +4,10 @@ const {client} = require("./discord-client");
 const {setupDiscordBot} = require("./setup-discord-bot");
 
 setupDiscordBot().then(() => {
-  MongoClient.connect(`mongodb+srv://${process.env.MONGODB_ACCESS}@cluster0.cbrbn.mongodb.net/evrloot?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true }).then(async dbClient => {
+  MongoClient.connect(`mongodb+srv://${process.env.MONGODB_ACCESS}@cluster0.cbrbn.mongodb.net/evrloot?retryWrites=true&w=majority`, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  }).then(async dbClient => {
     try {
       const collection = dbClient.db("evrloot").collection("discordverifications");
 
@@ -28,12 +31,11 @@ setupDiscordBot().then(() => {
 })
 
 
-
 async function getDiscordIdFor(discordName) {
   await client.guilds.fetch();
   const guild = client.guilds.cache.get(process.env.GUILD_ID);
 
-  const memberMap = await guild.members.fetch({ query: discordName, limit: 10})
+  const memberMap = await guild.members.fetch({query: discordName, limit: 10})
 
   let id = '0';
   memberMap.forEach(member => {

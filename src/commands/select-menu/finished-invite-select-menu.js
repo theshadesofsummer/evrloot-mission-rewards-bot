@@ -1,6 +1,6 @@
 const {addFightingSoul, getOutstandingInvitationWithSoul, getSoulCooldown} = require("../../evrloot-db");
 const {isSoulAvailable} = require("../../helpers/fighting-soul-helpers");
-const { addSoulToFightPool } = require("../new-fight/add-soul-to-fight-pool");
+const {addSoulToFightPool} = require("../new-fight/add-soul-to-fight-pool");
 
 module.exports = {
   async execute(interaction) {

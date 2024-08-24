@@ -1,9 +1,19 @@
-const {fetchTradeByIdFromSquid, getFromIpfs, fetchNftMetadataByIdAndCollection, fetchBidByIdFromSquid} = require("../evrloot-api");
+const {
+  fetchTradeByIdFromSquid,
+  getFromIpfs,
+  fetchNftMetadataByIdAndCollection,
+  fetchBidByIdFromSquid
+} = require("../evrloot-api");
 const {postNewTrade, getUserByClientId} = require("../discord-client");
 const createBidAcceptedEmbed = require('../embeds/bid-accepted-embed')
 const resourceRewards = require("../mappings/resource-types");
 const {getTradeMessages, getAccountByWallet} = require("../evrloot-db");
-const {getTradeNfts, getDiscordUserForWallet, getNftWithMetadata, getResourcesWithMetadata} = require("./trade-helpers");
+const {
+  getTradeNfts,
+  getDiscordUserForWallet,
+  getNftWithMetadata,
+  getResourcesWithMetadata
+} = require("./trade-helpers");
 
 module.exports = {
   handleBidAccepted

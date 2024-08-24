@@ -85,7 +85,7 @@ function walletSettingsRow(entry) {
 
   const toggleAnonButton = new ButtonBuilder()
     .setCustomId('wallet-toggle-anon')
-    .setLabel('Toggle Anonymity, currently ' + getAnonState(entry.isAnonymous)+ '.')
+    .setLabel('Toggle Anonymity, currently ' + getAnonState(entry.isAnonymous) + '.')
     .setStyle(ButtonStyle.Primary);
 
   const deleteButton = new ButtonBuilder()

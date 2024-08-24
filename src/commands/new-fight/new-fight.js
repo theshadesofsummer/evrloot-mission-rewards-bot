@@ -2,7 +2,7 @@ const {SlashCommandBuilder} = require("discord.js");
 const config = require("../../config");
 const {showFighters} = require("./show-fighter");
 const {getAllFighterAccounts} = require("../../evrloot-db");
-const { battle } = require("./battle");
+const {battle} = require("./battle");
 const showLeaderboard = require("../fight/show-leaderboard");
 const showPersonalStandings = require("../fight/show-personal-standings");
 
@@ -27,8 +27,8 @@ module.exports = {
         )
     )
     .addSubcommand(subcommand =>
-        subcommand.setName('personal-standings')
-          .setDescription('See how your soul performs in the tournament!')
+      subcommand.setName('personal-standings')
+        .setDescription('See how your soul performs in the tournament!')
     ),
   async execute(interaction) {
     await interaction.deferReply({
@@ -59,7 +59,7 @@ module.exports = {
         await battle(interaction, wallets)
       } else if (subcommand === 'show-fighter') {
         await showFighters(interaction, wallets)
-      
+
         // } else if (subcommand === 'accept') {
         //   if (!isTournamentRunning) {
         //     await interaction.editReply('The tournament is not running anymore, the invite was not accepted!')
@@ -74,10 +74,10 @@ module.exports = {
         //   await fightOverview(interaction)
         // } else if (subcommand === 'revoke') {
         //   await fightRevoke(interaction)
-        } else if (subcommand === 'leaderboard') {
-          await showLeaderboard(interaction)
-        } else if (subcommand === 'personal-standings') {
-          await showPersonalStandings(interaction, wallets)
+      } else if (subcommand === 'leaderboard') {
+        await showLeaderboard(interaction)
+      } else if (subcommand === 'personal-standings') {
+        await showPersonalStandings(interaction, wallets)
         //   // } else if (subcommand === 'anyone') {
         //   //   await handleFightAnyone(interaction, wallets)
       }

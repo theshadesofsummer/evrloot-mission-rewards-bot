@@ -5,11 +5,11 @@ const createRevealPotionEmbed = require('../embeds/potion-reveal-embed')
 const {postPotionReveal} = require("../discord-client");
 
 const choices = [
-  { name: 'Sandy Oasis Water', value: 'Sandy Oasis Water' },
-  { name: 'Soft Palmwood', value: 'Soft Palmwood' },
-  { name: 'New Resource #1', value: 'Glade Grass' },
-  { name: 'New Resource #2', value: 'Cactus Leaf' },
-  { name: 'New Resource #3', value: 'Dry Sand Herb' },
+  {name: 'Sandy Oasis Water', value: 'Sandy Oasis Water'},
+  {name: 'Soft Palmwood', value: 'Soft Palmwood'},
+  {name: 'New Resource #1', value: 'Glade Grass'},
+  {name: 'New Resource #2', value: 'Cactus Leaf'},
+  {name: 'New Resource #3', value: 'Dry Sand Herb'},
   // { name: 'New Resource #4', value: 'Mirage Sprout' },
   // { name: 'New Resource #5', value: 'Deep Root' }
 ]
@@ -76,14 +76,14 @@ module.exports = {
     const rssName3 = interaction.options.getString('rss-name-3');
     const rssAmount3 = interaction.options.getInteger('rss-amount-3');
 
-    if (resourceNamesDoubled(rssName1, rssName2, rssName3)){
+    if (resourceNamesDoubled(rssName1, rssName2, rssName3)) {
       await interaction.editReply({
         content: 'You have entered multiple entries for the same resource.',
         ephemeral: true
       })
       return;
     }
-    if (thirdEntryNotCorrect(rssName3, rssAmount3)){
+    if (thirdEntryNotCorrect(rssName3, rssAmount3)) {
       await interaction.editReply({
         content: 'If you specify a name or amount for the third resource, you need to fully specify the name and amount.',
         ephemeral: true
@@ -145,8 +145,9 @@ function resourceNamesDoubled(rssName1, rssName2, rssName3) {
 
 function thirdEntryNotCorrect(rssName3, rssAmount3) {
   return (rssName3 !== null && rssAmount3 === null)
-  || (rssName3 === null && rssAmount3 !== null)
+    || (rssName3 === null && rssAmount3 !== null)
 }
+
 function recipeIngredientsMatching(recipe, guessedRecipe) {
   if (recipe.length !== guessedRecipe.length) return false;
 

@@ -1,4 +1,9 @@
-const {fetchTradeByIdFromSquid, getFromIpfs, fetchNftMetadataByIdAndCollection, fetchBidByIdFromSquid} = require("../evrloot-api");
+const {
+  fetchTradeByIdFromSquid,
+  getFromIpfs,
+  fetchNftMetadataByIdAndCollection,
+  fetchBidByIdFromSquid
+} = require("../evrloot-api");
 const {postNewTrade, getUserByClientId} = require("../discord-client");
 const createNewBidEmbed = require('../embeds/new-bid-embed')
 const resourceRewards = require("../mappings/resource-types");

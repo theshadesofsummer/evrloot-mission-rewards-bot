@@ -6,7 +6,7 @@ module.exports = function createBidAcceptedEmbed(tradeInfo, textInfo, tradeCreat
 
   const fields = [...tradeFields, ...bidFields]
 
-  const author =  getAuthor(tradeCreator)
+  const author = getAuthor(tradeCreator)
 
   const titlePrefix = `${bidCreator ? `${bidCreator.globalName}'s ` : ''}`
   const title = `${titlePrefix}Bid Accepted: ${textInfo.title}`

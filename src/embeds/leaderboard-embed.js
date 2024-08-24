@@ -1,5 +1,3 @@
-
-
 module.exports = function createLeaderboardEmbed(topTenEntries, isForMobile) {
   return {
     color: 0xae1917,
@@ -18,17 +16,17 @@ module.exports = function createLeaderboardEmbed(topTenEntries, isForMobile) {
           value: listIndices(topTenEntries),
           inline: true
         },
-          {
-            name: 'Warriors:',
-            value: listNames(topTenEntries),
-            inline: true
-          },
-          {
-            name: 'Points',
-            value: listPoints(topTenEntries),
-            inline: true
-          }
-        ],
+        {
+          name: 'Warriors:',
+          value: listNames(topTenEntries),
+          inline: true
+        },
+        {
+          name: 'Points',
+          value: listPoints(topTenEntries),
+          inline: true
+        }
+      ],
     timestamp: new Date().toISOString(),
   };
 }
@@ -42,7 +40,7 @@ function listIndices(topTenEntries) {
   topTenEntries.forEach((entry, index) => {
     switch (index) {
       case 0:
-        topListMessage +=`🥇\n`
+        topListMessage += `🥇\n`
         break;
       case 1:
         topListMessage += `🥈\n`
@@ -51,7 +49,7 @@ function listIndices(topTenEntries) {
         topListMessage += `🥉\n`
         break;
       default:
-        topListMessage += `${index+1}:\n`
+        topListMessage += `${index + 1}:\n`
         break;
     }
   })
@@ -92,7 +90,7 @@ function listTopEntries(topTenEntries) {
   topTenEntries.forEach((entry, index) => {
     switch (index) {
       case 0:
-        topListMessage +=`🥇 **${entry.soulName}**: ${entry.amount} 🏆(${entry.wins}W/${entry.losses}L) (${entry.soulId})\n`
+        topListMessage += `🥇 **${entry.soulName}**: ${entry.amount} 🏆(${entry.wins}W/${entry.losses}L) (${entry.soulId})\n`
         break;
       case 1:
         topListMessage += `🥈 **${entry.soulName}**: ${entry.amount} 🏆(${entry.wins}W/${entry.losses}L)  (${entry.soulId})\n`

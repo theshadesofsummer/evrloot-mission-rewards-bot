@@ -17,7 +17,7 @@ function getRevealStatus() {
 }
 
 function saveRevealStatus() {
-  fs.writeFileSync('reveal-status.json', JSON.stringify(revealStatus) , 'utf-8');
+  fs.writeFileSync('reveal-status.json', JSON.stringify(revealStatus), 'utf-8');
 }
 
 function addRevealDay(day) {

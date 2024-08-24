@@ -1,5 +1,5 @@
 const {getLeaderboardEntries} = require("../../evrloot-db");
-const { getOnlyTemporarySouls } = require("../../evrloot-api");
+const {getOnlyTemporarySouls} = require("../../evrloot-api");
 const createPersonalStandingsEmbed = require("../../embeds/personal-standings-embed");
 
 module.exports = async function (interaction, wallets) {

@@ -1,5 +1,3 @@
-
-
 module.exports = function createPersonalStandingsEmbed(ownSoulsWithIndex) {
   return {
     color: 0xae1917,
