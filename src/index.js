@@ -13,7 +13,7 @@ const {handleNewBid} = require("./trades/handle-new-bid");
 const {handleBidAccepted} = require("./trades/handle-bid-accepted");
 
 setupDiscordBot().then(() => {
-  handleNewTrade("0xd235b3b1ac41f7eaa72e7de14019fddce08d81e8b20f32843d3480e90c78c431") // soul
+  //handleNewTrade("0xd235b3b1ac41f7eaa72e7de14019fddce08d81e8b20f32843d3480e90c78c431") // soul
   setupMissionRewardListener()
   setupMongoDbConnection()
   initStats()
