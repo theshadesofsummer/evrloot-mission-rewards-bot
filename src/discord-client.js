@@ -1,6 +1,6 @@
 const {Client} = require("discord.js");
 const generateSummary = require("./summary/generate-summary");
-const {deleteWallet, getFightByFightId} = require("./evrloot-db");
+const {deleteWallet, getFightByFightId, updateDocument, getAllAccounts, updateDiscordInfo} = require("./evrloot-db");
 const {verificationMessage} = require("./messaging/verification-message");
 
 const client = new Client({intents: 0});
@@ -19,7 +19,8 @@ module.exports = {
   postNewTradeWithImage,
   sendVerificationDm,
   mapClientIdToName,
-  getUserByClientId
+  getUserByClientId,
+  updateAllUsers
 }
 
 
@@ -152,4 +153,40 @@ async function getUserByClientId(clientId) {
     return undefined
   }
   return guildMember.user
+}
+
+async function updateAllUsers() {
+  const accounts = await getAllAccounts()
+  const discordIds = accounts.map(account => account.discordId)
+  const filteredDiscordIds = [...new Set(discordIds)]
+
+  for (const discordId of filteredDiscordIds) {
+    try {
+      const user = await getUserByClientId(discordId)
+      if (user) {
+        await updateDiscordInfo(user.id, user.username, user.avatarURL())
+
+        // possible result if nothing changed:
+        // {
+        //   acknowledged: true,
+        //   modifiedCount: 0,
+        //   upsertedId: null,
+        //   upsertedCount: 0,
+        //   matchedCount: 13
+        // }
+      }
+    } catch (e) {
+
+    }
+    console.log('finished update')
+  }
+  // await client.guilds.fetch();
+  // const guild = client.guilds.cache.get(process.env.GUILD_ID);
+  //
+  // const guildMember = await guild.members.fetch(clientId)
+  // if (!guildMember) {
+  //   console.warn('no user found for client id', clientId)
+  //   return undefined
+  // }
+  // return guildMember.user
 }

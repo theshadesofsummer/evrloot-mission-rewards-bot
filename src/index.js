@@ -4,7 +4,7 @@ const {MISSION_CONTRACT, MARKETPLACE_CONTRACT} = require("./abi-interaction.js")
 const {fetchMissionReward} = require('./mission-interaction.js');
 const cron = require('node-cron');
 const {MongoClient} = require("mongodb");
-const {publishSummary, sendVerificationDm} = require("./discord-client");
+const {publishSummary, sendVerificationDm, updateAllUsers} = require("./discord-client");
 const {initStats, increaseExpeditionCounter, resetStats} = require("./summary/daily-stats");
 const {loadRevealStatus} = require("./reveal-status");
 const {handleNewTrade} = require("./trades/handle-new-trade");
@@ -21,9 +21,8 @@ setupDiscordBot().then(() => {
 
   cron.schedule('0 0 * * *', () => {
     publishSummary();
+    updateAllUsers()
   });
-
-
 });
 
 function setupMongoDbConnection() {

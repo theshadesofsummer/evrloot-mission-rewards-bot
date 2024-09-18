@@ -2,6 +2,8 @@ const {MongoClient, ObjectId} = require('mongodb');
 
 module.exports = {
   getAccountByWallet,
+  getAllAccounts,
+  updateDiscordInfo,
   getAllConnectedAccounts,
   getAllFighterAccounts,
   updateDiscordName,
@@ -46,6 +48,42 @@ async function getAccountByWallet(wallet) {
     return doc;
   } catch (error) {
     console.error('[DB] getting account name for address failed.', error);
+    return undefined
+  } finally {
+    await client.close();
+  }
+}
+
+async function getAllAccounts() {
+  const client = await MongoClient.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true});
+  try {
+    console.log('[DB]', 'getting all accounts')
+    const collection = client.db("evrloot").collection("discordverifications");
+
+    // Fetch the document
+    return await collection.find().toArray();
+
+  } catch (error) {
+    console.error('[DB] getting account name for address failed.', error);
+    return []
+  } finally {
+    await client.close();
+  }
+}
+
+async function updateDiscordInfo(userId, username, avatarURL) {
+  const client = await MongoClient.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true});
+  try {
+    console.log('[DB]', 'update discord info for userId', userId)
+    const collection = client.db("evrloot").collection("discordverifications");
+
+    const filter = {
+      discordId: userId,
+    }
+
+    return await collection.updateMany(filter, {$set: {discordName: username, avatarURL}});
+  } catch (error) {
+    console.error('[DB] error updating discordinfo.', error);
     return undefined
   } finally {
     await client.close();
