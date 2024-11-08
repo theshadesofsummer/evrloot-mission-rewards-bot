@@ -4,7 +4,7 @@ const {
   fetchNftMetadataByIdAndCollection,
   fetchBidByIdFromSquid
 } = require("../evrloot-api");
-const {postNewTrade, getUserByClientId} = require("../discord-client");
+const {postNewTrade, getUserByClientId, logMessageOrError} = require("../discord-client");
 const createNewBidEmbed = require('../embeds/new-bid-embed')
 const resourceRewards = require("../mappings/resource-types");
 const {getTradeMessages, getAccountByWallet} = require("../evrloot-db");
@@ -21,12 +21,12 @@ async function handleNewBid(bidId) {
   const bidInfo = await fetchBidByIdFromSquid(bidId)
 
   if (!bidInfo) {
-    console.error('no bid found for', bidId)
+    await logMessageOrError('no bid found for', bidId)
     return;
   }
   const textInfo = await getTradeMessages(bidInfo.trade.id)
   if (!textInfo) {
-    console.error('no textInfo found for trade on bid', bidId)
+    await logMessageOrError('no textInfo found for trade on bid', bidId)
     return;
   }
 

@@ -6,7 +6,7 @@ const {
 } = require("../evrloot-api");
 const resourceRewards = require("../mappings/resource-types");
 const {getAccountByWallet} = require("../evrloot-db");
-const {getUserByClientId} = require("../discord-client");
+const {getUserByClientId, logMessageOrError} = require("../discord-client");
 
 const GLMR_DECIMALS = Math.pow(10, 18);
 const TOKEN_INFOS = new Map([
@@ -84,7 +84,7 @@ async function enrichErc1155Info(erc1155Id, erc1155Amount) {
       emoteId: resourceType.emoteId
     };
   } catch (err) {
-    console.error('error in enricherc1155info with id', erc1155Id, 'amount', erc1155Amount, err);
+    await logMessageOrError('error in enricherc1155info with id', erc1155Id, 'amount', erc1155Amount, err)
     return undefined
   }
 

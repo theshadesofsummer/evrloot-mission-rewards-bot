@@ -23,8 +23,6 @@ module.exports = {
     const address = interaction.options.getString('address')
     const souls = await getSouls(address);
 
-    console.log('user', interaction.user.username, 'requested souls of', address);
-
     const embeds = createChooseSoulEmbeds(souls);
 
     const pagination = new Pagination(interaction)

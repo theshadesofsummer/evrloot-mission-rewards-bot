@@ -51,7 +51,6 @@ function soulSorterByStatus(soulA, soulB) { // 1 -> soulB switches to front; -1 
   } else if (soulBStatus === 'onCooldown' && soulAStatus === 'onCooldown') {
     return soulA.cooldown - soulB.cooldown;
   }
-  console.log('no soul matching param found')
   return 0
 }
 

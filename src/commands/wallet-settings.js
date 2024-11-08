@@ -1,6 +1,7 @@
 const {SlashCommandBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder} = require("discord.js");
 const {userWithWallet, updateDocument, deleteWallet} = require("../evrloot-db");
 const {verificationMessage} = require("../messaging/verification-message");
+const {logMessageOrError} = require("../discord-client");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -66,7 +67,7 @@ module.exports = {
           })
         }
       } catch (e) {
-        console.log('user did not react on the setting command or some error happened:', e)
+        await logMessageOrError('user did not react on the setting command:', interaction.user.id, e)
 
         await interaction.followUp({
           ephemeral: true,

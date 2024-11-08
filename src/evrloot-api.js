@@ -2,6 +2,7 @@ const removeIpfsStuff = require("./helpers/ipfs-link-tools");
 const dns = require("dns");
 const fs = require("fs");
 const {getSoulIpfsLink} = require("./abi-interaction");
+const {logMessageOrError} = require("./discord-client");
 
 const SQUID_ADDRESS = 'https://squid.subsquid.io/evrsquid/graphql';
 const QUERY_SOUL_ID_BY_ESTRA_TOKEN_ID = `
@@ -195,7 +196,7 @@ async function fetchAsyncImage(url) {
     return response.arrayBuffer()
   }).then(arrayBuffer => {
     return Buffer.from(arrayBuffer)
-  }).catch(error => console.log(error))
+  }).catch(error => logMessageOrError('could not fetch image async:', error))
 }
 
 async function getFromIpfs(ipfsLink) {
@@ -212,7 +213,7 @@ async function fetchAsync(url, options = {}) {
     return response.json()
   }).then(json => {
     return json
-  }).catch(error => console.log(error))
+  }).catch(error => logMessageOrError('could not fetch async:', error))
 }
 
 async function fetchSoulIdFromSquid(estraTokenId) {
@@ -234,7 +235,7 @@ async function fetchSoulIdFromSquid(estraTokenId) {
       return result.data.nfts[0].id;
     })
     .catch((err) => {
-      console.log('error while fetching from squid:', err);
+      logMessageOrError('could not fetch soulID from squid by estra token id:', estraTokenId, err)
       return undefined
     });
 }
@@ -258,7 +259,7 @@ async function fetchTradeByIdFromSquid(tradeId) {
       return result.data.tradeById;
     })
     .catch((err) => {
-      console.log('error while fetching from squid:', err);
+      logMessageOrError('could not fetch trade from squid by trade id:', tradeId, err)
       return undefined
     });
 }
@@ -282,7 +283,7 @@ async function fetchBidByIdFromSquid(bidId) {
       return result.data.bidById;
     })
     .catch((err) => {
-      console.log('error while fetching from squid:', err);
+      logMessageOrError('could not bid from squid by bid id:', bidId, err)
       return undefined
     });
 }
@@ -307,7 +308,7 @@ async function fetchNftMetadataByIdAndCollection(tokenId, collectionAddress) {
       return result.data.nfts[0].assets[0].asset.metadata;
     })
     .catch((err) => {
-      console.log('error while fetching from squid:', err);
+      logMessageOrError('error while fetchNftMetadataByIdAndCollection:', tokenId, collectionAddress, err)
       return undefined
     });
 }

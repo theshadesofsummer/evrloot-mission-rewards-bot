@@ -1,5 +1,6 @@
 const {ButtonBuilder, ButtonStyle, ActionRowBuilder} = require("discord.js");
 const {updateDocument, deleteWallet} = require("../evrloot-db");
+const {logMessageOrError} = require("../discord-client");
 
 module.exports = {
   verificationMessage
@@ -41,7 +42,7 @@ async function verificationMessage(member, wallet) {
 
       await handleVerificationConfirmation(confirmation, member, wallet)
     } catch (e) {
-      console.log('[DM]', 'user did not react or some error happened:', e)
+      await logMessageOrError('user did not react on the setting command or error', member.user.username, e)
       await deleteWallet(wallet)
       await confirmationDm.edit({
         components: []
@@ -54,9 +55,8 @@ async function verificationMessage(member, wallet) {
     }
 
   } catch (e) {
-    console.log('dm create error:', e)
+    await logMessageOrError('could not create DM for', member.user.username, e)
     await deleteWallet(wallet)
-    console.log('could not create DM for', member.user.username)
   }
 }
 
@@ -85,7 +85,6 @@ async function handleVerificationConfirmation(confirmation, member, wallet) {
         `Do you want your name to be publicly shown?`,
       components: [rowAnon]
     })
-    console.log('[DM]', 'sent user anon message')
 
     try {
       const confirmation = await requestAnonMessage.awaitMessageComponent({time: 60_000});
@@ -93,6 +92,8 @@ async function handleVerificationConfirmation(confirmation, member, wallet) {
       await handleAnonConfirmation(confirmation, member, wallet)
     } catch (e) {
       console.log('[DM]', 'user did not react on the anon request or some error happened:', e)
+      await logMessageOrError('user did not react on the anon request or some error happened', member.user.username, e)
+
       await requestAnonMessage.edit({
         components: []
       })
@@ -104,7 +105,7 @@ async function handleVerificationConfirmation(confirmation, member, wallet) {
     }
 
   } else if (confirmation.customId === 'deny') {
-    console.log('[DM]', 'user denied verification')
+    await logMessageOrError('user denied verification', member.user.username)
     await deleteWallet(wallet)
     await confirmation.update({components: []});
     await member.send(`Of course, this looked like total gibberish. I'm sorry for wasting your time, traveller!`)

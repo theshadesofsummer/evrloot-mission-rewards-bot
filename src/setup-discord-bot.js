@@ -1,6 +1,6 @@
 const {REST, Collection} = require('discord.js');
 const {Routes} = require('discord-api-types/v9');
-const {client} = require('./discord-client')
+const {client, logMessageOrError} = require('./discord-client')
 const connectedWalletsCommand = require("./commands/connected-wallets");
 const walletSettingsCommand = require("./commands/wallet-settings");
 const soulInfoCommand = require('./commands/soul-info.js');
@@ -13,10 +13,6 @@ const showFighterSelectMenu = require("./commands/select-menu/show-fighter-selec
 const updateUsernameCommand = require('./commands/update-username')
 const tournamentCommand = require('./commands/tournament-fight')
 const claimableSoulsCommand = require('./commands/claimable-souls')
-const revealCommand = require('./commands/reveal')
-const guessPotionCommand = require('./commands/guess-potion')
-const guessTinctureCommand = require('./commands/guess-tincture')
-const recipeBookCommand = require('./commands/recipe-book')
 const newFightCommand = require('./commands/new-fight/new-fight')
 
 module.exports = {
@@ -31,10 +27,6 @@ const commands = [
   tournamentCommand,
   updateUsernameCommand,
   claimableSoulsCommand,
-  revealCommand,
-  guessPotionCommand,
-  guessTinctureCommand,
-  recipeBookCommand,
   newFightCommand
 ]
 
@@ -87,17 +79,16 @@ async function setupDiscordBot() {
         try {
           await command.execute(interaction);
         } catch (error) {
-          console.error(error);
+          await logMessageOrError('Error executing interaction:',  client.commands.get(interaction.commandName), interaction.user.id)
           await interaction.reply({content: 'There was an error while executing this command!', ephemeral: true});
         }
       } catch (error) {
-        console.warn('error while interaction:', error)
+        await logMessageOrError('Error while processing interaction:',  client.commands.get(interaction.commandName), interaction.user.id)
       }
     }
 
     if (interaction.isStringSelectMenu()) {
       try {
-        console.log('>>> string select menu', interaction.customId, interaction.values[0], interaction.user.id)
         if (interaction.customId === 'choose-soul-menu')
           await soulInfoSelectMenu.execute(interaction)
         else if (interaction.customId === 'choose-fishing-board-menu') {
@@ -118,7 +109,7 @@ async function setupDiscordBot() {
         }
 
       } catch (error) {
-        console.log(error);
+        await logMessageOrError('error while interacting with the string select menu:',  interaction.customId, interaction.user.id)
         await interaction.editReply({content: 'There was an error while interacting with the string select menu!'});
       }
     }

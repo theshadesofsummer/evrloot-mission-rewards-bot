@@ -1,4 +1,5 @@
 const {MongoClient, ObjectId} = require('mongodb');
+const {logMessageOrError} = require("./discord-client");
 
 module.exports = {
   getAccountByWallet,
@@ -47,7 +48,8 @@ async function getAccountByWallet(wallet) {
 
     return doc;
   } catch (error) {
-    console.error('[DB] getting account name for address failed.', error);
+    await logMessageOrError('[DB] getting account name for address failed:', wallet, error)
+
     return undefined
   } finally {
     await client.close();
@@ -64,7 +66,7 @@ async function getAllAccounts() {
     return await collection.find().toArray();
 
   } catch (error) {
-    console.error('[DB] getting account name for address failed.', error);
+    await logMessageOrError('[DB] getting all accounts failed:', error)
     return []
   } finally {
     await client.close();
@@ -83,7 +85,8 @@ async function updateDiscordInfo(userId, username, avatarURL) {
 
     return await collection.updateMany(filter, {$set: {discordName: username, avatarURL}});
   } catch (error) {
-    console.error('[DB] error updating discordinfo.', error);
+    await logMessageOrError('[DB] error updating discordinfo:', userId, username, avatarURL, error)
+
     return undefined
   } finally {
     await client.close();
@@ -104,7 +107,7 @@ async function getAllFighterAccounts(userId) {
     // Fetch the documents
     return await collection.find(filter).toArray();
   } catch (error) {
-    console.error('[DB] getting verified and non anonymous accounts failed.', error);
+    await logMessageOrError('[DB] getting verified and non anonymous accounts failed:', userId, error)
     return []
   } finally {
     await client.close();
@@ -123,7 +126,7 @@ async function getAllConnectedAccounts(userId) {
     // Fetch the documents
     return await collection.find(filter).toArray();
   } catch (error) {
-    console.error('[DB] all connected accounts failed.', error);
+    await logMessageOrError('[DB] get all connected accounts failed:', userId, error)
     return []
   } finally {
     await client.close();
@@ -138,7 +141,7 @@ async function updateDiscordName(id, discordName) {
 
     await collection.updateOne({_id: id}, {$set: {discordName}});
   } catch (error) {
-    console.error('[DB] updating doc id', id, 'to discord name:', discordName, 'failed.', error);
+    await logMessageOrError('[DB] updating doc id', id, 'to discord name:', discordName, 'failed', error)
     return []
   } finally {
     await client.close();
@@ -156,7 +159,7 @@ async function userWithWallet(userId, address) {
     console.log('[DB]', 'found user wallet combination:', doc)
     return doc
   } catch (error) {
-    console.error('[DB] finding user wallet combination failed.', error);
+    await logMessageOrError('[DB] finding user wallet combination failed', userId, address, error)
     return undefined
   } finally {
     await client.close();
@@ -182,7 +185,7 @@ async function updateDocument(filter, updateData) {
     // Update the document with provided data
     await collection.updateOne(filter, {$set: updateData});
   } catch (error) {
-    console.error('[DB]', 'Error updating the document', error);
+    await logMessageOrError('[DB] Error updating the document', filter, updateData, error)
   } finally {
     await client.close();
   }
@@ -205,7 +208,8 @@ async function deleteWallet(address) {
     // Update the document with provided data
     await collection.deleteOne({wallet: address});
   } catch (error) {
-    console.error('[DB]', 'Error deleting the document', error);
+    await logMessageOrError('[DB] Error deleting the document', address, error)
+
   } finally {
     await client.close();
   }
@@ -219,7 +223,7 @@ async function createNewFight(fighterA, fighterB) {
 
     return await collection.insertOne({fighterA, fighterB});
   } catch (error) {
-    console.error('[DB]', 'Error creating the new fight', error);
+    await logMessageOrError('[DB] Error creating the new fight', fighterA, fighterB, error)
   } finally {
     await client.close();
   }
@@ -233,7 +237,7 @@ async function getFightByFighters(fighterA, fighterB) {
 
     return await collection.findOne({fighterA, fighterB});
   } catch (error) {
-    console.error('[DB]', 'error getting a fight by both fighterNames', error);
+    await logMessageOrError('[DB] error getting a fight by both fighterNames', fighterA, fighterB, error)
     return undefined;
   } finally {
     await client.close();
@@ -249,7 +253,7 @@ async function getFightByFightId(fightId) {
     const fightObjectId = new ObjectId(fightId)
     return await collection.findOne({_id: fightObjectId})
   } catch (error) {
-    console.error('[DB]', 'error getting a fight by fightId', error);
+    await logMessageOrError('[DB] error getting a fight by fightId', fightId, error)
   } finally {
     await client.close();
   }
@@ -263,7 +267,7 @@ async function getOutstandingInvitationWithSoul(soulId) {
 
     return await collection.findOne({fighterA: soulId});
   } catch (error) {
-    console.error('[DB]', 'Error searching for an open invitation by soulId', error);
+    await logMessageOrError('[DB] Error searching for an open invitation by soulId', soulId, error)
     return undefined;
   } finally {
     await client.close();
@@ -289,7 +293,7 @@ async function addFightingSoul(fightId, soulId, firstFighter) {
     const soulToAdd = firstFighter ? {soulA: soulId} : {soulB: soulId}
     await collection.updateOne({_id: fightObjectId}, {$set: soulToAdd});
   } catch (error) {
-    console.error('[DB]', 'Error adding the soul to the fight', error);
+    await logMessageOrError('[DB] Error adding the soul to the fight', fightId, soulId, firstFighter, error)
   } finally {
     await client.close();
   }
@@ -312,7 +316,7 @@ async function getOpenPoolFight(discordId) {
     console.log('[DB]', 'fight found', doc);
     return doc
   } catch (error) {
-    console.error('[DB]', 'Error getting open soul in pool', error);
+    await logMessageOrError('[DB] Error getting open soul in pool', error)
   } finally {
     await client.close();
   }
@@ -327,7 +331,7 @@ async function createNewFightInPool(soulId, discordId) {
     // Fetch the document
     return await collection.insertOne({fighterA: soulId, discordIdA: discordId});
   } catch (error) {
-    console.error('[DB]', 'Error creating new fight in pool', error);
+    await logMessageOrError('[DB] Error creating new fight in pool', error)
   } finally {
     await client.close();
   }
@@ -351,7 +355,7 @@ async function addFighterToOpenPoolFight(openPoolFightId, soulId, discordId) {
     await collection.updateOne({_id: openPoolFightId}, {$set: {fighterB: soulId, discordIdB: discordId}});
     return await collection.findOne({_id: openPoolFightId})
   } catch (error) {
-    console.error('[DB]', 'Error adding the soul to the fight', error);
+    await logMessageOrError('[DB] Error adding the soul to the fight', error)
   } finally {
     await client.close();
   }
@@ -366,7 +370,7 @@ async function getOpenInvitationsToYou(userId) {
 
     return await collection.find({fighterB: userId, soulA: {$exists: true}}).toArray();
   } catch (error) {
-    console.error('[DB]', 'Error getting all open invitations to oneself', error);
+    await logMessageOrError('[DB] Error getting all open invitations to oneself', error)
   } finally {
     await client.close();
   }
@@ -397,7 +401,7 @@ async function deleteFight(openPoolFight) {
 
     return await collection.deleteOne({_id: openPoolFight._id});
   } catch (error) {
-    console.error('[DB]', 'Error deleting the fight', error);
+    await logMessageOrError('[DB] Error deleting the fight', openPoolFight, error)
   } finally {
     await client.close();
   }
@@ -412,6 +416,7 @@ async function addSoulCooldown(soulId, timestamp) {
     await collection.insertOne({soul: soulId, cooldownUntil: timestamp});
   } catch (error) {
     console.error('[DB]', 'Error adding the soul cooldown', error);
+    await logMessageOrError('[DB] Error adding the soul cooldown', soulId, timestamp, error)
   } finally {
     await client.close();
   }
@@ -435,7 +440,7 @@ async function getSoulCooldown(soulId) {
 
     return cooldownDoc;
   } catch (error) {
-    console.error('[DB]', 'Error getting the soul cooldown', error);
+    await logMessageOrError('[DB] Error getting the soul cooldown', soulId, error)
     return undefined
   } finally {
     await client.close();
@@ -450,7 +455,7 @@ async function getLeaderboardEntries() {
 
     return await collection.find({}).toArray()
   } catch (error) {
-    console.error('[DB] Error getting the fight leaderboard');
+    await logMessageOrError('[DB] Error getting the fight leaderboard', error)
   } finally {
     await client.close();
   }
@@ -479,7 +484,7 @@ async function updateWinnerOnLeaderboard(soulId, soulName, winner) {
       await collection.updateOne({_id: winnerDoc._id}, {$set: updateValues})
     }
   } catch (error) {
-    console.error('[DB] Error adding the win to leaderboard for', soulId, 'with', winPoints, error);
+    await logMessageOrError('[DB] Error adding the win to leaderboard for', soulId, soulName, winner, error)
   } finally {
     await client.close();
   }
@@ -500,7 +505,7 @@ async function countPlayerCombination(playerA, playerB) {
       await collection.updateOne({_id: winnerDoc._id}, {$set: {amount: winnerDoc.amount + 1}})
     }
   } catch (error) {
-    console.error('[DB] Error adding the combination for', playerA, 'and', playerB, error);
+    await logMessageOrError('[DB] Error adding the combination for', playerA, 'and', playerB, error)
   } finally {
     await client.close();
   }
@@ -521,7 +526,7 @@ async function addFightParticipants(discordId) {
       console.log('[DB] participant already added', discordId)
     }
   } catch (error) {
-    console.error('[DB] Error adding the participant', discordId, error);
+    await logMessageOrError('[DB] Error adding the participant', discordId, error)
   } finally {
     await client.close();
   }
@@ -541,7 +546,7 @@ async function getTradeMessages(tradeId) {
 
     return tradeMessagesDoc
   } catch (error) {
-    console.error('[DB]', 'Error getting trade messages', error);
+    await logMessageOrError('[DB] Error getting trade messages', error)
     return undefined
   } finally {
     await client.close();

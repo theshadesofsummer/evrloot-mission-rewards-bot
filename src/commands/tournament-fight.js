@@ -114,7 +114,6 @@ async function startManualFight(interaction) {
   await interaction.editReply({content: 'initialized fight; starting battle!', ephemeral: true});
 
   const fightObj = await getFightByFightId(fightId.toString())
-  console.log(attackerSoulId, defenderSoulId, fightObj)
 
   await handleFight(fightId.toString())
 

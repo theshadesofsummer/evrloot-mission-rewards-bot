@@ -82,7 +82,6 @@ function soulStatsFormatter(properties) {
 const shownExperiences = [1, 2, 3, 4, 6, 7, 9]
 
 function soulExperienceFormatter(experiences) {
-  console.log(experiences)
   const expStrings = experiences
     .filter(exp => shownExperiences.includes(exp.activityId))
     .map(getExpString)

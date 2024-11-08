@@ -1,6 +1,6 @@
 require('dotenv').config();
 const {MongoClient} = require('mongodb');
-const {client} = require("./discord-client");
+const {client, logMessageOrError} = require("./discord-client");
 const {setupDiscordBot} = require("./setup-discord-bot");
 
 setupDiscordBot().then(() => {
@@ -15,15 +15,12 @@ setupDiscordBot().then(() => {
       while (await cursor.hasNext()) {
         const doc = await cursor.next();
 
-        console.log('found doc', doc)
-
         const discordId = await getDiscordIdFor(doc.discordName)
-        console.log('=>', discordId)
 
         await collection.updateOne({_id: doc._id}, {$set: {discordId}})
       }
     } catch (error) {
-      console.error('errorrr', error);
+      logMessageOrError('Error in migrate-new-verifications', error)
     } finally {
       await dbClient.close();
     }

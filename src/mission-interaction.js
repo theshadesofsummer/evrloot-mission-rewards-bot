@@ -1,16 +1,11 @@
 const createMissionRewardEmbed = require('./embeds/mission-reward-embed.js')
-const createPinkMissionRewardEmbed = require('./embeds/pink-mission-reward-embed')
 const resourceRewards = require('./mappings/resource-types.js');
 const {getFromIpfs} = require('./evrloot-api.js')
 const config = require('./config.js')
 const {addToStats, increaseMissionCounter} = require('./summary/daily-stats.js')
-const {getAccountByWallet} = require("./evrloot-db");
-const {getAccountFromTx} = require("./abi-interaction");
 const {nftMapping} = require("./mappings/item-ids");
-const {postEmbed} = require("./discord-client");
+const {postEmbed, logMessageOrError} = require("./discord-client");
 const {getSoulMetadata, fetchSoulIdFromSquid} = require("./evrloot-api");
-
-const EVRSOULS_PREFIX = 'EVR-SOULS-';
 
 module.exports = {
   fetchMissionReward
@@ -40,7 +35,7 @@ async function fetchMissionReward(eventInput) {
 
     if (resourceRewardWithMetadata !== undefined) {
       if (resourceRewardWithMetadata.retrievedMetadata === undefined) {
-        console.warn('[RWD]', 'found no metadata for rr', resourceRewardWithMetadata)
+        logMessageOrError('no metadata for resourcereward', resourceRewardWithMetadata)
         return;
       }
       addToStats(resourceRewardWithMetadata)
@@ -53,7 +48,7 @@ async function fetchMissionReward(eventInput) {
 
     if (nftRewardWithMetadata !== undefined) {
       if (nftRewardWithMetadata.retrievedMetadata === undefined) {
-        console.warn('[RWD]', 'found no metadata for nr', nftRewardWithMetadata)
+        logMessageOrError('no metadata for nftreward', nftRewardWithMetadata)
         return;
       }
       addToStats(nftRewardWithMetadata)
@@ -85,21 +80,15 @@ async function fetchMissionReward(eventInput) {
   const soulId = await fetchSoulIdFromSquid(estraTokenId);
 
   if (!soulId) {
-    console.log('[RWD]', 'could not resolve soulId for estraTokenId', estraTokenId)
+    return;
   }
   const soulMetadata = await getSoulMetadata(soulId);
 
   console.log('[RWD]', 'soul with id', soulId, 'has name', soulMetadata.retrievedMetadata.name)
 
-  // await the dynamic image loader so discord can get the cached image faster
-  // console.log('image pre fetch')
-  // await fetch(soulMetadata.retrievedMetadata.image)
-  // console.log('image post fetch')
-
   for (const filteredNftReward of filteredNftRewards) {
     await postEmbed(createMissionRewardEmbed(soulMetadata, filteredNftReward));
   }
-  console.log('[RWD]', 'finished mission rewards')
 }
 
 async function getResourceRewardInfos(resourceReward) {
@@ -134,7 +123,7 @@ async function getNftRewardInfos(nftReward) {
     const nftInfo = nftMapping[`${nftReward.contractAddress.toLowerCase()}+${nftReward.itemId}`];
 
     if (nftInfo === undefined) {
-      console.log('no nftMapping found for' + `${nftReward.contractAddress}+${nftReward.itemId}`)
+      await logMessageOrError('no nftMapping found for', nftReward.contractAddress, nftReward.itemId)
     } else {
       const retrievedMetadata = nftInfo.metadataUri
         ? await getFromIpfs(nftInfo.metadataUri)

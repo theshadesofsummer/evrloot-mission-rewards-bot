@@ -10,17 +10,15 @@ module.exports = {
   publishSummary,
   postEmbed,
   postFightResult,
-  postFightAnnouncement,
   postTournamentStart,
   postTournamentStop,
-  postResourceReveal,
-  postPotionReveal,
   postNewTrade,
   postNewTradeWithImage,
   sendVerificationDm,
   mapClientIdToName,
   getUserByClientId,
-  updateAllUsers
+  updateAllUsers,
+  logMessageOrError
 }
 
 
@@ -32,19 +30,8 @@ async function publishSummary() {
 }
 
 async function postEmbed(embed) {
-  console.log('[BOT] publish embed')
   const channel = await getChannel(client, process.env.PUBLISH_CHANNEL_ID)
   await channel.send({embeds: [embed]});
-}
-
-async function postFightAnnouncement(fightId) {
-  console.log('[BOT] publish fight announcement')
-  const fight = await getFightByFightId(fightId)
-
-  const channel = await getChannel(client, process.env.ARENA_CHANNEL_ID)
-  return await channel.send({
-    content: `<@${fight.fighterA}> has challenged <@${fight.fighterB}> to a fight!`
-  });
 }
 
 async function postTournamentStart() {
@@ -74,18 +61,6 @@ async function postFightResult(fight, embed) {
   return await channel.send({content: `<@${fight.teamA.discordId}> vs. <@${fight.teamB.discordId}>`, embeds: [embed]});
 }
 
-async function postResourceReveal(embed, file) {
-  console.log('[BOT] publish resource reveal')
-  const channel = await getChannel(client, process.env.REVEAL_CHANNEL_ID)
-  return await channel.send({embeds: [embed], files: [file]});
-}
-
-async function postPotionReveal(embed, file) {
-  console.log('[BOT] publish potion reveal')
-  const channel = await getChannel(client, process.env.REVEAL_CHANNEL_ID)
-  return await channel.send({embeds: [embed], files: [file]});
-}
-
 async function postNewTrade(embed) {
   console.log('[BOT] publish new trade')
   const channel = await getChannel(client, process.env.TRADE_CHANNEL_ID)
@@ -93,29 +68,33 @@ async function postNewTrade(embed) {
 }
 
 async function postNewTradeWithImage(embed, file) {
-  console.log('[BOT] publish new trade')
+  console.log('[BOT] publish new trade with image')
   const channel = await getChannel(client, process.env.TRADE_CHANNEL_ID)
   return await channel.send({embeds: [embed], files: [file]});
 }
 
 async function sendVerificationDm(discordName, wallet) {
-  await client.guilds.fetch();
-  const guild = client.guilds.cache.get(process.env.GUILD_ID);
+  try {
+    await client.guilds.fetch();
+    const guild = client.guilds.cache.get(process.env.GUILD_ID);
 
-  const memberMap = await guild.members.fetch({query: discordName, limit: 10})
+    const memberMap = await guild.members.fetch({query: discordName, limit: 10})
 
-  let userWithMatchingUsername = undefined;
-  memberMap.forEach(member => {
-    const username = member.user.username;
-    if (username === discordName.toLowerCase()) {
-      userWithMatchingUsername = member;
+    let userWithMatchingUsername = undefined;
+    memberMap.forEach(member => {
+      const username = member.user.username;
+      if (username === discordName.toLowerCase()) {
+        userWithMatchingUsername = member;
+      }
+    })
+
+    if (!userWithMatchingUsername) {
+      await deleteWallet(wallet)
+    } else {
+      await verificationMessage(userWithMatchingUsername, wallet)
     }
-  })
-
-  if (!userWithMatchingUsername) {
-    await deleteWallet(wallet)
-  } else {
-    await verificationMessage(userWithMatchingUsername, wallet)
+  } catch (e) {
+    await logMessageOrError('error while sendVerificationDm:', discordName, wallet, e)
   }
 }
 
@@ -138,6 +117,7 @@ async function mapToName(clientId) {
   const guildMember = await guild.members.fetch(clientId)
   if (!guildMember) {
     console.warn('no user found for client id', clientId)
+    await logMessageOrError('mapToName: could not find user in server with client id', clientId)
     return 'User not found'
   }
   return guildMember.user.globalName
@@ -149,6 +129,7 @@ async function getUserByClientId(clientId) {
 
   const guildMember = await guild.members.fetch(clientId)
   if (!guildMember) {
+    await logMessageOrError('getUserByClientId: could not find user in server with client id', clientId)
     console.warn('no user found for client id', clientId)
     return undefined
   }
@@ -189,4 +170,9 @@ async function updateAllUsers() {
   //   return undefined
   // }
   // return guildMember.user
+}
+
+async function logMessageOrError(message) {
+  const channel = await getChannel(client, process.env.ERROR_CHANNEL_ID)
+  return await channel.send(message);
 }

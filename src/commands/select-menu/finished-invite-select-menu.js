@@ -6,7 +6,6 @@ module.exports = {
   async execute(interaction) {
     const [soulId] = interaction.values;
 
-    console.log(soulId)
     await interaction.deferReply({ephemeral: true})
     await interaction.editReply('<a:Doubloon:1256636404658602076> Checking if soul is available')
 
