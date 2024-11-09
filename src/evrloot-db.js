@@ -34,7 +34,7 @@ module.exports = {
 const uri = `mongodb+srv://${process.env.MONGODB_ACCESS}@cluster0.cbrbn.mongodb.net/evrloot?retryWrites=true&w=majority`;
 
 async function getAccountByWallet(wallet) {
-  const client = await MongoClient.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true});
+  const client = await MongoClient.connect(uri);
   try {
     console.log('[DB]', 'getting account for wallet:', wallet)
     const collection = client.db("evrloot").collection("discordverifications");
@@ -57,7 +57,7 @@ async function getAccountByWallet(wallet) {
 }
 
 async function getAllAccounts() {
-  const client = await MongoClient.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true});
+  const client = await MongoClient.connect(uri);
   try {
     console.log('[DB]', 'getting all accounts')
     const collection = client.db("evrloot").collection("discordverifications");
@@ -74,7 +74,7 @@ async function getAllAccounts() {
 }
 
 async function updateDiscordInfo(userId, username, avatarURL) {
-  const client = await MongoClient.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true});
+  const client = await MongoClient.connect(uri);
   try {
     console.log('[DB]', 'update discord info for userId', userId)
     const collection = client.db("evrloot").collection("discordverifications");
@@ -94,7 +94,7 @@ async function updateDiscordInfo(userId, username, avatarURL) {
 }
 
 async function getAllFighterAccounts(userId) {
-  const client = await MongoClient.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true});
+  const client = await MongoClient.connect(uri);
   try {
     console.log('[DB]', 'getting verified and non anonymous accounts for user:', userId)
     const collection = client.db("evrloot").collection("discordverifications");
@@ -115,7 +115,7 @@ async function getAllFighterAccounts(userId) {
 }
 
 async function getAllConnectedAccounts(userId) {
-  const client = await MongoClient.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true});
+  const client = await MongoClient.connect(uri);
   try {
     console.log('[DB]', 'getting all connected accounts for user:', userId)
     const collection = client.db("evrloot").collection("discordverifications");
@@ -134,7 +134,7 @@ async function getAllConnectedAccounts(userId) {
 }
 
 async function updateDiscordName(id, discordName) {
-  const client = await MongoClient.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true});
+  const client = await MongoClient.connect(uri);
   try {
     console.log('[DB]', 'updating doc id', id, 'to discord name:', discordName)
     const collection = client.db("evrloot").collection("discordverifications");
@@ -149,7 +149,7 @@ async function updateDiscordName(id, discordName) {
 }
 
 async function userWithWallet(userId, address) {
-  const client = await MongoClient.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true});
+  const client = await MongoClient.connect(uri);
   try {
     console.log('[DB]', 'get user wallet combination. user:', userId, 'wallet:', address)
     const collection = client.db("evrloot").collection("discordverifications");
@@ -168,7 +168,7 @@ async function userWithWallet(userId, address) {
 }
 
 async function updateDocument(filter, updateData) {
-  const client = await MongoClient.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true});
+  const client = await MongoClient.connect(uri);
   try {
     console.log('[DB]', 'updating a verification for filter:', filter, 'with updateData:', updateData)
 
@@ -192,7 +192,7 @@ async function updateDocument(filter, updateData) {
 }
 
 async function deleteWallet(address) {
-  const client = await MongoClient.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true});
+  const client = await MongoClient.connect(uri);
   try {
     console.log('[DB]', 'deleting the entry with the wallet:', address)
     const collection = client.db("evrloot").collection("discordverifications");
@@ -216,7 +216,7 @@ async function deleteWallet(address) {
 }
 
 async function createNewFight(fighterA, fighterB) {
-  const client = await MongoClient.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true});
+  const client = await MongoClient.connect(uri);
   try {
     console.log('[DB]', 'creating a new fight with fighterA:', fighterA, 'fighterB:', fighterB)
     const collection = client.db("evrloot").collection("discordfights");
@@ -230,7 +230,7 @@ async function createNewFight(fighterA, fighterB) {
 }
 
 async function getFightByFighters(fighterA, fighterB) {
-  const client = await MongoClient.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true});
+  const client = await MongoClient.connect(uri);
   try {
     console.log('[DB]', 'get a fight by fighters with fighterA:', fighterA, 'fighterB:', fighterB)
     const collection = client.db("evrloot").collection("discordfights");
@@ -245,7 +245,7 @@ async function getFightByFighters(fighterA, fighterB) {
 }
 
 async function getFightByFightId(fightId) {
-  const client = await MongoClient.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true});
+  const client = await MongoClient.connect(uri);
   try {
     console.log('[DB]', 'get a fight by fightId:', fightId)
     const collection = client.db("evrloot").collection("discordfights");
@@ -260,7 +260,7 @@ async function getFightByFightId(fightId) {
 }
 
 async function getOutstandingInvitationWithSoul(soulId) {
-  const client = await MongoClient.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true});
+  const client = await MongoClient.connect(uri);
   try {
     console.log('[DB]', 'check if a soul', soulId, 'is in an open invitation')
     const collection = client.db("evrloot").collection("discordfights");
@@ -275,7 +275,7 @@ async function getOutstandingInvitationWithSoul(soulId) {
 }
 
 async function addFightingSoul(fightId, soulId, firstFighter) {
-  const client = await MongoClient.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true});
+  const client = await MongoClient.connect(uri);
   try {
     console.log('[DB]', 'add', soulId, 'to the fight', fightId, 'as the firstFighter', firstFighter)
     const collection = client.db("evrloot").collection("discordfights");
@@ -300,7 +300,7 @@ async function addFightingSoul(fightId, soulId, firstFighter) {
 }
 
 async function getOpenPoolFight(discordId) {
-  const client = await MongoClient.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true});
+  const client = await MongoClient.connect(uri);
   try {
     console.log('[DB]', 'get open fight in pool')
     const collection = client.db("evrloot").collection("discordfights");
@@ -323,7 +323,7 @@ async function getOpenPoolFight(discordId) {
 }
 
 async function createNewFightInPool(soulId, discordId) {
-  const client = await MongoClient.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true});
+  const client = await MongoClient.connect(uri);
   try {
     console.log('[DB]', 'createNewFightInPool', soulId)
     const collection = client.db("evrloot").collection("discordfights");
@@ -338,7 +338,7 @@ async function createNewFightInPool(soulId, discordId) {
 }
 
 async function addFighterToOpenPoolFight(openPoolFightId, soulId, discordId) {
-  const client = await MongoClient.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true});
+  const client = await MongoClient.connect(uri);
   try {
     console.log('[DB]', 'add', soulId, 'to the fight', openPoolFightId, 'with supplier', discordId)
     const collection = client.db("evrloot").collection("discordfights");
@@ -362,7 +362,7 @@ async function addFighterToOpenPoolFight(openPoolFightId, soulId, discordId) {
 }
 
 async function getOpenInvitationsToYou(userId) {
-  const client = await MongoClient.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true});
+  const client = await MongoClient.connect(uri);
   try {
 
     console.log('[DB]', 'get all open invitations to', userId)
@@ -377,7 +377,7 @@ async function getOpenInvitationsToYou(userId) {
 }
 
 async function getOpenInvitationsFromYou(userId, withFighter) {
-  const client = await MongoClient.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true});
+  const client = await MongoClient.connect(uri);
   try {
     console.log('[DB]', 'get all open invitations from', userId)
     const collection = client.db("evrloot").collection("discordfights");
@@ -394,7 +394,7 @@ async function getOpenInvitationsFromYou(userId, withFighter) {
 }
 
 async function deleteFight(openPoolFight) {
-  const client = await MongoClient.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true});
+  const client = await MongoClient.connect(uri);
   try {
     console.log('[DB]', 'delete fight by id', openPoolFight._id)
     const collection = client.db("evrloot").collection("discordfights");
@@ -408,7 +408,7 @@ async function deleteFight(openPoolFight) {
 }
 
 async function addSoulCooldown(soulId, timestamp) {
-  const client = await MongoClient.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true});
+  const client = await MongoClient.connect(uri);
   try {
     console.log('[DB]', 'adding a cooldown on soul', soulId, 'until', timestamp)
     const collection = client.db("evrloot").collection("fightcooldowns");
@@ -423,7 +423,7 @@ async function addSoulCooldown(soulId, timestamp) {
 }
 
 async function getSoulCooldown(soulId) {
-  const client = await MongoClient.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true});
+  const client = await MongoClient.connect(uri);
   try {
     console.log('[DB]', 'get the cooldown from a soul', soulId)
     const collection = client.db("evrloot").collection("fightcooldowns");
@@ -448,7 +448,7 @@ async function getSoulCooldown(soulId) {
 }
 
 async function getLeaderboardEntries() {
-  const client = await MongoClient.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true});
+  const client = await MongoClient.connect(uri);
   try {
     console.log('[DB]', 'get leaderboard')
     const collection = client.db("evrloot").collection("fightwins");
@@ -463,7 +463,7 @@ async function getLeaderboardEntries() {
 
 async function updateWinnerOnLeaderboard(soulId, soulName, winner) {
   console.log('soulName', soulName)
-  const client = await MongoClient.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true});
+  const client = await MongoClient.connect(uri);
   try {
     const collection = client.db("evrloot").collection("fightwins");
 
@@ -491,7 +491,7 @@ async function updateWinnerOnLeaderboard(soulId, soulName, winner) {
 }
 
 async function countPlayerCombination(playerA, playerB) {
-  const client = await MongoClient.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true});
+  const client = await MongoClient.connect(uri);
   try {
     const collection = client.db("evrloot").collection("fightplayercombinations");
 
@@ -513,7 +513,7 @@ async function countPlayerCombination(playerA, playerB) {
 
 
 async function addFightParticipants(discordId) {
-  const client = await MongoClient.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true});
+  const client = await MongoClient.connect(uri);
   try {
     const collection = client.db("evrloot").collection("fightparticipants");
 
@@ -533,7 +533,7 @@ async function addFightParticipants(discordId) {
 }
 
 async function getTradeMessages(tradeId) {
-  const client = await MongoClient.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true});
+  const client = await MongoClient.connect(uri);
   try {
     console.log('[DB]', 'get trade messages', tradeId)
     const collection = client.db("evrloot").collection("trademessages");

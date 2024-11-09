@@ -27,7 +27,7 @@ setupDiscordBot().then(() => {
 function setupMongoDbConnection() {
   const uri = `mongodb+srv://${process.env.MONGODB_ACCESS}@cluster0.cbrbn.mongodb.net/evrloot?retryWrites=true&w=majority`;
 
-  MongoClient.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true}).then((client, err) => {
+  MongoClient.connect(uri).then((client, err) => {
     if (err) {
       logMessageOrError('Failed to connect to MongoDB:', err);
       return;
