@@ -172,7 +172,7 @@ async function updateAllUsers() {
   // return guildMember.user
 }
 
-async function logMessageOrError(message) {
+async function logMessageOrError(...messages) {
   const channel = await getChannel(client, process.env.ERROR_CHANNEL_ID)
-  return await channel.send(message);
+  return await channel.send(messages.join(' '));
 }
