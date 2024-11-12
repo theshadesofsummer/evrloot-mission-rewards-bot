@@ -4,6 +4,11 @@ module.exports = function createMissionRewardEmbed(soul, reward) {
   if (reward.emoteId === '')
     console.log('[RWD] cannot find emote for', reward.retrievedMetadata.name)
 
+  let thumbnail = undefined;
+  if (soul.retrievedMetadata.image) {
+    thumbnail = {url: soul.retrievedMetadata.image}
+  }
+
   return {
     color: colorForRarity(reward.retrievedMetadata.attributes.find(m => m.label === 'Rarity')),
     author: {
@@ -11,9 +16,7 @@ module.exports = function createMissionRewardEmbed(soul, reward) {
       icon_url: 'https://game.evrloot.com/assets/icons/moonbeamIcon.png',
     },
     description: `**${soul.retrievedMetadata.name}** found ${reward.amount} ${reward.retrievedMetadata.name}! ${reward.emoteId}`,
-    thumbnail: {
-      url: getCorrectImageUrl(soul.retrievedMetadata.image)
-    },
+    thumbnail: thumbnail
   };
 }
 

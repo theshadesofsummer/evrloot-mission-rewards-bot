@@ -71,6 +71,7 @@ function setupMissionRewardListener() {
     })
     .on('error', function (error, receipt) {
       logMessageOrError('Error in MISSION_CONTRACT MissionReward:', error, receipt);
+      console.error('Error in MISSION_CONTRACT MissionReward', error, receipt);
     });
 
   MARKETPLACE_CONTRACT.events.BidCreated({fromBlock: 'latest'})
@@ -82,6 +83,7 @@ function setupMissionRewardListener() {
     })
     .on('error', function (error, receipt) {
       logMessageOrError('Error in MARKETPLACE_CONTRACT BidCreated:', error, receipt);
+      console.error('Error in MARKETPLACE_CONTRACT BidCreated', error, receipt);
     });
 
   MARKETPLACE_CONTRACT.events.TradeCreated({fromBlock: 'latest'})
@@ -95,6 +97,7 @@ function setupMissionRewardListener() {
     })
     .on('error', function (error, receipt) {
       logMessageOrError('Error in MARKETPLACE_CONTRACT TradeCreated:', error, receipt);
+      console.error('Error in MARKETPLACE_CONTRACT TradeCreated', error, receipt);
     });
 
   MARKETPLACE_CONTRACT.events.BidAccepted({fromBlock: 'latest'})
@@ -106,6 +109,7 @@ function setupMissionRewardListener() {
     })
     .on('error', function (error, receipt) {
       logMessageOrError('Error in MARKETPLACE_CONTRACT BidAccepted:', error, receipt);
+      console.error('Error in MARKETPLACE_CONTRACT BidAccepted', error, receipt);
     });
 
 
@@ -119,5 +123,6 @@ function setupMissionRewardListener() {
     })
     .on('error', function (error, receipt) {
       logMessageOrError('Error in EXPEDITION_CONTRACT ExpeditionStart:', error, receipt);
+      console.error('Error in EXPEDITION_CONTRACT ExpeditionStart', error, receipt);
     });
 }
