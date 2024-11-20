@@ -1,20 +1,20 @@
 require('dotenv').config();
 const {setupDiscordBot} = require("./setup-discord-bot.js");
-const {MISSION_CONTRACT, MARKETPLACE_CONTRACT} = require("./abi-interaction.js")
+const {MISSION_CONTRACT, MARKETPLACE_CONTRACT, EXPEDITION_CONTRACT} = require("./abi-interaction.js")
 const {fetchMissionReward} = require('./mission-interaction.js');
 const cron = require('node-cron');
 const {MongoClient} = require("mongodb");
 const {publishSummary, sendVerificationDm, updateAllUsers, logMessageOrError} = require("./discord-client");
-const {initStats, increaseExpeditionCounter, resetStats} = require("./summary/daily-stats");
+const {initStats, increaseExpeditionCounter} = require("./summary/daily-stats");
 const {handleNewTrade} = require("./trades/handle-new-trade");
-const {EXPEDITION_CONTRACT} = require("./abi-interaction");
 const {handleNewBid} = require("./trades/handle-new-bid");
 const {handleBidAccepted} = require("./trades/handle-bid-accepted");
 
 setupDiscordBot().then(() => {
   logMessageOrError('new start of discord bot')
   //handleNewTrade("0xd235b3b1ac41f7eaa72e7de14019fddce08d81e8b20f32843d3480e90c78c431") // soul
-  setupMissionRewardListener()
+  setupContractEvents()
+
   setupMongoDbConnection()
   initStats()
 
@@ -61,68 +61,43 @@ function setupMongoDbConnection() {
   });
 }
 
-function setupMissionRewardListener() {
-  MISSION_CONTRACT.events.MissionReward({fromBlock: 'latest'})
-    .on("connected", function (_subscriptionId) {
-      console.log('connected to mission reward event')
-    })
-    .on('data', function (event) {
-      fetchMissionReward(event)
-    })
-    .on('error', function (error, receipt) {
-      logMessageOrError('Error in MISSION_CONTRACT MissionReward:', error, receipt);
-      console.error('Error in MISSION_CONTRACT MissionReward', error, receipt);
-    });
+function setupContractEvents() {
+  MISSION_CONTRACT.on('MissionReward', async (
+    tokenId,             // uint256
+    missionId,           // uint16
+    activityId,          // uint16
+    experienceGained,    // uint256
+    nftRewards,          // Array of { contractAddress: string, itemId: number, amount: number }
+    resourceRewards,     // Array of { resourceId: number, amount: number }
+    event                // Full event log object
+  ) => {
+    console.log('MissionReward Event Details:');
+    console.log('tokenId:', tokenId);
+    console.log('missionId:', missionId);
+    console.log('activityId:', activityId);
+    console.log('experienceGained:', experienceGained);
+    console.log('nftRewards:', nftRewards);
+    console.log('resourceRewards:', resourceRewards);
+    await fetchMissionReward(tokenId, nftRewards, resourceRewards);
+  });
 
-  MARKETPLACE_CONTRACT.events.BidCreated({fromBlock: 'latest'})
-    .on("connected", function (_subscriptionId) {
-      console.log('connected to bid created event')
-    })
-    .on('data', function (event) {
-      handleNewBid(event.returnValues.bidId)
-    })
-    .on('error', function (error, receipt) {
-      logMessageOrError('Error in MARKETPLACE_CONTRACT BidCreated:', error, receipt);
-      console.error('Error in MARKETPLACE_CONTRACT BidCreated', error, receipt);
-    });
+  MARKETPLACE_CONTRACT.on('BidCreated', async (bidId) => {
+    console.log('BidCreated event received:', bidId);
+    await handleNewBid(bidId);
+  });
 
-  MARKETPLACE_CONTRACT.events.TradeCreated({fromBlock: 'latest'})
-    .on("connected", function (_subscriptionId) {
-      console.log('connected to trade created event')
-    })
-    .on('data', function (event) {
-      console.log('trade created event')
+  MARKETPLACE_CONTRACT.on('TradeCreated', async (tradeId) => {
+    console.log('TradeCreated event received:', tradeId);
+    await handleNewTrade(tradeId);
+  });
 
-      handleNewTrade(event.returnValues.tradeId)
-    })
-    .on('error', function (error, receipt) {
-      logMessageOrError('Error in MARKETPLACE_CONTRACT TradeCreated:', error, receipt);
-      console.error('Error in MARKETPLACE_CONTRACT TradeCreated', error, receipt);
-    });
+  MARKETPLACE_CONTRACT.on('BidAccepted', async (tradeId) => {
+    console.log('BidAccepted event received:', tradeId);
+    await handleBidAccepted(tradeId);
+  });
 
-  MARKETPLACE_CONTRACT.events.BidAccepted({fromBlock: 'latest'})
-    .on("connected", function (_subscriptionId) {
-      console.log('connected to bid accepted event')
-    })
-    .on('data', function (event) {
-      handleBidAccepted(event.returnValues.tradeId)
-    })
-    .on('error', function (error, receipt) {
-      logMessageOrError('Error in MARKETPLACE_CONTRACT BidAccepted:', error, receipt);
-      console.error('Error in MARKETPLACE_CONTRACT BidAccepted', error, receipt);
-    });
-
-
-  EXPEDITION_CONTRACT.events.ExpeditionStart({fromBlock: 'latest'})
-    .on("connected", function (_subscriptionId) {
-      console.log('connected to expedition start event')
-    })
-    .on('data', function (_event) {
-      console.log('increaseExpeditionCounter')
-      increaseExpeditionCounter()
-    })
-    .on('error', function (error, receipt) {
-      logMessageOrError('Error in EXPEDITION_CONTRACT ExpeditionStart:', error, receipt);
-      console.error('Error in EXPEDITION_CONTRACT ExpeditionStart', error, receipt);
-    });
+  EXPEDITION_CONTRACT.on('ExpeditionStart', async (_event) => {
+    console.log('ExpeditionStart event received');
+    increaseExpeditionCounter()
+  });
 }

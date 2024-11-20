@@ -11,7 +11,7 @@ module.exports = {
   fetchMissionReward
 }
 
-async function fetchMissionReward(eventInput) {
+async function fetchMissionReward(tokenId, nftRewards, resourceRewards) {
   console.log('[RWD]', 'started fetching mission rewards')
   increaseMissionCounter();
 
@@ -24,9 +24,6 @@ async function fetchMissionReward(eventInput) {
 
   // currently not in use
   // const missionInformation = await MISSION_CONTRACT.methods.getMissionData(eventInput.returnValues.missionId).call();
-
-  const resourceRewards = eventInput.returnValues.resourceRewards;
-  const nftRewards = eventInput.returnValues.nftRewards;
 
   const rewardsForEmbed = [];
 
@@ -76,7 +73,7 @@ async function fetchMissionReward(eventInput) {
 
   // old location for account fetching
 
-  const estraTokenId = Number.parseInt(eventInput.returnValues.tokenId);
+  const estraTokenId = Number.parseInt(tokenId);
   const soulId = await fetchSoulIdFromSquid(estraTokenId);
 
   if (!soulId) {
