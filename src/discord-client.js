@@ -1,7 +1,6 @@
 const {Client} = require("discord.js");
 const generateSummary = require("./summary/generate-summary");
 const {deleteWallet, getAllAccounts, updateDiscordInfo} = require("./evrloot-db");
-const {verificationMessage} = require("./messaging/verification-message");
 
 const client = new Client({intents: 0});
 
@@ -89,12 +88,14 @@ async function sendVerificationDm(discordName, wallet) {
     })
 
     if (!userWithMatchingUsername) {
+      await logMessageOrError('no user found in evrloot server for name', discordName, 'therefore deleting entry')
       await deleteWallet(wallet)
     } else {
-      await verificationMessage(userWithMatchingUsername, wallet)
+      await logMessageOrError('found user', discordName, ' in evrloot server, trying to send dm')
+      await verificationMessage(client, userWithMatchingUsername, wallet)
     }
   } catch (e) {
-    await logMessageOrError('error while sendVerificationDm:', discordName, wallet, e)
+    await logMessageOrError('error while verification process for name', discordName, 'wallet', wallet, 'exception', e)
   }
 }
 
@@ -173,6 +174,10 @@ async function updateAllUsers() {
 }
 
 async function logMessageOrError(...messages) {
-  const channel = await getChannel(client, process.env.ERROR_CHANNEL_ID)
-  return await channel.send(messages.join(' '));
+  try {
+    const channel = await getChannel(client, process.env.ERROR_CHANNEL_ID)
+    return await channel.send(messages.join(' '));
+  } catch (e) {
+    console.error('could not log', e);
+  }
 }

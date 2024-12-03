@@ -1,13 +1,12 @@
 const {ButtonBuilder, ButtonStyle, ActionRowBuilder} = require("discord.js");
 const {updateDocument, deleteWallet} = require("../evrloot-db");
-const {logMessageOrError} = require("../discord-client");
 
 module.exports = {
   verificationMessage
 }
 
-async function verificationMessage(member, wallet) {
-  console.log('[DM]', 'initiating the verification process for', member, 'with address', wallet);
+async function verificationMessage(client, member, wallet) {
+  console.log('[DM]', 'initiating the verification process for', member.user.username, 'with address', wallet);
   const dmMessage = `Welcome Traveller, i found a ripped piece of paper in the palace, it recited your name and the following combination i can't seem to make sense of...\n` +
     `It stated: \`${wallet}\`\n` +
     `Can you make sense of this?`;
@@ -28,102 +27,54 @@ async function verificationMessage(member, wallet) {
   try {
     await member.createDM()
 
-    console.log('[DM]', 'successfully created DM');
-
     const confirmationDm = await member.send({
       content: dmMessage,
       components: [row],
     })
 
-    console.log('[DM]', 'successfully sent 1st message');
-
     try {
-      const confirmation = await confirmationDm.awaitMessageComponent({time: 60_000});
+      const confirmation = await confirmationDm.awaitMessageComponent({time: 6_000});
 
-      await handleVerificationConfirmation(confirmation, member, wallet)
+      await handleVerificationConfirmation(client, confirmation, member, wallet)
     } catch (e) {
-      await logMessageOrError('user did not react on the setting command or error', member.user.username, e)
+      console.log(e)
+
+      await logMessageOrErrorForVerification(client, 'user', member.user.username, 'did not react within 60s on the verification message, deleting entry and removing buttons;', e)
       await deleteWallet(wallet)
       await confirmationDm.edit({
         components: []
       })
       await member.send({
         content: `Not the most talkative, are you traveller? Do not worry, i'll just throw the paper into the well.\n` +
-          `> *Since you did not respond in 60s your entry was not saved. For another try please put in your discord username on the website https://game.evrloot.com/*`,
+          `> *Since you did not respond in 60s your entry was not saved. For another try please put in your discord username on the website again*`,
         components: []
       });
     }
 
   } catch (e) {
-    await logMessageOrError('could not create DM for', member.user.username, e)
+    console.log('x')
+    await logMessageOrErrorForVerification(client, 'could not create DM for', member.user.username, 'therefore deleting entry', e)
     await deleteWallet(wallet)
   }
 }
 
-async function handleVerificationConfirmation(confirmation, member, wallet) {
+async function handleVerificationConfirmation(client, confirmation, member, wallet) {
   if (confirmation.customId === 'confirm') {
-    console.log('[DM]', 'user confirmed verification')
-    await updateDocument({wallet}, {verified: true, isAnonymous: true, discordId: member.id})
+    await logMessageOrErrorForVerification(client, 'user', member.user.username, 'confirmed verification')
+
+    await updateDocument({wallet}, {verified: true, discordId: member.id})
 
     await confirmation.update({components: []});
 
-    const confirmAnon = new ButtonBuilder()
-      .setCustomId('confirm-anon')
-      .setLabel('Yes i want my name to be publicly shown!')
-      .setStyle(ButtonStyle.Success);
-
-    const denyAnon = new ButtonBuilder()
-      .setCustomId('deny-anon')
-      .setLabel('No thanks, i rather want to stay undercover!')
-      .setStyle(ButtonStyle.Danger);
-
-    const rowAnon = new ActionRowBuilder()
-      .addComponents(denyAnon, confirmAnon);
-
-    const requestAnonMessage = await member.send({
-      content: `Thanks, i knew you i could count on you!\nI will keep this note stored safe!\n\n` +
-        `Do you want your name to be publicly shown?`,
-      components: [rowAnon]
+    await member.send({
+      content: `Thanks, i knew you i could count on you!\nI will keep this note stored safe!\n`
     })
 
-    try {
-      const confirmation = await requestAnonMessage.awaitMessageComponent({time: 60_000});
-
-      await handleAnonConfirmation(confirmation, member, wallet)
-    } catch (e) {
-      console.log('[DM]', 'user did not react on the anon request or some error happened:', e)
-      await logMessageOrError('user did not react on the anon request or some error happened', member.user.username, e)
-
-      await requestAnonMessage.edit({
-        components: []
-      })
-      await member.send({
-        content: `Alright, if you stay that silent i will take that as a no.\n` +
-          `> *Since you did not respond in 60s you are automatically the status 'anonymous'. Your entry was saved successfully, check your accounts with \`/connected-wallets\`*`,
-        components: []
-      });
-    }
-
   } else if (confirmation.customId === 'deny') {
-    await logMessageOrError('user denied verification', member.user.username)
+    await logMessageOrErrorForVerification(client, 'user', member.user.username, 'denied verification, deleting entry')
     await deleteWallet(wallet)
     await confirmation.update({components: []});
     await member.send(`Of course, this looked like total gibberish. I'm sorry for wasting your time, traveller!`)
   }
 }
 
-async function handleAnonConfirmation(confirmation, member, wallet) {
-  if (confirmation.customId === 'confirm-anon') {
-    console.log('[DM]', 'user accepted being shown')
-    await updateDocument({wallet}, {isAnonymous: false})
-
-    await confirmation.update({components: []});
-    await member.send(`Perfect, if you find something valuable i will spread the news!\n` +
-      `> *Successfully connected your account. You can always check your connected accounts with \`/connected-wallets\`*`)
-  } else if (confirmation.customId === 'deny-anon') {
-    console.log('[DM]', 'user denied being shown')
-    await confirmation.update({components: []});
-    await member.send(`Alright, i will respect the mystery, thanks a lot!\n` +
-      `> *Successfully connected your account. You can always check your connected accounts with \`/connected-wallets\`*`)
-  }
-}
