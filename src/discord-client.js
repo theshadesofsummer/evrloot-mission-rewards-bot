@@ -1,6 +1,7 @@
 const {Client} = require("discord.js");
 const generateSummary = require("./summary/generate-summary");
 const {deleteWallet, getAllAccounts, updateDiscordInfo} = require("./evrloot-db");
+const {verificationMessage} = require("./messaging/verification-message");
 
 const client = new Client({intents: 0});
 
