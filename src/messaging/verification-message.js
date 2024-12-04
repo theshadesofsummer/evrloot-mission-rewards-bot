@@ -78,3 +78,17 @@ async function handleVerificationConfirmation(client, confirmation, member, wall
   }
 }
 
+async function logMessageOrErrorForVerification(client, ...messages) {
+  try {
+    await client.guilds.fetch();
+    const guild = client.guilds.cache.get(process.env.GUILD_ID);
+
+    await guild.channels.fetch();
+    const errorChannel = guild.channels.cache.get(process.env.ERROR_CHANNEL_ID);
+
+    return await errorChannel.send(messages.join(' '));
+  } catch (e) {
+    console.error('could not log in verification', e);
+  }
+}
+
