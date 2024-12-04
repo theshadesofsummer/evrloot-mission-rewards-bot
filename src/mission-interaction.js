@@ -57,15 +57,9 @@ async function fetchMissionReward(tokenId, nftRewards, resourceRewards) {
   // const from = await getAccountFromTx(eventInput.transactionHash)
   // let accountEntry = await getAccountByWallet(from.toLowerCase())
 
-  const crabRewards = rewardsForEmbed.filter(hasCrabItems)
-  for (const pinkNftReward of crabRewards) {
-    await postEmbed(createPinkMissionRewardEmbed(pinkNftReward));
-  }
-
 
   const filteredNftRewards = rewardsForEmbed
     .filter(containsShowableRarity)
-    .filter(reward => !hasCrabItems(reward));
 
   if (filteredNftRewards.length <= 0) {
     return;
@@ -144,8 +138,4 @@ function containsShowableRarity(nftRewardWithMetadata) {
   const rarity = rarityMetadata.value;
 
   return config.showItems.includes(rarity)
-}
-
-function hasCrabItems(reward) {
-  return reward.retrievedMetadata.name.includes('Small Crab') || reward.retrievedMetadata.name.includes('Giant Pink Crab')
 }

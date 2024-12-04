@@ -31,8 +31,6 @@ async function handleNewTrade(tradeId) {
 
   const tradeCreator = await getDiscordUserForWallet(tradeInfo.ownerAddress)
 
-  console.log('tradeInfo', tradeInfo)
-
   if (isSoulTrade(tradeInfo)) {
     console.log('is soul trade true')
     const soul = await getSoulMetadataForTrade(tradeInfo);
