@@ -33,13 +33,13 @@ async function verificationMessage(client, member, wallet) {
     })
 
     try {
-      const confirmation = await confirmationDm.awaitMessageComponent({time: 6_000});
+      const confirmation = await confirmationDm.awaitMessageComponent({time: 300_000});
 
       await handleVerificationConfirmation(client, confirmation, member, wallet)
     } catch (e) {
       console.log(e)
 
-      await logMessageOrErrorForVerification(client, 'user', member.user.username, 'did not react within 60s on the verification message, deleting entry and removing buttons;', e)
+      await logMessageOrErrorForVerification(client, 'user', member.user.username, 'did not react within 5min on the verification message, deleting entry and removing buttons;', e)
       await deleteWallet(wallet)
       await confirmationDm.edit({
         components: []
