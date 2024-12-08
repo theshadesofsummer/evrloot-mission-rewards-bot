@@ -159,7 +159,8 @@ async function updateAllUsers() {
         // }
       }
     } catch (e) {
-
+      console.error('error while updating users', discordId, e)
+      await logMessageOrError('error while updating users', discordId, e);
     }
     console.log('finished update')
   }

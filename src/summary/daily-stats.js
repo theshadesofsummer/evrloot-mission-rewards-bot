@@ -65,13 +65,18 @@ function addToStats(reward) {
     statEntry.amount += reward.amount;
     stats.set(name, statEntry)
   } else {
-    stats.set(
-      name,
-      {
-        rarity: reward.retrievedMetadata.attributes.find(attr => attr.label === 'Rarity').value,
-        amount: reward.amount
-      }
-    )
+    try {
+      stats.set(
+        name,
+        {
+          rarity: reward.retrievedMetadata.attributes.find(attr => attr.label === 'Rarity').value,
+          amount: reward.amount
+        }
+      )
+    } catch (e) {
+      console.error('could not add item to stats', reward, e)
+    }
+
   }
   fs.writeFileSync('./stats.json', JSON.stringify({expeditionCounter, missionCounter, stats: [...stats]}), 'utf-8');
 }

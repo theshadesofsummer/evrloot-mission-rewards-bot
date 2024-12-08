@@ -20,7 +20,7 @@ setupDiscordBot().then(() => {
         await collection.updateOne({_id: doc._id}, {$set: {discordId}})
       }
     } catch (error) {
-      logMessageOrError('Error in migrate-new-verifications', error)
+      await logMessageOrError('Error in migrate-new-verifications', error)
     } finally {
       await dbClient.close();
     }

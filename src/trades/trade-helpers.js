@@ -28,6 +28,7 @@ module.exports = {
 async function getSoulMetadataForTrade(tradeInfo) {
   if (tradeInfo.erc721s[0]) {
     const soulId = await fetchSoulIdFromSquid(tradeInfo.erc721s[0].tokenId)
+    console.log('soulId', soulId)
     return await getSoulFromBackend(soulId);
   } else {
     console.log("3 DEBUG: fetch not staked soul metadata incoming", tradeInfo.unclaimedNfts[0])

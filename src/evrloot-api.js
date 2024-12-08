@@ -204,7 +204,6 @@ async function getFromIpfs(ipfsLink) {
 }
 
 async function fetchAsync(url, options = {}) {
-  console.log('[API]', 'fetching from url', url)
   dns.setDefaultResultOrder('ipv4first')
   return fetch(url, options).then(response => {
     if (!response.ok) {
@@ -235,6 +234,7 @@ async function fetchSoulIdFromSquid(estraTokenId) {
       return result.data.nfts[0].id;
     })
     .catch((err) => {
+      console.log('error', err)
       logMessageOrError('could not fetch soulID from squid by estra token id:', estraTokenId, err)
       return undefined
     });
