@@ -65,16 +65,17 @@ function addToStats(reward) {
     statEntry.amount += reward.amount;
     stats.set(name, statEntry)
   } else {
+    const rarity = reward.retrievedMetadata.attributes.find(attr => attr.label === 'Rarity')
     try {
       stats.set(
         name,
         {
-          rarity: reward.retrievedMetadata.attributes.find(attr => attr.label === 'Rarity').value,
+          rarity: rarity ? rarity : "Common",
           amount: reward.amount
         }
       )
     } catch (e) {
-      console.error('could not add item to stats', reward, e)
+      console.error('could not add item to stats', reward.retrievedMetadata.attributes, reward, e)
     }
 
   }
