@@ -4,7 +4,7 @@ const fs = require("fs");
 const {getSoulIpfsLink} = require("./abi-interaction");
 const {logMessageOrError} = require("./discord-client");
 
-const SQUID_ADDRESS = 'https://squid.subsquid.io/evrsquid/graphql';
+const SQUID_ADDRESS = 'https://evrloot.squids.live/evrsquid:production/api/graphql';
 const QUERY_SOUL_ID_BY_ESTRA_TOKEN_ID = `
 query MyQuery($estraTokenId: Int!) {
   nfts(where: {estraTokenId_eq: $estraTokenId}) {
