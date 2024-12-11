@@ -134,8 +134,14 @@ async function getNftRewardInfos(nftReward) {
 }
 
 function containsShowableRarity(nftRewardWithMetadata) {
-  const rarityMetadata = nftRewardWithMetadata.retrievedMetadata.attributes.find(o => o.label === 'Rarity');
-  const rarity = rarityMetadata.value;
+  try {
+    const rarityMetadata = nftRewardWithMetadata.retrievedMetadata.attributes.find(o => o.label === 'Rarity');
+    const rarity = rarityMetadata.value;
 
-  return config.showItems.includes(rarity)
+    return config.showItems.includes(rarity)
+  } catch (error) {
+    logMessageOrError('nft reward with metadata does not contain rarity', nftRewardWithMetadata.retrievedMetadata.attributes)
+    return false
+  }
+
 }
