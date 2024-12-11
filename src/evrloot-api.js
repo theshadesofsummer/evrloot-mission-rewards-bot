@@ -120,6 +120,7 @@ module.exports = {
   mapMetadataToSoul,
   getSoulFromBackend,
   getSoulImage,
+  getCitizenImage,
   getFromIpfs,
   fetchSoulIdFromSquid,
   fetchTradeByIdFromSquid,
@@ -184,8 +185,13 @@ async function getSoulFromBackend(fullSoulId) {
 
 async function getSoulImage(soulId) {
   const soulImageUrl = `https://api.evrloot.xyz/api/dynamic/evr-souls/${soulId}`
-  console.log(soulImageUrl);
   return await fetchAsyncImage(soulImageUrl);
+}
+
+async function getCitizenImage(citizenId) {
+  const citizenImageUrl = `https://api.evrloot.io/api/dynamic/citizens/${citizenId}`
+  console.log(citizenImageUrl);
+  return await fetchAsyncImage(citizenImageUrl);
 }
 
 async function fetchAsyncImage(url) {

@@ -17,16 +17,6 @@ module.exports = function createSoulNewTradeEmbed(tradeInfo, textInfo, tradeCrea
     fields: [
       ...fields,
       {
-        name: 'Stats',
-        value: soulStatsFormatter(soul.retrievedMetadata.properties),
-        inline: true
-      },
-      {
-        name: 'Attributes',
-        value: soulAttrFormatter(soul.retrievedMetadata.properties),
-        inline: true
-      },
-      {
         name: 'Experience',
         value: soulExperienceFormatter(soul.experience.activities),
         inline: true
@@ -35,46 +25,23 @@ module.exports = function createSoulNewTradeEmbed(tradeInfo, textInfo, tradeCrea
         name: 'Equipment',
         value: soulChildsFormatter(soul.children),
         inline: true
-      }
+      },
+      {
+        name: 'Properties',
+        value: soulStatsFormatter(soul.retrievedMetadata.properties),
+        inline: false
+      },
     ],
     timestamp: new Date().toISOString(),
   };
 }
 
-function soulAttrFormatter(properties) {
-  const soulClass = properties["Soul Class"].value;
-  const personality = properties["Personality"].value;
-  const talent = properties["Talent"].value;
-  const origin = properties["Origin"].value;
-  const condition = properties["Condition"].value;
-
-  let returnString = '';
-
-  returnString += `*Soul Class*: ${findClassEmote(soulClass)} ${soulClass}\n`;
-  returnString += `*Personality*: ${personality}\n`;
-  returnString += `*Talent*: ${talent}\n`;
-  returnString += `*Origin*: ${origin}\n`;
-  returnString += `*Condition*: ${condition}\n`;
-
-  return returnString;
-}
-
 function soulStatsFormatter(properties) {
-  const strength = properties["Strength"].value;
-  const dexterity = properties["Dexterity"].value;
-  const intelligence = properties["Intelligence"].value;
-  const wisdom = properties["Wisdom"].value;
-  const fortitude = properties["Fortitude"].value;
-  const luck = properties["Luck"].value;
-
   let returnString = '';
 
-  returnString += `*Strength*: ${strength}\n`;
-  returnString += `*Dexterity*: ${dexterity}\n`;
-  returnString += `*Intelligence*: ${intelligence}\n`;
-  returnString += `*Wisdom*: ${wisdom}\n`;
-  returnString += `*Fortitude*: ${fortitude}\n`;
-  returnString += `*Luck*: ${luck}\n`;
+  Object.entries(properties).forEach(([name, property]) => {
+    returnString += `*${name}*: ${property.value}\n`;
+  })
 
   return returnString;
 }

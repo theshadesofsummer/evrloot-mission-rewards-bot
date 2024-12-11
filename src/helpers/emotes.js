@@ -16,7 +16,7 @@ const soulClassEmoteMap = new Map([
   ['Alchemist', '<:alchemist_logo:1276288001990725665>'],
   ['Ranger', '<:ranger_logo:1276288006793330708>'],
   ['Behemoth', '<:behemoth_logo:1276288003844866151>'],
-  ['Sandshaper', '<:sandshaper_logo:1276288000740823194>'],
+  ['Sand Shaper', '<:sandshaper_logo:1276288000740823194>'],
 ]);
 
 

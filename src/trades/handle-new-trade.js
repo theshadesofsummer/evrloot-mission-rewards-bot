@@ -1,4 +1,4 @@
-const {fetchTradeByIdFromSquid, getSoulFromBackend, getSoulImage} = require("../evrloot-api");
+const {fetchTradeByIdFromSquid, getSoulFromBackend, getSoulImage, getCitizenImage} = require("../evrloot-api");
 const {postNewTrade, postNewTradeWithImage} = require("../discord-client");
 const createNewTradeEmbed = require('../embeds/new-trade-embed')
 const createNewSoulTradeEmbed = require('../embeds/new-soul-trade-embed')
@@ -35,8 +35,16 @@ async function handleNewTrade(tradeId) {
     console.log('is soul trade true')
     const soul = await getSoulMetadataForTrade(tradeInfo);
 
-    const soulImageBuffer = await getSoulImage(soul.tokenId)
-    const imageFileName = `soul_${soul.tokenId}.png`;
+    let soulImageBuffer;
+    let imageFileName;
+    if (soul.id.startsWith("CITIZENS")) {
+      soulImageBuffer = await getCitizenImage(soul.tokenId);
+      imageFileName = `citizen_${soul.tokenId}.png`;
+    } else {
+      soulImageBuffer = await getSoulImage(soul.tokenId)
+      imageFileName = `soul_${soul.tokenId}.png`;
+    }
+
     let path = 'static/'+imageFileName;
     fs.createWriteStream(path).write(soulImageBuffer);
     fs.createWriteStream(path).close();
