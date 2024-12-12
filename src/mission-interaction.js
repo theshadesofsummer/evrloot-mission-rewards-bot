@@ -140,7 +140,7 @@ function containsShowableRarity(nftRewardWithMetadata) {
 
     return config.showItems.includes(rarity)
   } catch (error) {
-    logMessageOrError('nft reward with metadata does not contain rarity', nftRewardWithMetadata.retrievedMetadata.attributes)
+    logMessageOrError('nft reward with metadata does not contain rarity', nftRewardWithMetadata.retrievedMetadata.attributes.toString())
     return false
   }
 
