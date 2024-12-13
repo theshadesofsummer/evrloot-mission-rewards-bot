@@ -31,6 +31,7 @@ setupDiscordBot().then(async () => {
     } catch (error) {
       await logMessageOrError('there was in issue in the daily fetching of the users info (pb etc.)', error)
     }
+    await handleReconnection();
   });
 });
 
