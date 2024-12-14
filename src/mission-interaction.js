@@ -136,11 +136,13 @@ async function getNftRewardInfos(nftReward) {
 function containsShowableRarity(nftRewardWithMetadata) {
   try {
     const rarityMetadata = nftRewardWithMetadata.retrievedMetadata.attributes.find(o => o.label === 'Rarity');
+    if (!rarityMetadata)
+      return false;
     const rarity = rarityMetadata.value;
 
     return config.showItems.includes(rarity)
   } catch (error) {
-    logMessageOrError('nft reward with metadata does not contain rarity', nftRewardWithMetadata.retrievedMetadata.attributes.toString())
+    logMessageOrError('still issue in containsShowableRarity', nftRewardWithMetadata.retrievedMetadata.attributes.toString())
     return false
   }
 

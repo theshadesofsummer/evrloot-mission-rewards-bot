@@ -19,7 +19,7 @@ module.exports = function generateSummary() {
   }
 
   for (const [itemName, value] of sortedStatsWithRarity) {
-    const rarityColor = getColorRarity(value.rarity)
+    const rarityColor = getColorRarity(value.rarity.value)
     summary += `${rarityColor}${itemName}\u001b[0m: ${value.amount}\n`
   }
 
@@ -58,13 +58,13 @@ const raritySortValue = new Map([
 ])
 
 function raritySorter(entryA, entryB) {
-  const rarityA = entryA[1].rarity;
-  const rarityB = entryB[1].rarity;
+  const rarityA = entryA[1].rarity.value;
+  const rarityB = entryB[1].rarity.value;
 
   return raritySortValue.get(rarityA) - raritySortValue.get(rarityB)
 }
 
 function hasSelectedRarity(entry) {
-  const entryRarity = entry[1].rarity
+  const entryRarity = entry[1].rarity.value
   return ['Common', 'Rare', 'Epic', 'Legendary'].includes(entryRarity)
 }
