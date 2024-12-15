@@ -27,11 +27,11 @@ setupDiscordBot().then(async () => {
   cron.schedule('0 0 * * *', async () => {
     await publishSummary();
     try {
-      await updateAllUsers()
+      //await updateAllUsers()
     } catch (error) {
       await logMessageOrError('there was in issue in the daily fetching of the users info (pb etc.)', error)
     }
-    await handleReconnection();
+    //await handleReconnection();
   });
 });
 
