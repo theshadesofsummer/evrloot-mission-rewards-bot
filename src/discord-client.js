@@ -129,13 +129,18 @@ async function getUserByClientId(clientId) {
   await client.guilds.fetch();
   const guild = client.guilds.cache.get(process.env.GUILD_ID);
 
-  const guildMember = await guild.members.fetch(clientId)
-  if (!guildMember) {
-    await logMessageOrError('getUserByClientId: could not find user in server with client id', clientId)
-    console.warn('no user found for client id', clientId)
+  try {
+    const guildMember = await guild.members.fetch(clientId)
+
+    if (!guildMember) {
+      await logMessageOrError('getUserByClientId: could not find user in server with client id', clientId)
+      console.warn('no user found for client id', clientId)
+      return undefined
+    }
+    return guildMember.user
+  } catch (err) {
     return undefined
   }
-  return guildMember.user
 }
 
 async function updateAllUsers() {
@@ -162,8 +167,8 @@ async function updateAllUsers() {
       console.error('error while updating users', discordId, e)
       await logMessageOrError('error while updating users', discordId, e);
     }
-    console.log('finished update')
   }
+  console.log('finished update of all users')
   // await client.guilds.fetch();
   // const guild = client.guilds.cache.get(process.env.GUILD_ID);
   //

@@ -73,7 +73,6 @@ async function getAllAccounts() {
 async function updateDiscordInfo(userId, username, avatarURL) {
   const client = await MongoClient.connect(uri);
   try {
-    console.log('[DB]', 'update discord info for userId', userId)
     const collection = client.db("evrloot").collection("discordverifications");
 
     const filter = {

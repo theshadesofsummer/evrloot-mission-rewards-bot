@@ -9,8 +9,6 @@ const {initStats, increaseExpeditionCounter} = require("./summary/daily-stats");
 const {handleNewTrade} = require("./trades/handle-new-trade");
 const {handleNewBid} = require("./trades/handle-new-bid");
 const {handleBidAccepted} = require("./trades/handle-bid-accepted");
-let provider = require("./provider")
-const {ethers} = require("ethers");
 
 setupDiscordBot().then(async () => {
   await logMessageOrError('new start of discord bot')
@@ -27,11 +25,10 @@ setupDiscordBot().then(async () => {
   cron.schedule('0 0 * * *', async () => {
     await publishSummary();
     try {
-      //await updateAllUsers()
+      await updateAllUsers()
     } catch (error) {
       await logMessageOrError('there was in issue in the daily fetching of the users info (pb etc.)', error)
     }
-    //await handleReconnection();
   });
 });
 
@@ -74,90 +71,67 @@ async function setupMongoDbConnection() {
 }
 
 async function setupContractEvents() {
-  await MISSION_CONTRACT.on('MissionReward', async (
-    tokenId,             // uint256
-    missionId,           // uint16
-    activityId,          // uint16
-    experienceGained,    // uint256
-    nftRewards,          // Array of { contractAddress: string, itemId: number, amount: number }
-    resourceRewards,     // Array of { resourceId: number, amount: number }
-    event                // Full event log object
-  ) => {
-    await fetchMissionReward(tokenId, nftRewards, resourceRewards);
-  });
+  MISSION_CONTRACT.events.MissionReward({fromBlock: 'latest'})
+    .on("connected", function (_subscriptionId) {
+      console.log('connected to mission reward event')
+    })
+    .on('data', function (event) {
+      fetchMissionReward(event)
+    })
+    .on('error', function (error, receipt) {
+      console.error('Error in MISSION_CONTRACT MissionReward', error, receipt);
+      logMessageOrError('Error in MISSION_CONTRACT MissionReward:', error, receipt);
+    });
 
-  await MARKETPLACE_CONTRACT.on('BidCreated', async (bidId) => {
-    console.log('BidCreated event received:', bidId);
-    try {
-      await handleNewBid(bidId);
-    } catch (e) {
-      await logMessageOrError('Failed to handle new bid', bidId);
-    }
-  });
+  MARKETPLACE_CONTRACT.events.BidCreated({fromBlock: 'latest'})
+    .on("connected", function (_subscriptionId) {
+      console.log('connected to bid created event')
+    })
+    .on('data', function (event) {
+      handleNewBid(event.returnValues.bidId)
+    })
+    .on('error', function (error, receipt) {
+      console.error('Error in MARKETPLACE_CONTRACT BidCreated', error, receipt);
+      logMessageOrError('Error in MARKETPLACE_CONTRACT BidCreated:', error, receipt);
+    });
 
-  await MARKETPLACE_CONTRACT.on('TradeCreated', async (tradeId) => {
-    console.log('TradeCreated event received:', tradeId);
-    try {
-      await handleNewTrade(tradeId);
-    } catch (e) {
-      await logMessageOrError('Failed to handle new trade', tradeId);
-    }
-  });
+  MARKETPLACE_CONTRACT.events.TradeCreated({fromBlock: 'latest'})
+    .on("connected", function (_subscriptionId) {
+      console.log('connected to trade created event')
+    })
+    .on('data', function (event) {
+      console.log('trade created event')
 
-  await MARKETPLACE_CONTRACT.on('BidAccepted', async (tradeId) => {
-    console.log('BidAccepted event received:', tradeId);
-    try {
-      await handleBidAccepted(tradeId);
-    } catch (e) {
-      await logMessageOrError('Failed to handle new bid accepted', tradeId);
-    }
-  });
+      handleNewTrade(event.returnValues.tradeId)
+    })
+    .on('error', function (error, receipt) {
+      console.error('Error in MARKETPLACE_CONTRACT TradeCreated', error, receipt);
+      logMessageOrError('Error in MARKETPLACE_CONTRACT TradeCreated:', error, receipt);
+    });
 
-  await EXPEDITION_CONTRACT.on('ExpeditionStart', async (_event) => {
-    console.log('ExpeditionStart event received');
-    increaseExpeditionCounter()
-  });
+  MARKETPLACE_CONTRACT.events.BidAccepted({fromBlock: 'latest'})
+    .on("connected", function (_subscriptionId) {
+      console.log('connected to bid accepted event')
+    })
+    .on('data', function (event) {
+      handleBidAccepted(event.returnValues.tradeId)
+    })
+    .on('error', function (error, receipt) {
+      console.error('Error in MARKETPLACE_CONTRACT BidAccepted', error, receipt);
+      logMessageOrError('Error in MARKETPLACE_CONTRACT BidAccepted:', error, receipt);
+    });
 
-  monitorConnection();
-}
 
-const HEARTBEAT_INTERVAL = 60_000;
-function monitorConnection() {
-  let counter = 0;
-  setInterval(async () => {
-    try {
-      await provider.getBlockNumber();
-      counter++;
-      if (counter > 60) {
-        console.log('hourly info, WebSocket connection is active.');
-        counter = 0;
-      }
-    } catch (error) {
-      console.warn('WebSocket connection lost. Attempting to reconnect...', error);
-      await handleReconnection();
-    }
-  }, HEARTBEAT_INTERVAL);
-}
-
-let isReconnecting = false;
-async function handleReconnection() {
-  if (isReconnecting) return;
-  isReconnecting = true;
-
-  console.log('Reconnecting to WebSocket provider...');
-  while (true) {
-    try {
-      // Recreate the provider
-      provider = new ethers.WebSocketProvider('wss://moonbeam.blastapi.io/3f7856cf-73cf-489e-9973-0daafbd333a6');
-      await provider.getBlockNumber();
-      console.log('Reconnected to WebSocket provider.');
-
-      await setupContractEvents();
-      isReconnecting = false;
-      break;
-    } catch (error) {
-      console.error('Reconnection failed. Retrying in 10 seconds...', error);
-      await new Promise((resolve) => setTimeout(resolve, 10_000));
-    }
-  }
+  EXPEDITION_CONTRACT.events.ExpeditionStart({fromBlock: 'latest'})
+    .on("connected", function (_subscriptionId) {
+      console.log('connected to expedition start event')
+    })
+    .on('data', function (_event) {
+      console.log('increaseExpeditionCounter')
+      increaseExpeditionCounter()
+    })
+    .on('error', function (error, receipt) {
+      console.error('Error in EXPEDITION_CONTRACT ExpeditionStart', error, receipt);
+      logMessageOrError('Error in EXPEDITION_CONTRACT ExpeditionStart:', error, receipt);
+    });
 }
