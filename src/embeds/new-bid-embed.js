@@ -8,13 +8,18 @@ module.exports = function createNewBidEmbed(bidInfo, textInfo, tradeCreator, bid
 
   return {
     color: 0xf16a06,
-    title: `New Bid: ${textInfo.title} ${tradeCreatorInfo}`,
+    title: `New Bid: ${textInfo
+      ? textInfo.message
+      : 'trade without title'
+    } ${tradeCreatorInfo}`,
     url: `https://game.evrloot.com/marketplace?mId=${bidInfo.trade.id}`,
     author,
     // thumbnail: {
     //   url: soul.retrievedMetadata.image
     // },
-    description: textInfo.message,
+    description: textInfo
+      ? textInfo.message
+      : 'no message',
     fields,
     timestamp: new Date().toISOString(),
   };

@@ -18,7 +18,7 @@ setupDiscordBot().then(async () => {
   await setupMongoDbConnection()
 
   // await handleBidAccepted("0xee3256046d663f68f62db61e1debf5fbb046949285491f7e2a27524b6e567075") // soul
-  // await handleNewTrade("0xee3256046d663f68f62db61e1debf5fbb046949285491f7e2a27524b6e567075") // soul
+  await handleNewTrade("0xfbc9fe6e051e4a6d0762cc84b03a4dd7495ae0ad69eb0397fdf9a5c4b6dcec90")
   // await handleNewBid("0xee3256046d663f68f62db61e1debf5fbb046949285491f7e2a27524b6e567075") // soul
   initStats()
 

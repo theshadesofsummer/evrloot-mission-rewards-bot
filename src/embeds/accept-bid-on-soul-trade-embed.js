@@ -8,7 +8,9 @@ module.exports = function createSoulNewTradeEmbed(tradeInfo, textInfo, tradeCrea
   const bidFields = getFields(bidInfo, bidNfts, bidResources, false)
 
   const titlePrefix = `${bidCreator ? `${bidCreator.globalName}'s ` : ''}`
-  const title = `${titlePrefix}Bid Accepted: ${findClassEmote(soul.retrievedMetadata.properties['Soul Class'].value)}${textInfo.title}`
+  const title = `${titlePrefix}Bid Accepted: ${findClassEmote(soul.retrievedMetadata.properties['Soul Class'].value)}${textInfo
+    ? textInfo.title
+    : 'no title'}`
 
   return {
     color: 0x2f9f00,
@@ -18,7 +20,9 @@ module.exports = function createSoulNewTradeEmbed(tradeInfo, textInfo, tradeCrea
     image: {
      url: `attachment://${imageName}`
     },
-    description: textInfo.message,
+    description: textInfo
+      ? textInfo.message
+      : 'no message',
     fields: [
       ...fields,
       {

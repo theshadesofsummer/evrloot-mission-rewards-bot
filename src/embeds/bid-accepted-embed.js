@@ -9,7 +9,9 @@ module.exports = function createBidAcceptedEmbed(tradeInfo, textInfo, tradeCreat
   const author = getAuthor(tradeCreator)
 
   const titlePrefix = `${bidCreator ? `${bidCreator.globalName}'s ` : ''}`
-  const title = `${titlePrefix}Bid Accepted: ${textInfo.title}`
+  const title = `${titlePrefix}Bid Accepted: ${textInfo
+    ? textInfo.title
+    : 'no title'}`
 
   return {
     color: 0x2f9f00,
@@ -19,7 +21,9 @@ module.exports = function createBidAcceptedEmbed(tradeInfo, textInfo, tradeCreat
     // thumbnail: {
     //   url: soul.retrievedMetadata.image
     // },
-    description: textInfo.message,
+    description: textInfo
+      ? textInfo.message
+      : 'no message',
     fields,
     timestamp: new Date().toISOString(),
   };
