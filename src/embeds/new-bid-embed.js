@@ -9,7 +9,7 @@ module.exports = function createNewBidEmbed(bidInfo, textInfo, tradeCreator, bid
   return {
     color: 0xf16a06,
     title: `New Bid: ${textInfo
-      ? textInfo.message
+      ? textInfo.title
       : 'trade without title'
     } ${tradeCreatorInfo}`,
     url: `https://game.evrloot.com/marketplace?mId=${bidInfo.trade.id}`,
