@@ -25,10 +25,6 @@ async function handleNewBid(bidId) {
     return;
   }
   const textInfo = await getTradeMessages(bidInfo.trade.id)
-  if (!textInfo) {
-    await logMessageOrError('no textInfo found for trade on bid', bidId)
-    return;
-  }
 
   const tradeCreator = await getDiscordUserForWallet(bidInfo.trade.ownerAddress)
   const bidCreator = await getDiscordUserForWallet(bidInfo.ownerAddress)

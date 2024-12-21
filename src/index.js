@@ -17,9 +17,9 @@ setupDiscordBot().then(async () => {
   await setupContractEvents()
   await setupMongoDbConnection()
 
-  // await handleBidAccepted("0xee3256046d663f68f62db61e1debf5fbb046949285491f7e2a27524b6e567075") // soul
+  // await handleBidAccepted("0x06d14fc4c7b60a8f318b50b676451c820cefe52548df142cc6e6da46f5f99599") // soul
   // await handleNewTrade("0xfbc9fe6e051e4a6d0762cc84b03a4dd7495ae0ad69eb0397fdf9a5c4b6dcec90")
-  // await handleNewBid("0xee3256046d663f68f62db61e1debf5fbb046949285491f7e2a27524b6e567075") // soul
+  // await handleNewBid("0x503630bf4c15f29c39228c2156b4a0843d5817ea30bf0a00ba6fb12ecbeab72f") // soul
   initStats()
 
   cron.schedule('0 0 * * *', async () => {
