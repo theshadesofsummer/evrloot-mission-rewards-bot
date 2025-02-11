@@ -78,9 +78,11 @@ async function setupContractEvents() {
     .on('data', function (event) {
       fetchMissionReward(event)
     })
-    .on('error', function (error, receipt) {
-      console.error('Error in MISSION_CONTRACT MissionReward', error, receipt);
-      logMessageOrError('Error in MISSION_CONTRACT MissionReward:', error, receipt);
+    .on('error', function (error) {
+      if (!error.data.range) {
+        console.error('Error in MISSION_CONTRACT MissionReward', error);
+        logMessageOrError('Error in MISSION_CONTRACT MissionReward:', error);
+      }
     });
 
   MARKETPLACE_CONTRACT.events.BidCreated({fromBlock: 'latest'})
@@ -90,9 +92,11 @@ async function setupContractEvents() {
     .on('data', function (event) {
       handleNewBid(event.returnValues.bidId)
     })
-    .on('error', function (error, receipt) {
-      console.error('Error in MARKETPLACE_CONTRACT BidCreated', error, receipt);
-      logMessageOrError('Error in MARKETPLACE_CONTRACT BidCreated:', error, receipt);
+    .on('error', function (error) {
+      if (!error.data.range) {
+        console.error('Error in MARKETPLACE_CONTRACT BidCreated', error);
+        logMessageOrError('Error in MARKETPLACE_CONTRACT BidCreated:', error);
+      }
     });
 
   MARKETPLACE_CONTRACT.events.TradeCreated({fromBlock: 'latest'})
@@ -104,9 +108,11 @@ async function setupContractEvents() {
 
       handleNewTrade(event.returnValues.tradeId)
     })
-    .on('error', function (error, receipt) {
-      console.error('Error in MARKETPLACE_CONTRACT TradeCreated', error, receipt);
-      logMessageOrError('Error in MARKETPLACE_CONTRACT TradeCreated:', error, receipt);
+    .on('error', function (error) {
+      if (!error.data.range) {
+        console.error('Error in MARKETPLACE_CONTRACT TradeCreated', error);
+        logMessageOrError('Error in MARKETPLACE_CONTRACT TradeCreated:', error);
+      }
     });
 
   MARKETPLACE_CONTRACT.events.BidAccepted({fromBlock: 'latest'})
@@ -116,9 +122,11 @@ async function setupContractEvents() {
     .on('data', function (event) {
       handleBidAccepted(event.returnValues.tradeId)
     })
-    .on('error', function (error, receipt) {
-      console.error('Error in MARKETPLACE_CONTRACT BidAccepted', error, receipt);
-      logMessageOrError('Error in MARKETPLACE_CONTRACT BidAccepted:', error, receipt);
+    .on('error', function (error) {
+      if (!error.data.range) {
+        console.error('Error in MARKETPLACE_CONTRACT BidAccepted', error);
+        logMessageOrError('Error in MARKETPLACE_CONTRACT BidAccepted:', error);
+      }
     });
 
 
@@ -130,8 +138,10 @@ async function setupContractEvents() {
       console.log('increaseExpeditionCounter')
       increaseExpeditionCounter()
     })
-    .on('error', function (error, receipt) {
-      console.error('Error in EXPEDITION_CONTRACT ExpeditionStart', error, receipt);
-      logMessageOrError('Error in EXPEDITION_CONTRACT ExpeditionStart:', error, receipt);
+    .on('error', function (error) {
+      if (!error.data.range) {
+        console.error('Error in EXPEDITION_CONTRACT ExpeditionStart', error);
+        logMessageOrError('Error in EXPEDITION_CONTRACT ExpeditionStart:', error);
+      }
     });
 }
