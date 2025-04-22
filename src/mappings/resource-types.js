@@ -640,4 +640,201 @@ module.exports = { // resourceMappings.ts
     name: 'Worn Leather',
     emoteId: '<:worn_leather:1268673316953264272>'
   },
+  // BONE COLLECTION
+  RIB_CAGE: {
+    id: 850,
+    tokenUri: 'ipfs://QmZGTGtEUZ3G6LDVzu9mZ5XNywyaBKVMgSE6ajCiaHGzA8/beastly_rib_cage.json',
+    name: 'Beastly Rib Cage',
+    emoteId: '<:beastlyripcage:1364272596979290142>'
+  },
+  BEASTS_SPINE: {
+    id: 851,
+    tokenUri: 'ipfs://QmZGTGtEUZ3G6LDVzu9mZ5XNywyaBKVMgSE6ajCiaHGzA8/beasts_spine.json',
+    name: "Beast's Spine",
+    emoteId: '<:beastspine:1364272621402853517>'
+  },
+  BROKEN_EXOSKELETON: {
+    id: 852,
+    tokenUri: 'ipfs://QmZGTGtEUZ3G6LDVzu9mZ5XNywyaBKVMgSE6ajCiaHGzA8/broken_exoskeleton.json',
+    name: 'Broken Exoskeleton',
+    emoteId: '<:brokenexoskeleton:1364272633247563776>'
+  },
+  LONG_BONE: {
+    id: 853,
+    tokenUri: 'ipfs://QmZGTGtEUZ3G6LDVzu9mZ5XNywyaBKVMgSE6ajCiaHGzA8/long_bone.json',
+    name: 'Long Bone',
+    emoteId: '<:longbone:1364272641208352890>'
+  },
+  MUTATED_SKULL: {
+    id: 854,
+    tokenUri: 'ipfs://QmZGTGtEUZ3G6LDVzu9mZ5XNywyaBKVMgSE6ajCiaHGzA8/mutated_skull.json',
+    name: 'Mutated Skull',
+    emoteId: '<:mutatedskull:1364272651001921537>'
+  },
+  RECIPE_CAP_OF_THE_HALLOWED: {
+    id: 855,
+    tokenUri:
+      'ipfs://QmcJ8QEZtdBj1PR831MBmAwGDrDBvLHLeghsKoFDT8SFva/recipe_cap_of_the_hallowed.json',
+    name: 'Recipe Cap of the Hallowed',
+    emoteId: '<:recipe_rare:1268673361752625274>'
+  },
+  RECIPE_BASQUINE_OF_ANCESTRAL_BONES: {
+    id: 856,
+    tokenUri:
+      'ipfs://QmcJ8QEZtdBj1PR831MBmAwGDrDBvLHLeghsKoFDT8SFva/recipe_basquine_of_ancestral_bones.json',
+    name: 'Recipe Basquine of Ancestral Bones',
+    emoteId: '<:recipe_epic:1268673360720826520>'
+  },
+  RECIPE_HELM_OF_THE_HAUNTED: {
+    id: 857,
+    tokenUri:
+      'ipfs://QmcJ8QEZtdBj1PR831MBmAwGDrDBvLHLeghsKoFDT8SFva/recipe_helm_of_the_haunted.json',
+    name: 'Recipe Helm of the Haunted',
+    emoteId: '<:recipe_epic:1268673360720826520>'
+  },
+  RECIPE_WATCHER_OF_ETHERLIGHT: {
+    id: 858,
+    tokenUri:
+      'ipfs://QmcJ8QEZtdBj1PR831MBmAwGDrDBvLHLeghsKoFDT8SFva/recipe_watcher_of_etherlight.json',
+    name: 'Recipe Watcher of Etherlight',
+    emoteId: '<:recipe_epic:1268673360720826520>'
+  },
+  RECIPE_SCENT_OF_THE_DEPARTED: {
+    id: 859,
+    tokenUri:
+      'ipfs://QmcJ8QEZtdBj1PR831MBmAwGDrDBvLHLeghsKoFDT8SFva/recipe_scent_of_the_departed.json',
+    name: 'Recipe Scent of the Departed',
+    emoteId: '<:recipe_epic:1268673360720826520>'
+  },
+  RECIPE_CRANIUM_OF_THE_FALLEN_SENTINAL: {
+    id: 860,
+    tokenUri:
+      'ipfs://QmcJ8QEZtdBj1PR831MBmAwGDrDBvLHLeghsKoFDT8SFva/recipe_cranium_of_the_fallen_sentinal.json',
+    name: 'Recipe Cranium of the Fallen Sentinal',
+    emoteId: '<:recipe_epic:1268673360720826520>'
+  },
+  RECIPE_SKULLCAP_OF_THE_REMEMBERED: {
+    id: 861,
+    tokenUri:
+      'ipfs://QmcJ8QEZtdBj1PR831MBmAwGDrDBvLHLeghsKoFDT8SFva/recipe_skullcap_of_the_remembered.json',
+    name: 'Recipe Skullcap of the Remembered',
+    emoteId: '<:recipe_epic:1268673360720826520>'
+  },
+  RECIPE_HJALMR_OF_MORTAL_RUIN: {
+    id: 862,
+    tokenUri:
+      'ipfs://QmcJ8QEZtdBj1PR831MBmAwGDrDBvLHLeghsKoFDT8SFva/recipe_hjalmr_of_mortal_ruin.json',
+    name: 'Recipe Hjalmr of Mortal Ruin',
+    emoteId: '<:recipe_epic:1268673360720826520>'
+  },
+  RECIPE_THORAX_OF_THE_BOVAR: {
+    id: 863,
+    tokenUri:
+      'ipfs://QmcJ8QEZtdBj1PR831MBmAwGDrDBvLHLeghsKoFDT8SFva/recipe_thorax_of_the_bovar.json',
+    name: 'Recipe Thorax of the Bovar',
+    emoteId: '<:recipe_epic:1268673360720826520>'
+  },
+  RECIPE_HAMMER_OF_FORGETTING: {
+    id: 864,
+    tokenUri:
+      'ipfs://QmcJ8QEZtdBj1PR831MBmAwGDrDBvLHLeghsKoFDT8SFva/recipe_hammer_of_forgetting.json',
+    name: 'Recipe Hammer of Forgetting',
+  },
+  RECIPE_SHIELD_OF_THE_SHADOWLANDS: {
+    id: 865,
+    tokenUri:
+      'ipfs://QmcJ8QEZtdBj1PR831MBmAwGDrDBvLHLeghsKoFDT8SFva/recipe_shield_of_the_shadowlands.json',
+    name: 'Recipe Shield of the Shadowlands',
+    emoteId: '<:recipe_epic:1268673360720826520>'
+  },
+  RECIPE_BOOTS_OF_THE_EARTHBOUND: {
+    id: 866,
+    tokenUri:
+      'ipfs://QmcJ8QEZtdBj1PR831MBmAwGDrDBvLHLeghsKoFDT8SFva/recipe_boots_of_the_earthbound.json',
+    name: 'Recipe Boots of the Earthbound',
+    emoteId: '<:recipe_epic:1268673360720826520>'
+  },
+  RECIPE_FLAIL_OF_THE_TRANSVERSE: {
+    id: 867,
+    tokenUri:
+      'ipfs://QmcJ8QEZtdBj1PR831MBmAwGDrDBvLHLeghsKoFDT8SFva/recipe_flail_of_the_transverse.json',
+    name: 'Recipe Flail of the Transverse',
+    emoteId: '<:recipe_epic:1268673360720826520>'
+  },
+  RECIPE_DREAMWEB_OF_THE_LOST: {
+    id: 868,
+    tokenUri:
+      'ipfs://QmcJ8QEZtdBj1PR831MBmAwGDrDBvLHLeghsKoFDT8SFva/recipe_dreamweb_of_the_lost.json',
+    name: 'Recipe Dreamweb of the Lost',
+    emoteId: '<:recipe_epic:1268673360720826520>'
+  },
+  RECIPE_WALKERS_OF_THE_UNDEAD: {
+    id: 869,
+    tokenUri:
+      'ipfs://QmcJ8QEZtdBj1PR831MBmAwGDrDBvLHLeghsKoFDT8SFva/recipe_walkers_of_the_undead.json',
+    name: 'Recipe Walkers of the Undead',
+    emoteId: '<:recipe_epic:1268673360720826520>'
+  },
+  RECIPE_WALKERS_OF_THE_EMPTY_ROAD: {
+    id: 870,
+    tokenUri:
+      'ipfs://QmcJ8QEZtdBj1PR831MBmAwGDrDBvLHLeghsKoFDT8SFva/recipe_walkers_of_the_empty_road.json',
+    name: 'Recipe Walkers of the Empty Road',
+    emoteId: '<:recipe_epic:1268673360720826520>'
+  },
+  RECIPE_BONEPLATE_OF_THE_SPECTRE: {
+    id: 871,
+    tokenUri:
+      'ipfs://QmcJ8QEZtdBj1PR831MBmAwGDrDBvLHLeghsKoFDT8SFva/recipe_boneplate_of_the_spectre.json',
+    name: 'Recipe Boneplate of the Spectre',
+    emoteId: '<:recipe_epic:1268673360720826520>'
+  },
+  RECIPE_DANCE_OF_THE_HONORED_DEAD: {
+    id: 872,
+    tokenUri:
+      'ipfs://QmcJ8QEZtdBj1PR831MBmAwGDrDBvLHLeghsKoFDT8SFva/recipe_dance_of_the_honored_dead.json',
+    name: 'Recipe Dance of the Honored Dead',
+    emoteId: '<:recipe_epic:1268673360720826520>'
+  },
+  RECIPE_COAT_OF_BONES: {
+    id: 873,
+    tokenUri: 'ipfs://QmcJ8QEZtdBj1PR831MBmAwGDrDBvLHLeghsKoFDT8SFva/recipe_coat_of_bones.json',
+    name: 'Recipe Coat of Bones',
+    emoteId: '<:recipe_epic:1268673360720826520>'
+  },
+  RECIPE_BELL_OF_THE_SHRUNKEN_HEAD: {
+    id: 874,
+    tokenUri:
+      'ipfs://QmcJ8QEZtdBj1PR831MBmAwGDrDBvLHLeghsKoFDT8SFva/recipe_bell_of_the_shrunken_head.json',
+    name: 'Recipe Bell of the Shrunken Head',
+    emoteId: '<:recipe_epic:1268673360720826520>'
+  },
+  RECIPE_WHISPERER_OF_THE_SILENT_HUNT: {
+    id: 875,
+    tokenUri:
+      'ipfs://QmcJ8QEZtdBj1PR831MBmAwGDrDBvLHLeghsKoFDT8SFva/recipe_whisperer_of_the_silent_hunt.json',
+    name: 'Recipe Whisperer of the Silent Hunt',
+    emoteId: '<:recipe_epic:1268673360720826520>'
+  },
+  RECIPE_SOULKEEPERS_OF_THE_FALLEN: {
+    id: 876,
+    tokenUri:
+      'ipfs://QmcJ8QEZtdBj1PR831MBmAwGDrDBvLHLeghsKoFDT8SFva/recipe_soulkeepers_of_the_fallen.json',
+    name: 'Recipe Soulkeepers of the Fallen',
+    emoteId: '<:recipe_epic:1268673360720826520>'
+  },
+  RECIPE_BOOTS_OF_THE_LOST_LEGION: {
+    id: 877,
+    tokenUri:
+      'ipfs://QmcJ8QEZtdBj1PR831MBmAwGDrDBvLHLeghsKoFDT8SFva/recipe_boots_of_the_lost_legion.json',
+    name: 'Recipe Boots of the Lost Legion',
+    emoteId: '<:recipe_epic:1268673360720826520>'
+  },
+  RECIPE_QUIVER_OF_THE_LAST_MARCH: {
+    id: 878,
+    tokenUri:
+      'ipfs://QmcJ8QEZtdBj1PR831MBmAwGDrDBvLHLeghsKoFDT8SFva/recipe_quiver_of_the_last_march.json',
+    name: 'Recipe Quiver of the Last March',
+    emoteId: '<:recipe_epic:1268673360720826520>'
+  },
 };
