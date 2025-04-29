@@ -29,3 +29,5 @@ jobs:
           script: |
             pm2 stop trader-khalil
             pm2 pull trader-khalil
+            pm2 stop discord-verify
+            pm2 pull discord-verify
