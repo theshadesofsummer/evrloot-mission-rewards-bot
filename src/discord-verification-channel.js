@@ -132,7 +132,7 @@ client.on("messageReactionAdd", async (reaction, user) => {
 
           sendDiscordMessage(
             PROD,
-            `✅ Verification successful!\n` +
+            `✅ Verification successful!  Send me a Directe message with \`/connected-wallets\` to manage your Discord connection.\n` +
               `• 👤 User: <@${user.id}>\n` +
               `• 💳 Wallet: ${partialWallet}...\n` +
               `• ✨ Status: Verified\n` +
