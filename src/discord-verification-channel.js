@@ -323,7 +323,7 @@ async function setupMongoDbConnection() {
             PROD,
             `Hey <@${
               discordUser.user.id
-            }>, reply with 👍 if this is you and you'll be verified! (Wallet: ${wallet.slice(
+            }>, react with 👍 if this is you and you'll be verified! (Wallet: ${wallet.slice(
               0,
               6
             )}...${wallet.slice(-4)})`
