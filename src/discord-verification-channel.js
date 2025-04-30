@@ -102,7 +102,7 @@ client.on("messageReactionAdd", async (reaction, user) => {
   }
 
   // Check if this is a verification message (contains the verification prompt)
-  if (reaction.message.content.includes("reply with 👍 if this is you")) {
+  if (reaction.message.content.includes("react with 👍 if this is you")) {
     // Extract wallet from message
     const walletMatch = reaction.message.content.match(
       /Wallet: (0x[a-fA-F0-9]+)/
