@@ -28,6 +28,6 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             pm2 stop trader-khalil
-            pm2 pull trader-khalil
             pm2 stop discord-verify
-            pm2 pull discord-verify
+            pm2 pull trader-khalil
+            pm2 start discord-verify
