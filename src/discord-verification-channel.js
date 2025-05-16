@@ -139,15 +139,6 @@ client.on("messageReactionAdd", async (reaction, user) => {
               `• ✨ Status: Verified\n` +
               `• 🕒 Time: ${new Date().toISOString()}`
           );
-
-          try {
-            await message.react("👍");
-          } catch (err) {
-            sendDiscordMessage(
-              DEBUG,
-              `❌ Failed to react to verification message: ${err.message}`
-            );
-          }
         } catch (error) {
           sendDiscordMessage(
             DEBUG,
