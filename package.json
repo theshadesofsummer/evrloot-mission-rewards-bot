@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node ./src/index.js",
     "discord-channel": "node ./src/discord-verification-channel.js",
+    "start:support": "node ./src/discord-support-tickets.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "summershades",
