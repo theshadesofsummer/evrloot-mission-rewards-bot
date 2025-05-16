@@ -10,6 +10,7 @@ const EVRLOOT_DISCORD_SERVER_ID = process.env.EVRLOOT_DISCORD_SERVER_ID;
 const VALID_EMOJI = process.env.VALID_EMOJI;
 const DISCORD_BOT_PROD_CHANNEL = process.env.DISCORD_BOT_PROD_CHANNEL;
 const DISCORD_BOT_DEBUG_CHANNEL = process.env.DISCORD_BOT_DEBUG_CHANNEL;
+const BOT_USER_ID = process.env.DISCORD_BOT_USER_ID || "1131360002049835100"; // Set your bot's user ID here
 
 const DEBUG = DISCORD_BOT_DEBUG_CHANNEL;
 const PROD = DISCORD_BOT_PROD_CHANNEL;
@@ -160,6 +161,10 @@ client.on("messageReactionAdd", async (reaction, user) => {
         }
       } else {
         // Wrong user reacting
+        if (user.id === BOT_USER_ID) {
+          // Ignore reactions from the bot itself
+          return;
+        }
         sendDiscordMessage(
           DEBUG,
           `❌ Wrong user reacting to verification message\n` +
