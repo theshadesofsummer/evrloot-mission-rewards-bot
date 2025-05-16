@@ -130,7 +130,7 @@ client.on("messageReactionAdd", async (reaction, user) => {
             { verified: true, discordId: user.id }
           );
 
-          sendDiscordMessage(
+          const message = await sendDiscordMessage(
             PROD,
             `✅ Verification successful!  Send me a Direct message with \`/connected-wallets\` to manage your Discord connection(s).\n` +
               `• 👤 User: <@${user.id}>\n` +
@@ -138,6 +138,15 @@ client.on("messageReactionAdd", async (reaction, user) => {
               `• ✨ Status: Verified\n` +
               `• 🕒 Time: ${new Date().toISOString()}`
           );
+
+          try {
+            await message.react("👍");
+          } catch (err) {
+            sendDiscordMessage(
+              DEBUG,
+              `❌ Failed to react to verification message: ${err.message}`
+            );
+          }
         } catch (error) {
           sendDiscordMessage(
             DEBUG,
@@ -328,6 +337,14 @@ async function setupMongoDbConnection() {
               6
             )}...${wallet.slice(-4)})`
           );
+          try {
+            await message.react("👍");
+          } catch (err) {
+            sendDiscordMessage(
+              DEBUG,
+              `❌ Failed to react to verification message: ${err.message}`
+            );
+          }
         } else {
           sendDiscordMessage(
             DEBUG,
