@@ -240,7 +240,7 @@ async function getChannel(client, channelId) {
   throw new Error(`Could not find channel with ID ${channelId} in any guild`);
 }
 
-export async function sendDiscordMessage(channelId, ...messages) {
+async function sendDiscordMessage(channelId, ...messages) {
   try {
     console.log("sending message to public channel");
     const channel = await getChannel(client, channelId);
