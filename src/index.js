@@ -9,6 +9,7 @@ const { fetchMissionReward } = require("./mission-interaction.js");
 const cron = require("node-cron");
 const { MongoClient } = require("mongodb");
 const {
+  client,
   publishSummary,
   sendVerificationDm,
   updateAllUsers,
@@ -23,6 +24,16 @@ const { handleNewBid } = require("./trades/handle-new-bid");
 const { handleBidAccepted } = require("./trades/handle-bid-accepted");
 
 setupDiscordBot().then(async () => {
+  // Wait for client to be ready before logging
+  if (!client.isReady()) {
+    await new Promise((resolve) => {
+      if (client.isReady()) {
+        resolve();
+      } else {
+        client.once('ready', resolve);
+      }
+    });
+  }
   await logMessageOrError("new start of discord bot");
 
   //handleNewTrade("0xd235b3b1ac41f7eaa72e7de14019fddce08d81e8b20f32843d3480e90c78c431") // soul
@@ -101,10 +112,19 @@ async function setupContractEvents() {
   MISSION_CONTRACT.events
     .MissionReward({ fromBlock: "latest" })
     .on("connected", function (_subscriptionId) {
-      console.log("connected to mission reward event");
+      console.log("[EVENT] connected to mission reward event, subscription ID:", _subscriptionId);
     })
     .on("data", function (event) {
-      fetchMissionReward(event);
+      console.log("[EVENT] MissionReward event received:", {
+        blockNumber: event.blockNumber,
+        transactionHash: event.transactionHash,
+        tokenId: event.returnValues.tokenId,
+        missionId: event.returnValues.missionId
+      });
+      fetchMissionReward(event).catch(error => {
+        console.error("[EVENT] Error processing MissionReward event:", error);
+        logMessageOrError("[EVENT] Error processing MissionReward:", error.message, error.stack);
+      });
     })
     .on("error", function (error) {
       if (!error.data.range) {

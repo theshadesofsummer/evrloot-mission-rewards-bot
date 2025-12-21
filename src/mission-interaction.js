@@ -13,6 +13,12 @@ module.exports = {
 
 async function fetchMissionReward(eventInput) {
   console.log('[RWD]', 'started fetching mission rewards')
+  console.log('[RWD]', 'event data:', JSON.stringify({
+    tokenId: eventInput.returnValues.tokenId,
+    missionId: eventInput.returnValues.missionId,
+    resourceRewardsCount: eventInput.returnValues.resourceRewards?.length || 0,
+    nftRewardsCount: eventInput.returnValues.nftRewards?.length || 0
+  }))
   increaseMissionCounter();
 
   const resourceRewards = eventInput.returnValues.resourceRewards;
@@ -61,27 +67,42 @@ async function fetchMissionReward(eventInput) {
   // let accountEntry = await getAccountByWallet(from.toLowerCase())
 
 
+  console.log('[RWD]', 'total rewards collected:', rewardsForEmbed.length)
+  
   const filteredNftRewards = rewardsForEmbed
     .filter(containsShowableRarity)
 
+  console.log('[RWD]', 'rewards after rarity filter (Epic/Legendary):', filteredNftRewards.length)
   if (filteredNftRewards.length <= 0) {
+    console.log('[RWD]', 'no Epic/Legendary rewards found, skipping post')
     return;
   }
 
   // old location for account fetching
 
   const estraTokenId = Number.parseInt(eventInput.returnValues.tokenId);
+  console.log('[RWD]', 'fetching soul ID for token:', estraTokenId)
   const soulId = await fetchSoulIdFromSquid(estraTokenId);
 
   if (!soulId) {
+    console.log('[RWD]', 'ERROR: could not fetch soulId from squid for token', estraTokenId)
+    await logMessageOrError('[RWD] ERROR: could not fetch soulId from squid for token', estraTokenId)
     return;
   }
+  console.log('[RWD]', 'found soulId:', soulId)
   const soulMetadata = await getSoulMetadata(soulId);
 
   console.log('[RWD]', 'soul with id', soulId, 'has name', soulMetadata.retrievedMetadata.name)
 
   for (const filteredNftReward of filteredNftRewards) {
-    await postEmbed(createMissionRewardEmbed(soulMetadata, filteredNftReward));
+    console.log('[RWD]', 'posting embed for reward:', filteredNftReward.retrievedMetadata.name, 'amount:', filteredNftReward.amount)
+    try {
+      await postEmbed(createMissionRewardEmbed(soulMetadata, filteredNftReward));
+      console.log('[RWD]', 'successfully posted embed')
+    } catch (error) {
+      console.error('[RWD]', 'ERROR posting embed:', error)
+      await logMessageOrError('[RWD] ERROR posting embed:', error.message, error.stack)
+    }
   }
 }
 
@@ -91,6 +112,10 @@ async function getResourceRewardInfos(resourceReward) {
 
   if (amount > 0) {
     const resourceType = Object.values(resourceRewards).find(rr => rr.id === resourceId)
+    if (!resourceType) {
+      console.log('[RWD]', 'WARNING: no resourceType found for resourceId:', resourceId)
+      return undefined;
+    }
     const metadataUri = resourceType.tokenUri;
 
     const retrievedMetadata = metadataUri
@@ -139,13 +164,19 @@ async function getNftRewardInfos(nftReward) {
 function containsShowableRarity(nftRewardWithMetadata) {
   try {
     const rarityMetadata = nftRewardWithMetadata.retrievedMetadata.attributes.find(o => o.label === 'Rarity');
-    if (!rarityMetadata)
+    if (!rarityMetadata) {
+      console.log('[RWD]', 'no rarity metadata found for reward:', nftRewardWithMetadata.retrievedMetadata.name)
       return false;
+    }
     const rarity = rarityMetadata.value;
-
-    return config.showItems.includes(rarity)
+    const isShowable = config.showItems.includes(rarity)
+    if (!isShowable) {
+      console.log('[RWD]', 'reward filtered out - rarity:', rarity, 'not in showItems:', config.showItems, 'reward:', nftRewardWithMetadata.retrievedMetadata.name)
+    }
+    return isShowable
   } catch (error) {
-    logMessageOrError('still issue in containsShowableRarity', nftRewardWithMetadata.retrievedMetadata.attributes.toString())
+    console.error('[RWD]', 'error in containsShowableRarity:', error)
+    logMessageOrError('still issue in containsShowableRarity', nftRewardWithMetadata.retrievedMetadata?.attributes?.toString() || 'no attributes')
     return false
   }
 

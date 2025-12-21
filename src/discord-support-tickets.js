@@ -3,6 +3,9 @@ require("dotenv").config();
 const { Client, GatewayIntentBits } = require("discord.js");
 
 const DISCORD_BOT_SUPPORT_TICKET_LOG_CHANNEL_ID = "1372938180701065256";
+const DISCORD_BOT_DEBUG_CHANNEL = "1366445820114899067";
+
+const LOG_CHANNEL = DISCORD_BOT_DEBUG_CHANNEL;
 
 const producerClient = new Client({
   intents: [],
