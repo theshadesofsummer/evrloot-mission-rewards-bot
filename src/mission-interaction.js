@@ -32,6 +32,16 @@ function getMissionName(missionId) {
   return missionNames[id] || `Mission #${id}`;
 }
 
+// Create log file on startup if it doesn't exist
+try {
+  if (!fs.existsSync(MISSION_LOG_FILE)) {
+    fs.writeFileSync(MISSION_LOG_FILE, `# Mission Log - Created ${new Date().toISOString()}\n`);
+    console.log('[LOG] Created mission log file:', MISSION_LOG_FILE);
+  }
+} catch (error) {
+  console.error('[LOG] Failed to create mission log file:', error.message);
+}
+
 // Log a completed mission to file
 function logMissionToFile(logEntry) {
   const timestamp = new Date().toISOString();
