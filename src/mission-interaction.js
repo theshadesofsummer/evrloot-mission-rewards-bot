@@ -1,3 +1,5 @@
+const fs = require('fs');
+const path = require('path');
 const createMissionRewardEmbed = require('./embeds/mission-reward-embed.js')
 const resourceRewards = require('./mappings/resource-types.js');
 const {getFromIpfs} = require('./evrloot-api.js')
@@ -6,6 +8,41 @@ const {addToStats, increaseMissionCounter} = require('./summary/daily-stats.js')
 const {nftMapping} = require("./mappings/item-ids");
 const {postEmbed, logMessageOrError} = require("./discord-client");
 const {getSoulMetadata, fetchSoulIdFromSquid} = require("./evrloot-api");
+const {getAccountFromTx} = require("./abi-interaction");
+
+// Build reverse lookup for resource names
+const resourceById = {};
+Object.values(resourceRewards).forEach(r => {
+  resourceById[r.id] = r.name;
+});
+
+// Mission log file path
+const MISSION_LOG_FILE = path.join(__dirname, '..', 'mission-log.txt');
+
+// Mission name lookup (add more as you discover them)
+const missionNames = {
+  42: 'Fishing - Deep Sea',
+  51: 'Gathering - Oasis',
+  52: 'Woodcutting - Palm Grove',
+  // Add more mission IDs here as you identify them
+};
+
+function getMissionName(missionId) {
+  const id = Number(missionId);
+  return missionNames[id] || `Mission #${id}`;
+}
+
+// Log a completed mission to file
+function logMissionToFile(logEntry) {
+  const timestamp = new Date().toISOString();
+  const logLine = `[${timestamp}] ${logEntry}\n`;
+  
+  try {
+    fs.appendFileSync(MISSION_LOG_FILE, logLine);
+  } catch (error) {
+    console.error('[LOG] Failed to write to mission log:', error.message);
+  }
+}
 
 module.exports = {
   fetchMissionReward
@@ -63,9 +100,32 @@ async function fetchMissionReward(eventInput) {
 
   }
 
-  // const from = await getAccountFromTx(eventInput.transactionHash)
-  // let accountEntry = await getAccountByWallet(from.toLowerCase())
+  // Get wallet address from transaction
+  let walletAddress = 'unknown';
+  try {
+    walletAddress = await getAccountFromTx(eventInput.transactionHash);
+  } catch (error) {
+    console.log('[RWD]', 'Could not fetch wallet from TX:', error.message);
+  }
 
+  // Build human-readable rewards list
+  const rewardNames = rewardsForEmbed.map(r => {
+    const name = r.pinkExclusiveName || r.retrievedMetadata?.name || 'Unknown';
+    return `${r.amount}x ${name}`;
+  });
+
+  // Log to mission log file
+  const missionName = getMissionName(eventInput.returnValues.missionId);
+  const logEntry = [
+    `${missionName}`,
+    `| Soul: ${eventInput.returnValues.tokenId}`,
+    `| Wallet: ${walletAddress}`,
+    `| TX: ${eventInput.transactionHash}`,
+    `| Rewards: ${rewardNames.length > 0 ? rewardNames.join(', ') : 'none'}`
+  ].join(' ');
+  
+  logMissionToFile(logEntry);
+  console.log('[MISSION LOG]', logEntry);
 
   console.log('[RWD]', 'total rewards collected:', rewardsForEmbed.length)
   
